@@ -1,0 +1,7 @@
+.gdo-forum-unread {
+	background: lightyellow;
+}
+
+.gdo-forum-subscribed .icon-email {
+	color: green;
+}
