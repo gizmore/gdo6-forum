@@ -34,7 +34,7 @@ final class CRUDBoard extends MethodCrud
         $form->addFields(array(
             $gdo->gdoColumn('board_title'),
             $gdo->gdoColumn('board_description'),
-            GDO_ForumBoard::make('board_parent')->label('parent')->notNull()->initial($boardId)->editable($boardId>1),
+            GDO_ForumBoard::make('board_parent')->label('parent')->notNull()->initial($boardId)->writable($boardId>1),
             GDO_Permission::make('board_permission')->emptyInitial(t('sel_no_permissions')),
             $gdo->gdoColumn('board_allow_threads'),
         ));
