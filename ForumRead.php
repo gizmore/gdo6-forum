@@ -45,7 +45,7 @@ final class ForumRead extends GDO
             if ($latest = $module->cfgLastPostDate())
             {
                 # And there are posts
-                $latestU = UserSetting::userGet($user, 'forum_readmark')->getValue();
+                $latestU = UserSetting::userGet($user, 'forum_readmark')->getVar();
                 if ($latest !== $latestU)
                 {
                     # We have read all and can move the marker to current timestamp.
