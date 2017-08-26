@@ -77,12 +77,12 @@ final class CRUDPost extends MethodCrud
         $this->createFormButtons($form);
     }
     
-    public function afterCreate(GDO_Form $form)
+    public function afterCreate(GDO_Form $form, GDO $gdo)
     {
         $module = Module_Forum::instance();
-        $module->saveConfigVar('forum_latest_post_date', $this->gdo->getCreated());
+        $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         UserSetting::inc('forum_posts');
-        ForumRead::markRead(User::current(), $this->gdo);
+        ForumRead::markRead(User::current(), $gdo);
     }
     
     public function afterExecute()
