@@ -18,6 +18,10 @@ final class DownloadAttachment extends Method
         {
             return $this->error('err_permission');
         }
+        if (!$post->hasAttachment())
+        {
+            return $this->error('err_post_has_no_attachment');
+        }
         return $this->dowloadAttachment($post, method('GWF', 'GetFile'));
     }
     

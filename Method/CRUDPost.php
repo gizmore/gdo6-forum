@@ -72,8 +72,18 @@ final class CRUDPost extends MethodCrud
         $form->addFields(array(
             GDO_Hidden::make('post_thread')->initial($this->thread->getID()),
             $gdo->gdoColumn('post_message'),
-            $gdo->gdoColumn('post_attachment'),
         ));
+        if (Module_Forum::instance()->canUpload(User::current()))
+        {
+            $form->addFields(array(
+                $gdo->gdoColumn('post_attachment'),
+            ));
+            
+            if ($this->gdo)
+            {
+                $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$this->gdo->getID()}&file="));
+            }
+        }
         $this->createFormButtons($form);
     }
     
