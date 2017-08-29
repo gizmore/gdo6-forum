@@ -1,8 +1,8 @@
 <?php
 return array(
 'link_forum' => '%s Posts',
-'gwf_forumpost' => 'Post',
-'gwf_forumboard' => 'Board',
+'gdo_forumpost' => 'Post',
+'gdo_forumboard' => 'Board',
 'board' => 'Board',
 'board_stats' => '%s Threads, %s Posts',
 'btn_reply' => 'Reply',

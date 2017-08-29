@@ -2,7 +2,7 @@
 namespace GDO\Forum\Method;
 
 use GDO\Core\Method;
-use GDO\Forum\ForumThread;
+use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\Util\Common;
 /**
@@ -13,7 +13,7 @@ final class Thread extends Method
 {
     public function execute()
     {
-        $thread = ForumThread::table()->find(Common::getRequestString('thread'));
+        $thread = GDO_ForumThread::table()->find(Common::getRequestString('thread'));
         $_REQUEST['board'] = $thread->getBoardID();
         $tabs = Module_Forum::instance()->renderTabs();
         return $tabs->add($this->templatePHP('thread.php', ['thread' => $thread]));

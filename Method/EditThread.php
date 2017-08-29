@@ -7,22 +7,22 @@ use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
-use GDO\Forum\ForumBoard;
-use GDO\Forum\ForumThread;
+use GDO\Forum\GDO_ForumBoard;
+use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
-use GDO\User\User;
+use GDO\User\GDO_User;
 use GDO\Util\Common;
 /**
  * Start a new thread.
  * @author gizmore
- * @see ForumBoard
- * @see ForumThread
- * @see ForumPost
+ * @see GDO_ForumBoard
+ * @see GDO_ForumThread
+ * @see GDO_ForumPost
  */
 final class EditThread extends MethodForm
 {
     /**
-     * @var ForumThread
+     * @var GDO_ForumThread
      */
     private $thread;
     
@@ -31,7 +31,7 @@ final class EditThread extends MethodForm
     
     public function execute()
     {
-        $this->thread = ForumThread::table()->find(Common::getGetString('id'));
+        $this->thread = GDO_ForumThread::table()->find(Common::getGetString('id'));
         
         $response = parent::execute();
         $tabs = Module_Forum::instance()->renderTabs();
@@ -40,7 +40,7 @@ final class EditThread extends MethodForm
     
     public function createForm(GDT_Form $form)
     {
-        $user = User::current();
+        $user = GDO_User::current();
         $gdo = $this->thread;
         if ($user->isStaff())
         {
@@ -67,7 +67,7 @@ final class EditThread extends MethodForm
         return $this->message('msg_thread_edited')->add($response)->add($redirect);
     }
     
-    private function changeBoard(ForumBoard $newBoard)
+    private function changeBoard(GDO_ForumBoard $newBoard)
     {
         $postsBy = $this->thread->getPostCount();
         $oldBoard = $this->thread->getBoard();

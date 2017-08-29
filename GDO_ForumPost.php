@@ -8,14 +8,14 @@ use GDO\DB\GDT_CreatedBy;
 use GDO\DB\GDT_EditedAt;
 use GDO\DB\GDT_EditedBy;
 use GDO\DB\GDT_Object;
-use GDO\File\File;
+use GDO\File\GDO_File;
 use GDO\File\GDT_File;
 use GDO\Template\GDT_Template;
 use GDO\Type\GDT_Message;
-use GDO\User\User;
-use GDO\User\UserSetting;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserSetting;
 
-final class ForumPost extends GDO
+final class GDO_ForumPost extends GDO
 {
     ###########
     ### GDO ###
@@ -25,7 +25,7 @@ final class ForumPost extends GDO
     {
         return array(
             GDT_AutoInc::make('post_id'),
-            GDT_Object::make('post_thread')->table(ForumThread::table())->notNull(),
+            GDT_Object::make('post_thread')->table(GDO_ForumThread::table())->notNull(),
             GDT_Message::make('post_message')->utf8()->caseI()->notNull(),
             GDT_File::make('post_attachment'),
             
@@ -38,19 +38,19 @@ final class ForumPost extends GDO
     ##################
     ### Permission ###
     ##################
-    public function canEdit(User $user) { return $user->isStaff() || ($user->getID() === $this->getCreatorID()); }
-    public function canView(User $user) { return $this->getThread()->canView($user); }
+    public function canEdit(GDO_User $user) { return $user->isStaff() || ($user->getID() === $this->getCreatorID()); }
+    public function canView(GDO_User $user) { return $this->getThread()->canView($user); }
     ##############
     ### Getter ###
     ##############
     /**
-     * @return ForumThread
+     * @return GDO_ForumThread
      */
     public function getThread() { return $this->getValue('post_thread'); }
     public function getThreadID() { return $this->getVar('post_thread'); }
     
     /**
-     * @return File
+     * @return GDO_File
      */
     public function getAttachment() { return $this->getValue('post_attachment'); }
     public function getAttachmentID() { return $this->getVar('post_attachment'); }
@@ -72,7 +72,7 @@ final class ForumPost extends GDO
     ##############
     ### Render ###
     ##############
-    public function displaySignature() { return UserSetting::userGet($this->getCreator(), 'forum_signature')->renderCell(); }
+    public function displaySignature() { return GDO_UserSetting::userGet($this->getCreator(), 'forum_signature')->renderCell(); }
     public function displayMessage() { return $this->gdoColumn('post_message')->renderCell(); }
     public function displayCreated() { return tt($this->getCreated()); }
     public function renderCard() { return GDT_Template::responsePHP('Forum', 'card/post.php', ['post'=>$this]); }
@@ -80,15 +80,15 @@ final class ForumPost extends GDO
     ##############
     ### Unread ###
     ##############
-    public function isUnread(User $user)
+    public function isUnread(GDO_User $user)
     {
-        $unread = ForumRead::getUnreadPosts($user);
+        $unread = GDO_ForumRead::getUnreadPosts($user);
         return isset($unread[$this->getID()]);
     }
     
-    public function markRead(User $user)
+    public function markRead(GDO_User $user)
     {
-        return ForumRead::markRead($user, $this);
+        return GDO_ForumRead::markRead($user, $this);
     }
     
     #############

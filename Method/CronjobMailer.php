@@ -2,14 +2,14 @@
 namespace GDO\Forum\Method;
 
 use GDO\Cronjob\MethodCronjob;
-use GDO\Forum\ForumBoardSubscribe;
-use GDO\Forum\ForumPost;
-use GDO\Forum\ForumThreadSubscribe;
+use GDO\Forum\GDO_ForumBoardSubscribe;
+use GDO\Forum\GDO_ForumPost;
+use GDO\Forum\GDO_ForumThreadSubscribe;
 use GDO\Forum\Module_Forum;
 use GDO\Mail\Mail;
 use GDO\UI\GDT_Link;
-use GDO\User\User;
-use GDO\User\UserSetting;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserSetting;
 
 final class CronjobMailer extends MethodCronjob
 {
@@ -20,7 +20,7 @@ final class CronjobMailer extends MethodCronjob
         $post = true;
         while ($post)
         {
-            if ($post = ForumPost::table()->select()->where("post_id > $lastId")->order('post_id')->first()->exec()->fetchObject())
+            if ($post = GDO_ForumPost::table()->select()->where("post_id > $lastId")->order('post_id')->first()->exec()->fetchObject())
             {
                 $this->mailSubscriptions($module, $post);
                 $lastId = $post->getID();
@@ -29,16 +29,16 @@ final class CronjobMailer extends MethodCronjob
         }
     }
     
-    private function mailSubscriptions(Module_Forum $module, ForumPost $post)
+    private function mailSubscriptions(Module_Forum $module, GDO_ForumPost $post)
     {
         $this->logNotice(sprintf("Sending mails for {$post->getThread()->getTitle()}"));
         $mid = $module->getID();
         $sentTo = [];
         
         # Sent to those who subscribe the whole board
-        $query = UserSetting::table()->select('gwf_user.*')->joinObject('uset_user');
+        $query = GDO_UserSetting::table()->select('gdo_user.*')->joinObject('uset_user');
         $query->where("uset_name='forum_subscription'")->where("uset_value='fsub_all'");
-        $result = $query->fetchTable(User::table())->uncached()->exec();
+        $result = $query->fetchTable(GDO_User::table())->uncached()->exec();
         while ($user = $result->fetchObject())
         {
             if (!in_array($user->getID(), $sentTo, true))
@@ -49,10 +49,10 @@ final class CronjobMailer extends MethodCronjob
         }
         
         # Sent to those who subscribe their own threads
-        $query = ForumPost::table()->select('gwf_user.*')->joinObject('post_creator');
-        $query->join("LEFT JOIN gwf_usersetting ON uset_user=user_id AND uset_name='forum_subscription'");
+        $query = GDO_ForumPost::table()->select('gdo_user.*')->joinObject('post_creator');
+        $query->join("LEFT JOIN gdo_usersetting ON uset_user=user_id AND uset_name='forum_subscription'");
         $query->where("post_thread={$post->getThreadID()}")->where("uset_value IS NULL OR uset_value = 'fsub_own'");
-        $result = $query->fetchTable(User::table())->uncached()->exec();
+        $result = $query->fetchTable(GDO_User::table())->uncached()->exec();
         while ($user = $result->fetchObject())
         {
             if (!in_array($user->getID(), $sentTo, true))
@@ -64,9 +64,9 @@ final class CronjobMailer extends MethodCronjob
         
         # Sent to those who subscribed via thread or board
         $bids = implode(',', $this->getBoardIDs($post));
-        $query = ForumBoardSubscribe::table()->select('gwf_user.*')->joinObject('subscribe_user');
+        $query = GDO_ForumBoardSubscribe::table()->select('gdo_user.*')->joinObject('subscribe_user');
         $query->where("subscribe_board IN ($bids)");
-        $result = $query->fetchTable(User::table())->uncached()->exec();
+        $result = $query->fetchTable(GDO_User::table())->uncached()->exec();
         while ($user = $result->fetchObject())
         {
             if (!in_array($user->getID(), $sentTo, true))
@@ -77,9 +77,9 @@ final class CronjobMailer extends MethodCronjob
         }
         
         # Sent to those who subscribed via thread or board
-        $query = ForumThreadSubscribe::table()->select('gwf_user.*')->joinObject('subscribe_user');
+        $query = GDO_ForumThreadSubscribe::table()->select('gdo_user.*')->joinObject('subscribe_user');
         $query->where("subscribe_thread={$post->getThreadID()}");
-        $result = $query->fetchTable(User::table())->uncached()->exec();
+        $result = $query->fetchTable(GDO_User::table())->uncached()->exec();
         while ($user = $result->fetchObject())
         {
             if (!in_array($user->getID(), $sentTo, true))
@@ -91,7 +91,7 @@ final class CronjobMailer extends MethodCronjob
         
     }
     
-    private function getBoardIDs(ForumPost $post)
+    private function getBoardIDs(GDO_ForumPost $post)
     {
         $ids = [];
         $board = $post->getThread()->getBoard();
@@ -103,7 +103,7 @@ final class CronjobMailer extends MethodCronjob
         return $ids;
     }
     
-    private function mailSubscription(ForumPost $post, User $user)
+    private function mailSubscription(GDO_ForumPost $post, GDO_User $user)
     {
         $mail = Mail::botMail();
         $thread = $post->getThread();

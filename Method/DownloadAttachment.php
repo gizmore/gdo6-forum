@@ -2,17 +2,17 @@
 namespace GDO\Forum\Method;
 
 use GDO\Core\Method;
-use GDO\Forum\ForumPost;
+use GDO\Forum\GDO_ForumPost;
 use GDO\GWF\Method\GetFile;
-use GDO\User\User;
+use GDO\User\GDO_User;
 use GDO\Util\Common;
 
 final class DownloadAttachment extends Method
 {
     public function execute()
     {
-        $user = User::current();
-        $table = ForumPost::table();
+        $user = GDO_User::current();
+        $table = GDO_ForumPost::table();
         $post = $table->find(Common::getGetString('post'));
         if (!$post->canView($user))
         {
@@ -25,7 +25,7 @@ final class DownloadAttachment extends Method
         return $this->dowloadAttachment($post, method('GWF', 'GetFile'));
     }
     
-    private function dowloadAttachment(ForumPost $post, GetFile $method)
+    private function dowloadAttachment(GDO_ForumPost $post, GetFile $method)
     {
         return $method->executeWithId($post->getAttachmentID());
     }

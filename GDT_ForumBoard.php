@@ -3,9 +3,8 @@ namespace GDO\Forum;
 use GDO\Template\GDT_Template;
 use GDO\DB\GDT_ObjectSelect;
 /**
- * A selection for a Category object.
+ * A selection for a forum board.
  * @author gizmore
- * @see Category
  */
 final class GDT_ForumBoard extends GDT_ObjectSelect
 {
@@ -13,12 +12,12 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 	
 	public function __construct()
 	{
-		$this->table(ForumBoard::table());
+	    $this->table(GDO_ForumBoard::table());
 		$this->emptyLabel('no_parent');
 	}
 	
 	/**
-	 * @return ForumBoard
+	 * @return GDO_ForumBoard
 	 */
 	public function getBoard()
 	{

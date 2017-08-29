@@ -1,16 +1,16 @@
 <?php
 use GDO\DB\ArrayResult;
-use GDO\Forum\ForumBoard;
-use GDO\Forum\ForumThread;
+use GDO\Forum\GDO_ForumBoard;
+use GDO\Forum\GDO_ForumThread;
 use GDO\Table\GDT_List;
 use GDO\Table\GDT_PageMenu;
 use GDO\UI\GDT_Button;
 use GDO\Util\Common;
 
-$table = ForumBoard::table();
+$table = GDO_ForumBoard::table();
 $boards = $table->full()[0]; # Get tree structure
 $board = $boards[Common::getRequestString('board', '1')];
-$board instanceof ForumBoard;
+$board instanceof GDO_ForumBoard;
 
 # Children boards as list.
 $list = GDT_List::make();
@@ -28,7 +28,7 @@ if ($board->allowsThreads())
 # Threads as list
 $list = GDT_List::make();
 $pagemenu = GDT_PageMenu::make();
-$query = ForumThread::table()->select()->where("thread_board={$board->getID()}")->order('thread_created', false);
+$query = GDO_ForumThread::table()->select()->where("thread_board={$board->getID()}")->order('thread_created', false);
 $pagemenu->filterQuery($query);
 $list->query($query);
 $list->listMode(GDT_List::MODE_LIST);

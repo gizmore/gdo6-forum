@@ -1,14 +1,14 @@
 <?php
-use GDO\Forum\ForumBoard;
+use GDO\Forum\GDO_ForumBoard;
 use GDO\UI\GDT_IconButton;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Toolbar;
-use GDO\User\User;
+use GDO\User\GDO_User;
 use GDO\Util\Common;
 
 $bar = GDT_Toolbar::make();
-$user = User::current();
-$boards = ForumBoard::table()->full()[0];
+$user = GDO_User::current();
+$boards = GDO_ForumBoard::table()->full()[0];
 $board = $boards[Common::getRequestString('board', '1')];
 
 # Header Create Board Button

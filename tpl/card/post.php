@@ -1,13 +1,13 @@
 <?php
-use GDO\Forum\ForumPost;
+use GDO\Forum\GDO_ForumPost;
 use GDO\UI\GDT_Button;
 use GDO\UI\GDT_EditButton;
 use GDO\UI\GDT_IconButton;
-use GDO\User\User;
+use GDO\User\GDO_User;
 
-$post instanceof ForumPost;
+$post instanceof GDO_ForumPost;
 $creator = $post->getCreator();
-$user = User::current();
+$user = GDO_User::current();
 ?>
 <?php
 $unread = $post->isUnread($user);

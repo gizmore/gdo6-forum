@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Forum;
 
-use GDO\Category\Tree;
+use GDO\Category\GDO_Tree;
 use GDO\Core\Logger;
 use GDO\DB\Cache;
 use GDO\DB\GDT_AutoInc;
@@ -12,16 +12,16 @@ use GDO\Type\GDT_Checkbox;
 use GDO\Type\GDT_Int;
 use GDO\Type\GDT_String;
 use GDO\User\GDT_Permission;
-use GDO\User\User;
-use GDO\User\UserSetting;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserSetting;
 /**
- * A board inherits from Tree.
+ * A board inherits from GDO_Tree.
  * @author gizmore
- * @see Tree
- * @see ForumThread
- * @see ForumPost
+ * @see GDO_Tree
+ * @see GDO_ForumThread
+ * @see GDO_ForumPost
  */
-final class ForumBoard extends Tree
+final class GDO_ForumBoard extends GDO_Tree
 {
     ############
     ### Tree ###
@@ -64,7 +64,7 @@ final class ForumBoard extends Tree
     ### Permission ###
     ##################
     public function needsPermission() { return $this->getPermissionID() !== null; }
-    public function canView(User $user) { return $this->needsPermission() ? $user->hasPermissionID($this->getPermissionID()) : true; }
+    public function canView(GDO_User $user) { return $this->needsPermission() ? $user->hasPermissionID($this->getPermissionID()) : true; }
     
     ##############
     ### Render ###
@@ -79,17 +79,17 @@ final class ForumBoard extends Tree
     #############
     public function all()
     {
-        if (false === ($cache = Cache::get('gwf_forumboard_all')))
+        if (false === ($cache = Cache::get('gdo_forumboard_all')))
         {
             $cache = $this->queryAll();
-            Cache::set('gwf_forumboard_all', $cache);
+            Cache::set('gdo_forumboard_all', $cache);
         }
         return $cache;
     }
     
     public static function recacheAll()
     {
-        Cache::unset('gwf_forumboard_all');
+        Cache::unset('gdo_forumboard_all');
     }
     
     public function queryAll()
@@ -114,13 +114,13 @@ final class ForumBoard extends Tree
         }
     }
     
-    public function hasUnreadPosts(User $user)
+    public function hasUnreadPosts(GDO_User $user)
     {
-        $unread = ForumRead::getUnreadBoards($user);
+        $unread = GDO_ForumRead::getUnreadBoards($user);
         return self::hasBoardUnreadPosts($this, $unread);
     }
 
-    public static function hasBoardUnreadPosts(ForumBoard $board, array $unread)
+    public static function hasBoardUnreadPosts(GDO_ForumBoard $board, array $unread)
     {
         if (isset($unread[$board->getID()]))
         {
@@ -138,22 +138,22 @@ final class ForumBoard extends Tree
         return false;
     }
     
-    public function hasSubscribed(User $user)
+    public function hasSubscribed(GDO_User $user)
     {
-        if (UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
+        if (GDO_UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
         {
             return true;
         }
         return strpos($this->getForumSubscriptions($user), ",{$this->getID()},") !== false;
     }
     
-    public function getForumSubscriptions(User $user)
+    public function getForumSubscriptions(GDO_User $user)
     {
-        if (!($cache = $user->tempGet('gwf_forum_board_subsciptions')))
+        if (!($cache = $user->tempGet('gdo_forum_board_subsciptions')))
         {
-            $cache = ForumBoardSubscribe::table()->select('GROUP_CONCAT(subscribe_board)')->where("subscribe_user={$user->getID()}")->exec()->fetchValue();
+            $cache = GDO_ForumBoardSubscribe::table()->select('GROUP_CONCAT(subscribe_board)')->where("subscribe_user={$user->getID()}")->exec()->fetchValue();
             $cache = empty($cache) ? '' : ",$cache,";
-            $user->tempSet('gwf_forum_board_subsciptions', $cache);
+            $user->tempSet('gdo_forum_board_subsciptions', $cache);
             $user->recache();
         }
         return $cache;

@@ -4,21 +4,21 @@ namespace GDO\Forum\Method;
 use GDO\DB\GDO;
 use GDO\Form\GDT_Form;
 use GDO\Form\MethodCrud;
-use GDO\Forum\ForumBoard;
+use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\GDT_ForumBoard;
 use GDO\Forum\Module_Forum;
-use GDO\User\User;
+use GDO\User\GDO_User;
 use GDO\Util\Common;
 use GDO\User\GDT_Permission;
 
 final class CRUDBoard extends MethodCrud
 {
-    public function gdoTable() { return ForumBoard::table(); }
+    public function gdoTable() { return GDO_ForumBoard::table(); }
     public function hrefList() { return href('Forum', 'Boards', '&board='.Common::getRequestInt('board')); }
    
-    public function canCreate(GDO $gdo) { return User::current()->isStaff(); }
-    public function canUpdate(GDO $gdo) { return User::current()->isStaff(); }
-    public function canDelete(GDO $gdo) { return User::current()->isAdmin(); }
+    public function canCreate(GDO $gdo) { return GDO_User::current()->isStaff(); }
+    public function canUpdate(GDO $gdo) { return GDO_User::current()->isStaff(); }
+    public function canDelete(GDO $gdo) { return GDO_User::current()->isAdmin(); }
     
     public function execute()
     {
@@ -29,7 +29,7 @@ final class CRUDBoard extends MethodCrud
     
     public function createForm(GDT_Form $form)
     {
-        $gdo = ForumBoard::table();
+        $gdo = GDO_ForumBoard::table();
         $boardId = Common::getRequestString('board');
         $form->addFields(array(
             $gdo->gdoColumn('board_title'),
@@ -44,7 +44,7 @@ final class CRUDBoard extends MethodCrud
     
     public function afterUpdate(GDT_Form $form)
     {
-        ForumBoard::recacheAll();
+        GDO_ForumBoard::recacheAll();
         $this->gdo->recache();
     }
     

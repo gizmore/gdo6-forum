@@ -1,11 +1,11 @@
 <?php
-use GDO\Forum\ForumBoard;
+use GDO\Forum\GDO_ForumBoard;
 use GDO\UI\GDT_Icon;
 use GDO\UI\GDT_IconButton;
-use GDO\User\User;
+use GDO\User\GDO_User;
 
-$board instanceof ForumBoard;
-$user = User::current();
+$board instanceof GDO_ForumBoard;
+$user = GDO_User::current();
 $bid = $board->getID(); ?>
 <?php
 $subscribed = $board->hasSubscribed($user);

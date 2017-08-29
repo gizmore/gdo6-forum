@@ -3,9 +3,9 @@ namespace GDO\Forum;
 
 use GDO\DB\GDO;
 use GDO\User\GDT_User;
-use GDO\User\User;
+use GDO\User\GDO_User;
 
-final class ForumBoardSubscribe extends GDO
+final class GDO_ForumBoardSubscribe extends GDO
 {
     public function gdoCached() { return false; }
     public function gdoColumns()
@@ -24,6 +24,6 @@ final class ForumBoardSubscribe extends GDO
     
     public function gdoAfterCreate()
     {
-        $this->getUser()->tempUnset('gwf_forum_board_subsciptions');
+        $this->getUser()->tempUnset('gdo_forum_board_subsciptions');
     }
 }

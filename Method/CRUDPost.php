@@ -6,40 +6,40 @@ use GDO\DB\GDO;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Hidden;
 use GDO\Form\MethodCrud;
-use GDO\Forum\ForumPost;
-use GDO\Forum\ForumRead;
-use GDO\Forum\ForumThread;
+use GDO\Forum\GDO_ForumPost;
+use GDO\Forum\GDO_ForumRead;
+use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
-use GDO\User\User;
-use GDO\User\UserSetting;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserSetting;
 use GDO\Util\Common;
 
 final class CRUDPost extends MethodCrud
 {
-    public function gdoTable() { return ForumPost::table(); }
+    public function gdoTable() { return GDO_ForumPost::table(); }
     public function hrefList() { return href('Forum', 'Thread', '&thread='.$this->thread->getID()); }
    
     public function isGuestAllowed() { return Module_Forum::instance()->cfgGuestPosts(); }
     
     public function canCreate(GDO $gdo) { return true; }
-    public function canUpdate(GDO $gdo) { return $gdo->canEdit(User::current()); }
-    public function canDelete(GDO $gdo) { return User::current()->isAdmin(); }
+    public function canUpdate(GDO $gdo) { return $gdo->canEdit(GDO_User::current()); }
+    public function canDelete(GDO $gdo) { return GDO_User::current()->isAdmin(); }
     
     private $thread;
     
     public function execute()
     {
         # 1. Get thread
-        $user = User::current();
+        $user = GDO_User::current();
         if ( ($pid = Common::getGetString('quote')) ||
              ($pid = Common::getGetString('id')) )
         {
-            $post = ForumPost::table()->find($pid);
+            $post = GDO_ForumPost::table()->find($pid);
             $this->thread = $post->getThread();
         }
         elseif ($tid = Common::getGetString('reply'))
         {
-            $this->thread = ForumThread::table()->find($tid);
+            $this->thread = GDO_ForumThread::table()->find($tid);
         }
         else
         {
@@ -73,7 +73,7 @@ final class CRUDPost extends MethodCrud
             GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
             $gdo->gdoColumn('post_message'),
         ));
-        if (Module_Forum::instance()->canUpload(User::current()))
+        if (Module_Forum::instance()->canUpload(GDO_User::current()))
         {
             $form->addFields(array(
                 $gdo->gdoColumn('post_attachment'),
@@ -92,8 +92,8 @@ final class CRUDPost extends MethodCrud
         $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$gdo->getID()}&file="));
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
-        UserSetting::inc('forum_posts');
-        ForumRead::markRead(User::current(), $gdo);
+        GDO_UserSetting::inc('forum_posts');
+        GDO_ForumRead::markRead(GDO_User::current(), $gdo);
         GDT_Hook::call('ForumPostCreated', $gdo);
     }
 }

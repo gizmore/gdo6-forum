@@ -9,13 +9,13 @@ use GDO\Template\GDT_Template;
 use GDO\Type\GDT_Checkbox;
 use GDO\Type\GDT_Int;
 use GDO\Type\GDT_String;
-use GDO\User\User;
-use GDO\User\UserSetting;
+use GDO\User\GDO_User;
+use GDO\User\GDO_UserSetting;
 /**
  * Forum thread database object.
  * @author gizmore
  */
-final class ForumThread extends GDO
+final class GDO_ForumThread extends GDO
 {
     ###########
     ### GDO ###
@@ -38,14 +38,14 @@ final class ForumThread extends GDO
     ##################
     ### Permission ###
     ##################
-    public function canView(User $user) { return $this->getBoard()->canView($user); }
-    public function canEdit(User $user) { return $user->isStaff() || ($this->getCreatorID() === $user->getID()); }
+    public function canView(GDO_User $user) { return $this->getBoard()->canView($user); }
+    public function canEdit(GDO_User $user) { return $user->isStaff() || ($this->getCreatorID() === $user->getID()); }
     
     ##############
     ### Getter ###
     ##############
     /**
-     * @return ForumBoard
+     * @return GDO_ForumBoard
      */
     public function getBoard() { return $this->getValue('thread_board'); }
     public function getBoardID() { return $this->getVar('thread_board'); }
@@ -75,9 +75,9 @@ final class ForumThread extends GDO
     ##############
     ### Unread ###
     ##############
-    public function hasUnreadPosts(User $user)
+    public function hasUnreadPosts(GDO_User $user)
     {
-        $unread = ForumRead::getUnreadThreads($user);
+        $unread = GDO_ForumRead::getUnreadThreads($user);
         return isset($unread[$this->getID()]);
     }
     
@@ -97,22 +97,22 @@ final class ForumThread extends GDO
     #################
     ### Subscribe ###
     #################
-    public function hasSubscribed(User $user)
+    public function hasSubscribed(GDO_User $user)
     {
-        if (UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
+        if (GDO_UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
         {
             return true;
         }
         return strpos($this->getForumSubscriptions($user), ",{$this->getID()},") !== false;
     }
     
-    public function getForumSubscriptions(User $user)
+    public function getForumSubscriptions(GDO_User $user)
     {
-        if (!($cache = $user->tempGet('gwf_forum_thread_subsciptions')))
+        if (!($cache = $user->tempGet('gdo_forum_thread_subsciptions')))
         {
-            $cache = ForumThreadSubscribe::table()->select('GROUP_CONCAT(subscribe_thread)')->where("subscribe_user={$user->getID()}")->exec()->fetchValue();
+            $cache = GDO_ForumThreadSubscribe::table()->select('GROUP_CONCAT(subscribe_thread)')->where("subscribe_user={$user->getID()}")->exec()->fetchValue();
             $cache = empty($cache) ? '' : ",$cache,";
-            $user->tempSet('gwf_forum_thread_subsciptions', $cache);
+            $user->tempSet('gdo_forum_thread_subsciptions', $cache);
             $user->recache();
         }
         return $cache;

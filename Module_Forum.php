@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Forum;
 
-use GDO\Core\Module;
+use GDO\Core\GDO_Module;
 use GDO\DB\Cache;
 use GDO\Date\GDT_DateTime;
 use GDO\Template\GDT_Bar;
@@ -10,14 +10,14 @@ use GDO\Type\GDT_Int;
 use GDO\Type\GDT_Message;
 use GDO\UI\GDT_IconButton;
 use GDO\User\GDT_Level;
-use GDO\User\User;
+use GDO\User\GDO_User;
 /**
  * GWF Forum Module
  * @author gizmore
  * @since 2.0
  * @version 5.0
  */
-final class Module_Forum extends Module
+final class Module_Forum extends GDO_Module
 {
     ##############
     ### Module ###
@@ -25,12 +25,12 @@ final class Module_Forum extends Module
     public $module_priority = 55;
     public function getClasses() {
         return array(
-            'GDO\Forum\ForumBoard',
-            'GDO\Forum\ForumThread',
-            'GDO\Forum\ForumPost',
-            'GDO\Forum\ForumRead',
-            'GDO\Forum\ForumThreadSubscribe',
-            'GDO\Forum\ForumBoardSubscribe');
+            'GDO\Forum\GDO_ForumBoard',
+            'GDO\Forum\GDO_ForumThread',
+            'GDO\Forum\GDO_ForumPost',
+            'GDO\Forum\GDO_ForumRead',
+            'GDO\Forum\GDO_ForumThreadSubscribe',
+            'GDO\Forum\GDO_ForumBoardSubscribe');
     }
     public function onLoadLanguage() { $this->loadLanguage('lang/forum'); }
     public function onIncludeScripts()
@@ -88,7 +88,7 @@ final class Module_Forum extends Module
     ###################
     ### Permissions ###
     ###################
-    public function canUpload(User $user) { return $this->cfgAttachments() && ($user->getLevel() >= $this->cfgAttachmentLevel()); }
+    public function canUpload(GDO_User $user) { return $this->cfgAttachments() && ($user->getLevel() >= $this->cfgAttachmentLevel()); }
     
     ###############
     ### Install ###
@@ -98,9 +98,9 @@ final class Module_Forum extends Module
      */
     public function onInstall()
     {
-        if (!ForumBoard::getById('1'))
+        if (!GDO_ForumBoard::getById('1'))
         {
-            ForumBoard::blank(['board_title' => 'GWFv5 Forum', 'board_description' => 'Welcome to the GWFv5 Forum Module'])->insert();
+            GDO_ForumBoard::blank(['board_title' => 'GWFv5 Forum', 'board_description' => 'Welcome to the GWFv5 Forum Module'])->insert();
         }
     }
     
@@ -112,10 +112,10 @@ final class Module_Forum extends Module
     #############
     ### Hooks ###
     #############
-    public function hookForumPostCreated(ForumPost $post)
+    public function hookForumPostCreated(GDO_ForumPost $post)
     {
         $post->getThread()->getBoard()->recache();
-        ForumBoard::recacheAll();
+        GDO_ForumBoard::recacheAll();
     }
     
     ##############
