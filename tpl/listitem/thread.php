@@ -1,8 +1,8 @@
 <?php
 use GDO\Avatar\Avatar;
 use GDO\Forum\ForumThread;
-use GDO\UI\GDO_Icon;
-use GDO\UI\GDO_IconButton;
+use GDO\UI\GDT_Icon;
+use GDO\UI\GDT_IconButton;
 use GDO\User\User;
 
 $thread instanceof ForumThread;
@@ -23,7 +23,7 @@ $subscribeClass = $subscribed ? 'gdo-forum gdo-forum-subscribed' : 'gdo-forum';
     <p><?= $thread->displayCreated(); ?></p>
   </div>
   <?= t('thread_postcount', [$thread->getPostCount()]); ?>
-  <?= GDO_Icon::iconS('arrow_right'); ?>
+  <?= GDT_Icon::iconS('arrow_right'); ?>
   <?php $href = $subscribed ? href('Forum', 'Unsubscribe', '&thread='.$tid) : href('Forum', 'Subscribe', '&thread='.$tid)?>
-  <?= GDO_IconButton::make()->href($href)->icon('email'); ?>
+  <?= GDT_IconButton::make()->href($href)->icon('email'); ?>
  </md-list-item>

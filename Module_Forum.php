@@ -3,13 +3,13 @@ namespace GDO\Forum;
 
 use GDO\Core\Module;
 use GDO\DB\Cache;
-use GDO\Date\GDO_DateTime;
-use GDO\Template\GDO_Bar;
-use GDO\Type\GDO_Checkbox;
-use GDO\Type\GDO_Int;
-use GDO\Type\GDO_Message;
-use GDO\UI\GDO_IconButton;
-use GDO\User\GDO_Level;
+use GDO\Date\GDT_DateTime;
+use GDO\Template\GDT_Bar;
+use GDO\Type\GDT_Checkbox;
+use GDO\Type\GDT_Int;
+use GDO\Type\GDT_Message;
+use GDO\UI\GDT_IconButton;
+use GDO\User\GDT_Level;
 use GDO\User\User;
 /**
  * GWF Forum Module
@@ -47,8 +47,8 @@ final class Module_Forum extends Module
     public function getUserSettings()
     {
         return array(
-            GDO_Message::make('forum_signature')->utf8()->caseI()->max(512)->label('forum_signature'),
-            GDO_ForumSubscribe::make('forum_subscription')->initialValue(GDO_ForumSubscribe::OWN),
+            GDT_Message::make('forum_signature')->utf8()->caseI()->max(512)->label('forum_signature'),
+            GDT_ForumSubscribe::make('forum_subscription')->initialValue(GDT_ForumSubscribe::OWN),
         );
     }
     
@@ -58,9 +58,9 @@ final class Module_Forum extends Module
     public function getUserConfig()
     {
         return array(
-            GDO_Int::make('forum_posts')->unsigned()->initial('0'),
-            GDO_Int::make('forum_threads')->unsigned()->initial('0'),
-            GDO_DateTime::make('forum_readmark')->label('forum_readmark'),
+            GDT_Int::make('forum_posts')->unsigned()->initial('0'),
+            GDT_Int::make('forum_threads')->unsigned()->initial('0'),
+            GDT_DateTime::make('forum_readmark')->label('forum_readmark'),
         );
     }
     
@@ -70,12 +70,12 @@ final class Module_Forum extends Module
     public function getConfig()
     {
         return array(
-            GDO_Checkbox::make('forum_guest_posts')->initial('1'),
-            GDO_Checkbox::make('forum_attachments')->initial('1'),
-            GDO_Level::make('forum_attachment_level')->initial('0'),
-            GDO_Level::make('forum_post_level')->initial('0'),
-            GDO_DateTime::make('forum_latest_post_date'),
-            GDO_Int::make('forum_mail_sent_for_post')->initial('0'),
+            GDT_Checkbox::make('forum_guest_posts')->initial('1'),
+            GDT_Checkbox::make('forum_attachments')->initial('1'),
+            GDT_Level::make('forum_attachment_level')->initial('0'),
+            GDT_Level::make('forum_post_level')->initial('0'),
+            GDT_DateTime::make('forum_latest_post_date'),
+            GDT_Int::make('forum_mail_sent_for_post')->initial('0'),
         );
     }
     public function cfgGuestPosts() { return $this->getConfigValue('forum_guest_posts'); }
@@ -122,12 +122,12 @@ final class Module_Forum extends Module
     ### Render ###
     ##############
     public function renderTabs() { return $this->templatePHP('tabs.php'); }
-    public function hookLeftBar(GDO_Bar $navbar) { $this->templatePHP('sidebars.php', ['navbar'=>$navbar]); }
-    public function hookTopBar(GDO_Bar $navbar)
+    public function hookLeftBar(GDT_Bar $navbar) { $this->templatePHP('sidebars.php', ['navbar'=>$navbar]); }
+    public function hookTopBar(GDT_Bar $navbar)
     {
         if (mo()==='Forum')
         {
-            $navbar->addField(GDO_IconButton::make()->icon('settings')->href(href('Account', 'Settings', '&module=Forum')));
+            $navbar->addField(GDT_IconButton::make()->icon('settings')->href(href('Account', 'Settings', '&module=Forum')));
         }
     }
 }

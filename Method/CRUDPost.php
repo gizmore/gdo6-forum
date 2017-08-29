@@ -1,10 +1,10 @@
 <?php
 namespace GDO\Forum\Method;
 
-use GDO\Core\GDO_Hook;
+use GDO\Core\GDT_Hook;
 use GDO\DB\GDO;
-use GDO\Form\GDO_Form;
-use GDO\Form\GDO_Hidden;
+use GDO\Form\GDT_Form;
+use GDO\Form\GDT_Hidden;
 use GDO\Form\MethodCrud;
 use GDO\Forum\ForumPost;
 use GDO\Forum\ForumRead;
@@ -65,12 +65,12 @@ final class CRUDPost extends MethodCrud
         return $tabs->add($response);
     }
     
-    public function createForm(GDO_Form $form)
+    public function createForm(GDT_Form $form)
     {
         $gdo = $this->gdoTable();
         $boardId = Common::getRequestString('board');
         $form->addFields(array(
-            GDO_Hidden::make('post_thread')->initial($this->thread->getID()),
+            GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
             $gdo->gdoColumn('post_message'),
         ));
         if (Module_Forum::instance()->canUpload(User::current()))
@@ -87,20 +87,13 @@ final class CRUDPost extends MethodCrud
         $this->createFormButtons($form);
     }
     
-    public function afterCreate(GDO_Form $form, GDO $gdo)
+    public function afterCreate(GDT_Form $form, GDO $gdo)
     {
         $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$gdo->getID()}&file="));
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         UserSetting::inc('forum_posts');
         ForumRead::markRead(User::current(), $gdo);
-    }
-    
-    public function afterExecute()
-    {
-        if ($this->crudMode === self::CREATED)
-        {
-            GDO_Hook::call('ForumPostCreated', $this->gdo);
-        }
+        GDT_Hook::call('ForumPostCreated', $gdo);
     }
 }

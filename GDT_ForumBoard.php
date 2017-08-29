@@ -1,13 +1,13 @@
 <?php
 namespace GDO\Forum;
-use GDO\Template\GDO_Template;
-use GDO\DB\GDO_ObjectSelect;
+use GDO\Template\GDT_Template;
+use GDO\DB\GDT_ObjectSelect;
 /**
  * A selection for a Category object.
  * @author gizmore
  * @see Category
  */
-final class GDO_ForumBoard extends GDO_ObjectSelect
+final class GDT_ForumBoard extends GDT_ObjectSelect
 {
 	public function defaultLabel() { return $this->label('board'); }
 	
@@ -32,11 +32,11 @@ final class GDO_ForumBoard extends GDO_ObjectSelect
 	
 	public function renderCell()
 	{
-		return GDO_Template::php('Forum', 'cell/board.php', ['field'=>$this]);
+		return GDT_Template::php('Forum', 'cell/board.php', ['field'=>$this]);
 	}
 	
 	public function renderChoice()
 	{
-		return GDO_Template::php('Forum', 'choice/board.php', ['field'=>$this]);
+		return GDT_Template::php('Forum', 'choice/board.php', ['field'=>$this]);
 	}
 }

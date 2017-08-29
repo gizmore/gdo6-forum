@@ -1,8 +1,8 @@
 <?php
 use GDO\Forum\ForumPost;
-use GDO\UI\GDO_Button;
-use GDO\UI\GDO_EditButton;
-use GDO\UI\GDO_IconButton;
+use GDO\UI\GDT_Button;
+use GDO\UI\GDT_EditButton;
+use GDO\UI\GDT_IconButton;
 use GDO\User\User;
 
 $post instanceof ForumPost;
@@ -29,7 +29,7 @@ if ($unread) $post->markRead($user);
     <?= $post->displayMessage(); ?>
 <?php if ($post->hasAttachment()) : ?>
     <div class="gdo-attachment" layout="row" flex layout-fill layout-align="left center">
-      <div><?= GDO_IconButton::make()->icon('file_download')->href($post->hrefAttachment()); ?></div>
+      <div><?= GDT_IconButton::make()->icon('file_download')->href($post->hrefAttachment()); ?></div>
       <div><?= $post->getAttachment()->renderCell(); ?></div>
     </div>
 <?php endif; ?>
@@ -38,9 +38,9 @@ if ($unread) $post->markRead($user);
   </md-card-content>
   <gdo-div></gdo-div>
   <md-card-actions layout="row" layout-align="end center">
-    <?= GDO_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)); ?>
-    <?= GDO_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()); ?>
-    <?= GDO_Button::make('btn_quote')->icon('reply_all')->href($post->hrefQuote()); ?>
+    <?= GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)); ?>
+    <?= GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()); ?>
+    <?= GDT_Button::make('btn_quote')->icon('reply_all')->href($post->hrefQuote()); ?>
   </md-card-actions>
 </md-card>
 <!-- End ForumPost card -->

@@ -2,7 +2,7 @@
 namespace GDO\Forum;
 
 use GDO\DB\GDO;
-use GDO\User\GDO_User;
+use GDO\User\GDT_User;
 use GDO\User\User;
 
 final class ForumBoardSubscribe extends GDO
@@ -11,8 +11,8 @@ final class ForumBoardSubscribe extends GDO
     public function gdoColumns()
     {
         return array(
-            GDO_User::make('subscribe_user')->primary(),
-            GDO_ForumBoard::make('subscribe_board')->primary(),
+            GDT_User::make('subscribe_user')->primary(),
+            GDT_ForumBoard::make('subscribe_board')->primary(),
         );
     }
     

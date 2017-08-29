@@ -1,7 +1,7 @@
 <?php
 use GDO\Forum\ForumBoard;
-use GDO\UI\GDO_Icon;
-use GDO\UI\GDO_IconButton;
+use GDO\UI\GDT_Icon;
+use GDO\UI\GDT_IconButton;
 use GDO\User\User;
 
 $board instanceof ForumBoard;
@@ -19,8 +19,8 @@ $readClass = $board->hasUnreadPosts($user) ? 'gdo-forum-unread' : 'gdo-forum-rea
     <p><?= t('board_stats', [$board->getThreadCount(), $board->getPostCount()]); ?></p>
   </div>
 
-  <?= GDO_Icon::iconS('arrow_right'); ?>
+  <?= GDT_Icon::iconS('arrow_right'); ?>
   <?php $href = $subscribed ? href('Forum', 'Unsubscribe', '&board='.$bid) : href('Forum', 'Subscribe', '&board='.$bid)?>
-  <?= GDO_IconButton::make()->href($href)->icon('email'); ?>
+  <?= GDT_IconButton::make()->href($href)->icon('email'); ?>
       
 </md-list-item>

@@ -7,7 +7,7 @@ use GDO\Forum\ForumPost;
 use GDO\Forum\ForumThreadSubscribe;
 use GDO\Forum\Module_Forum;
 use GDO\Mail\Mail;
-use GDO\UI\GDO_Link;
+use GDO\UI\GDT_Link;
 use GDO\User\User;
 use GDO\User\UserSetting;
 
@@ -112,7 +112,7 @@ final class CronjobMailer extends MethodCronjob
         $poster = $post->getCreator()->displayNameLabel();
         $title = $thread->displayTitle();
         $message = $post->displayMessage();
-        $linkUnsub = GDO_Link::anchor(url('Forum', 'UnsubscribeAll', '&token='.$user->gdoHashcode()));
+        $linkUnsub = GDT_Link::anchor(url('Forum', 'UnsubscribeAll', '&token='.$user->gdoHashcode()));
         $args = [$username, $sitename, $title, $poster, $message, $linkUnsub];
         $mail->setSubject(tusr($user, 'mail_subj_forum_post', [$sitename, $title]));
         $mail->setBody(tusr($user, 'mail_body_forum_post', $args));

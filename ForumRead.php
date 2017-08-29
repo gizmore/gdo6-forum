@@ -2,8 +2,8 @@
 namespace GDO\Forum;
 
 use GDO\DB\GDO;
-use GDO\DB\GDO_Object;
-use GDO\User\GDO_User;
+use GDO\DB\GDT_Object;
+use GDO\User\GDT_User;
 use GDO\User\User;
 use GDO\User\UserSetting;
 
@@ -17,8 +17,8 @@ final class ForumRead extends GDO
     public function gdoColumns()
     {
         return array(
-            GDO_User::make('read_user')->primary(),
-            GDO_Object::make('read_post')->table(ForumPost::table())->primary(),
+            GDT_User::make('read_user')->primary(),
+            GDT_Object::make('read_post')->table(ForumPost::table())->primary(),
         );
     }
     

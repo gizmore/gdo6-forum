@@ -2,16 +2,16 @@
 namespace GDO\Forum;
 
 use GDO\DB\GDO;
-use GDO\DB\GDO_AutoInc;
-use GDO\DB\GDO_CreatedAt;
-use GDO\DB\GDO_CreatedBy;
-use GDO\DB\GDO_EditedAt;
-use GDO\DB\GDO_EditedBy;
-use GDO\DB\GDO_Object;
+use GDO\DB\GDT_AutoInc;
+use GDO\DB\GDT_CreatedAt;
+use GDO\DB\GDT_CreatedBy;
+use GDO\DB\GDT_EditedAt;
+use GDO\DB\GDT_EditedBy;
+use GDO\DB\GDT_Object;
 use GDO\File\File;
-use GDO\File\GDO_File;
-use GDO\Template\GDO_Template;
-use GDO\Type\GDO_Message;
+use GDO\File\GDT_File;
+use GDO\Template\GDT_Template;
+use GDO\Type\GDT_Message;
 use GDO\User\User;
 use GDO\User\UserSetting;
 
@@ -24,15 +24,15 @@ final class ForumPost extends GDO
     public function gdoColumns()
     {
         return array(
-            GDO_AutoInc::make('post_id'),
-            GDO_Object::make('post_thread')->table(ForumThread::table())->notNull(),
-            GDO_Message::make('post_message')->utf8()->caseI()->notNull(),
-            GDO_File::make('post_attachment'),
+            GDT_AutoInc::make('post_id'),
+            GDT_Object::make('post_thread')->table(ForumThread::table())->notNull(),
+            GDT_Message::make('post_message')->utf8()->caseI()->notNull(),
+            GDT_File::make('post_attachment'),
             
-            GDO_CreatedAt::make('post_created'),
-            GDO_CreatedBy::make('post_creator'),
-            GDO_EditedAt::make('post_edited'),
-            GDO_EditedBy::make('post_editor'),
+            GDT_CreatedAt::make('post_created'),
+            GDT_CreatedBy::make('post_creator'),
+            GDT_EditedAt::make('post_edited'),
+            GDT_EditedBy::make('post_editor'),
         );
     }
     ##################
@@ -75,7 +75,7 @@ final class ForumPost extends GDO
     public function displaySignature() { return UserSetting::userGet($this->getCreator(), 'forum_signature')->renderCell(); }
     public function displayMessage() { return $this->gdoColumn('post_message')->renderCell(); }
     public function displayCreated() { return tt($this->getCreated()); }
-    public function renderCard() { return GDO_Template::responsePHP('Forum', 'card/post.php', ['post'=>$this]); }
+    public function renderCard() { return GDT_Template::responsePHP('Forum', 'card/post.php', ['post'=>$this]); }
 
     ##############
     ### Unread ###

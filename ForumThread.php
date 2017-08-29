@@ -2,13 +2,13 @@
 namespace GDO\Forum;
 
 use GDO\DB\GDO;
-use GDO\DB\GDO_AutoInc;
-use GDO\DB\GDO_CreatedAt;
-use GDO\DB\GDO_CreatedBy;
-use GDO\Template\GDO_Template;
-use GDO\Type\GDO_Checkbox;
-use GDO\Type\GDO_Int;
-use GDO\Type\GDO_String;
+use GDO\DB\GDT_AutoInc;
+use GDO\DB\GDT_CreatedAt;
+use GDO\DB\GDT_CreatedBy;
+use GDO\Template\GDT_Template;
+use GDO\Type\GDT_Checkbox;
+use GDO\Type\GDT_Int;
+use GDO\Type\GDT_String;
 use GDO\User\User;
 use GDO\User\UserSetting;
 /**
@@ -24,14 +24,14 @@ final class ForumThread extends GDO
     public function gdoColumns()
     {
         return array(
-            GDO_AutoInc::make('thread_id'),
-            GDO_ForumBoard::make('thread_board')->notNull()->label('board'),
-            GDO_String::make('thread_title')->utf8()->caseI()->notNull()->max(128)->label('title'),
-            GDO_Int::make('thread_postcount')->unsigned()->initial('0'),
-            GDO_Int::make('thread_viewcount')->unsigned()->initial('0'),
-            GDO_Checkbox::make('thread_locked')->initial('0'),
-            GDO_CreatedAt::make('thread_created'),
-            GDO_CreatedBy::make('thread_creator'),
+            GDT_AutoInc::make('thread_id'),
+            GDT_ForumBoard::make('thread_board')->notNull()->label('board'),
+            GDT_String::make('thread_title')->utf8()->caseI()->notNull()->max(128)->label('title'),
+            GDT_Int::make('thread_postcount')->unsigned()->initial('0'),
+            GDT_Int::make('thread_viewcount')->unsigned()->initial('0'),
+            GDT_Checkbox::make('thread_locked')->initial('0'),
+            GDT_CreatedAt::make('thread_created'),
+            GDT_CreatedBy::make('thread_creator'),
         );
     }
     
@@ -70,7 +70,7 @@ final class ForumThread extends GDO
     public function displayTitle() { return html($this->getTitle()); }
     public function displayCreated() { return tt($this->getCreated()); }
     
-    public function renderList() { return GDO_Template::php('Forum', 'listitem/thread.php', ['thread'=>$this]); }
+    public function renderList() { return GDT_Template::php('Forum', 'listitem/thread.php', ['thread'=>$this]); }
 
     ##############
     ### Unread ###
@@ -99,7 +99,7 @@ final class ForumThread extends GDO
     #################
     public function hasSubscribed(User $user)
     {
-        if (UserSetting::userGet($user, 'forum_subscription') === GDO_ForumSubscribe::ALL)
+        if (UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
         {
             return true;
         }

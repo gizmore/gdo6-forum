@@ -4,14 +4,14 @@ namespace GDO\Forum;
 use GDO\Category\Tree;
 use GDO\Core\Logger;
 use GDO\DB\Cache;
-use GDO\DB\GDO_AutoInc;
-use GDO\DB\GDO_CreatedAt;
-use GDO\DB\GDO_CreatedBy;
-use GDO\Template\GDO_Template;
-use GDO\Type\GDO_Checkbox;
-use GDO\Type\GDO_Int;
-use GDO\Type\GDO_String;
-use GDO\User\GDO_Permission;
+use GDO\DB\GDT_AutoInc;
+use GDO\DB\GDT_CreatedAt;
+use GDO\DB\GDT_CreatedBy;
+use GDO\Template\GDT_Template;
+use GDO\Type\GDT_Checkbox;
+use GDO\Type\GDT_Int;
+use GDO\Type\GDT_String;
+use GDO\User\GDT_Permission;
 use GDO\User\User;
 use GDO\User\UserSetting;
 /**
@@ -36,15 +36,15 @@ final class ForumBoard extends Tree
     public function gdoColumns()
     {
         return array_merge(array(
-            GDO_AutoInc::make('board_id'),
-            GDO_String::make('board_title')->notNull()->utf8()->caseI()->label('title')->max(64),
-            GDO_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->max(256),
-            GDO_Permission::make('board_permission'),
-            GDO_CreatedAt::make('board_created'),
-            GDO_CreatedBy::make('board_creator'),
-            GDO_Checkbox::make('board_allow_threads')->initial('0'),
-            GDO_Int::make('board_threadcount')->initial('0'),
-            GDO_Int::make('board_postcount')->initial('0'),
+            GDT_AutoInc::make('board_id'),
+            GDT_String::make('board_title')->notNull()->utf8()->caseI()->label('title')->max(64),
+            GDT_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->max(256),
+            GDT_Permission::make('board_permission'),
+            GDT_CreatedAt::make('board_created'),
+            GDT_CreatedBy::make('board_creator'),
+            GDT_Checkbox::make('board_allow_threads')->initial('0'),
+            GDT_Int::make('board_threadcount')->initial('0'),
+            GDT_Int::make('board_postcount')->initial('0'),
         ), parent::gdoColumns());
     }
 
@@ -71,7 +71,7 @@ final class ForumBoard extends Tree
     ##############
     public function displayName() { return html($this->getTitle()); }
     public function displayDescription() { return html($this->getDescription()); }
-    public function renderList() { return GDO_Template::php('Forum', 'listitem/board.php', ['board'=>$this]); }
+    public function renderList() { return GDT_Template::php('Forum', 'listitem/board.php', ['board'=>$this]); }
     public function renderChoice() { return sprintf('%s - %s', $this->getID(), $this->displayName()); }
     
     #############
@@ -140,7 +140,7 @@ final class ForumBoard extends Tree
     
     public function hasSubscribed(User $user)
     {
-        if (UserSetting::userGet($user, 'forum_subscription') === GDO_ForumSubscribe::ALL)
+        if (UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
         {
             return true;
         }

@@ -3,9 +3,9 @@ namespace GDO\Forum\Method;
 
 use GDO\Core\Logger;
 use GDO\Core\Website;
-use GDO\Form\GDO_AntiCSRF;
-use GDO\Form\GDO_Form;
-use GDO\Form\GDO_Submit;
+use GDO\Form\GDT_AntiCSRF;
+use GDO\Form\GDT_Form;
+use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\Forum\ForumBoard;
 use GDO\Forum\ForumThread;
@@ -38,7 +38,7 @@ final class EditThread extends MethodForm
         return $tabs->add($response);
     }
     
-    public function createForm(GDO_Form $form)
+    public function createForm(GDT_Form $form)
     {
         $user = User::current();
         $gdo = $this->thread;
@@ -48,14 +48,14 @@ final class EditThread extends MethodForm
         }
         $form->addFields(array(
             $gdo->gdoColumn('thread_title'),
-            GDO_Submit::make(),
-            GDO_Submit::make('delete'),
-            GDO_AntiCSRF::make(),
+            GDT_Submit::make(),
+            GDT_Submit::make('delete'),
+            GDT_AntiCSRF::make(),
         ));
         $form->withGDOValuesFrom($gdo);
     }
     
-    public function formValidated(GDO_Form $form)
+    public function formValidated(GDT_Form $form)
     {
         $response = null;
         $this->thread->saveVar('thread_title', $form->getFormVar('thread_title'));

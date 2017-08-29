@@ -1,9 +1,9 @@
 <?php
 namespace GDO\Forum;
 
-use GDO\Form\GDO_Enum;
+use GDO\Form\GDT_Enum;
 
-final class GDO_ForumSubscribe extends GDO_Enum
+final class GDT_ForumSubscribe extends GDT_Enum
 {
     const NONE = 'fsub_none';
     const OWN = 'fsub_own';

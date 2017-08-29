@@ -1,11 +1,11 @@
 <?php
 namespace GDO\Forum\Method;
 
-use GDO\Core\GDO_Hook;
+use GDO\Core\GDT_Hook;
 use GDO\Core\Website;
-use GDO\Form\GDO_AntiCSRF;
-use GDO\Form\GDO_Form;
-use GDO\Form\GDO_Submit;
+use GDO\Form\GDT_AntiCSRF;
+use GDO\Form\GDT_Form;
+use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\Forum\ForumPost;
 use GDO\Forum\ForumRead;
@@ -36,7 +36,7 @@ final class CreateThread extends MethodForm
         return $tabs->add($response);
     }
     
-    public function createForm(GDO_Form $form)
+    public function createForm(GDT_Form $form)
     {
         $gdo = ForumThread::table();
         $posts = ForumPost::table();
@@ -45,8 +45,8 @@ final class CreateThread extends MethodForm
             $gdo->gdoColumn('thread_title'),
             $posts->gdoColumn('post_message'),
             $posts->gdoColumn('post_attachment'),
-            GDO_Submit::make(),
-            GDO_AntiCSRF::make(),
+            GDT_Submit::make(),
+            GDT_AntiCSRF::make(),
         ));
         
         $module = Module_Forum::instance();
@@ -57,7 +57,7 @@ final class CreateThread extends MethodForm
         }
     }
     
-    public function formValidated(GDO_Form $form)
+    public function formValidated(GDT_Form $form)
     {
         $module = Module_Forum::instance();
         $thread = ForumThread::blank($form->getFormData())->insert();
@@ -74,7 +74,7 @@ final class CreateThread extends MethodForm
     {
         if ($this->getForm()->validated)
         {
-            GDO_Hook::call('ForumPostCreated', $this->post);
+            GDT_Hook::call('ForumPostCreated', $this->post);
         }
     }
 }
