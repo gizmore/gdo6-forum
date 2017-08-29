@@ -89,6 +89,7 @@ final class CRUDPost extends MethodCrud
     
     public function afterCreate(GDO_Form $form, GDO $gdo)
     {
+        $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$gdo->getID()}&file="));
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         UserSetting::inc('forum_posts');
