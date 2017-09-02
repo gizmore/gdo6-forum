@@ -72,10 +72,11 @@ final class GDO_ForumRead extends GDO
     
     public static function getUnread(GDO_User $user)
     {
-        static $cache; # Cache only in this request
-        if (!isset($cache))
+        if (null === ($cache = $user->tempGet('gdo_forum_unread')))
         {
             $cache = self::queryUnread($user);
+            $user->tempSet('gdo_forum_unread', $cache);
+            $user->recache();
         }
         return $cache;
     }
