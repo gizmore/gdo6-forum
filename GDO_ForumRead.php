@@ -27,6 +27,8 @@ final class GDO_ForumRead extends GDO
     ################
     public static function markRead(GDO_User $user, GDO_ForumPost $post)
     {
+        $user->tempUnset('gdo_forum_unread');
+        $user->recache();
         return self::blank(['read_user'=>$user->getID(), 'read_post'=>$post->getID()])->replace();
     }
     
@@ -85,7 +87,7 @@ final class GDO_ForumRead extends GDO
     {
         $module = Module_Forum::instance();
         $latest = $module->cfgLastPostDate();
-        $latestU = GDO_UserSetting::userGet($user, 'forum_readmark')->getValue();
+        $latestU = GDO_UserSetting::userGet($user, 'forum_readmark')->getVar();
         $latestU = $latestU === null ? $user->getRegisterDate() : $latestU;
         if ( ($latest === $latestU) || (!$user->isAuthenticated()) ) 
         {
