@@ -18,7 +18,7 @@ final class GDO_ForumThreadSubscribe extends GDO
     }
     
     /**
-     * @return User
+     * @return GDO_User
      */
     public function getUser() { return $this->getValue('subscribe_user'); }
     public function getUserID() { return $this->getVar('subscribe_user'); }

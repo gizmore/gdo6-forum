@@ -102,7 +102,7 @@ final class Module_Forum extends GDO_Module
     {
         if (!GDO_ForumBoard::getById('1'))
         {
-            GDO_ForumBoard::blank(['board_title' => 'GWFv5 Forum', 'board_description' => 'Welcome to the GWFv5 Forum Module'])->insert();
+            GDO_ForumBoard::blank(['board_title' => 'GDOv6 Forum', 'board_description' => 'Welcome to the GDOv6 Forum Module'])->insert();
         }
     }
     

@@ -14,6 +14,7 @@ use GDO\Template\GDT_Template;
 use GDO\Type\GDT_Message;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
+use GDO\User\GDO_UserSettingBlob;
 
 final class GDO_ForumPost extends GDO
 {
@@ -59,7 +60,7 @@ final class GDO_ForumPost extends GDO
     public function getCreated() { return $this->getVar('post_created'); }
     
     /**
-     * @return User
+     * @return GDO_User
      */
     public function getCreator() { return $this->getValue('post_creator'); }
     public function getCreatorID() { return $this->getVar('post_creator'); }
@@ -72,7 +73,7 @@ final class GDO_ForumPost extends GDO
     ##############
     ### Render ###
     ##############
-    public function displaySignature() { return GDO_UserSetting::userGet($this->getCreator(), 'signature')->renderCell(); }
+    public function displaySignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->renderCell(); }
     public function displayMessage() { return $this->gdoColumn('post_message')->renderCell(); }
     public function displayCreated() { return tt($this->getCreated()); }
     public function renderCard() { return GDT_Template::responsePHP('Forum', 'card/post.php', ['post'=>$this]); }

@@ -59,7 +59,7 @@ final class GDO_ForumThread extends GDO
     
     public function getCreated() { return $this->getVar('thread_created'); }
     /**
-     * @return User
+     * @return GDO_User
      */
     public function getCreator() { return $this->getValue('thread_creator'); }
     public function getCreatorID() { return $this->getVar('thread_creator'); }
