@@ -72,7 +72,7 @@ final class GDO_ForumPost extends GDO
     ##############
     ### Render ###
     ##############
-    public function displaySignature() { return GDO_UserSetting::userGet($this->getCreator(), 'forum_signature')->renderCell(); }
+    public function displaySignature() { return GDO_UserSetting::userGet($this->getCreator(), 'signature')->renderCell(); }
     public function displayMessage() { return $this->gdoColumn('post_message')->renderCell(); }
     public function displayCreated() { return tt($this->getCreated()); }
     public function renderCard() { return GDT_Template::responsePHP('Forum', 'card/post.php', ['post'=>$this]); }

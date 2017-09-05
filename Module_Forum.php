@@ -41,9 +41,6 @@ final class Module_Forum extends GDO_Module
     ##############
     ### Config ###
     ##############
-    /**
-     * Let user choose a signature in settings page.
-     */
     public function getUserSettings()
     {
         return array(

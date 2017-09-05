@@ -27,8 +27,7 @@ return array(
 'msg_thread_moved' => 'Your thread has been moved to another board.',
 'msg_thread_edited' => 'Your thread has been edited successfully.',
 #######################################################################
-'forum_signature' => 'Forum signature',
-'tt_forum_signature' => 'There might be a separate PM Signature',
+'signature' => 'Your signature',
 'forum_subscription_mode' => 'Forum E-Mail Subscription Mode',
 'tt_forum_subscription_mode' => 'Also check account settings for E-Mail options',
 'forum_posts' => 'Your total posts',
