@@ -47,8 +47,13 @@ final class Module_Forum extends GDO_Module
     public function getUserSettings()
     {
         return array(
-            GDT_Message::make('forum_signature')->utf8()->caseI()->max(512)->label('forum_signature'),
             GDT_ForumSubscribe::make('forum_subscription')->initialValue(GDT_ForumSubscribe::OWN),
+        );
+    }
+    public function getUserSettingBlobs()
+    {
+        return array(
+            GDT_Message::make('signature')->max(4096)->label('signature'),
         );
     }
     
