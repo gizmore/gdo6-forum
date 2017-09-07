@@ -94,7 +94,9 @@ final class CronjobMailer extends MethodCronjob
     private function getBoardIDs(GDO_ForumPost $post)
     {
         $ids = [];
-        $board = $post->getThread()->getBoard();
+        $thread = $post->getThread();
+        GDO_User::table()->countWhere();
+        $board = $thread->getBoard();
         while ($board)
         {
             $ids[] = $board->getID();
