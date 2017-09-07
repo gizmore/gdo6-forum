@@ -32,7 +32,10 @@ final class EditThread extends MethodForm
     public function execute()
     {
         $this->thread = GDO_ForumThread::table()->find(Common::getGetString('id'));
-        
+        if (!$this->thread->canEdit(GDO_User::current()))
+        {
+            return $this->error('err_permission');
+        }
         $response = parent::execute();
         $tabs = Module_Forum::instance()->renderTabs();
         return $tabs->add($response);

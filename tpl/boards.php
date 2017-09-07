@@ -5,16 +5,13 @@ use GDO\Forum\GDO_ForumThread;
 use GDO\Table\GDT_List;
 use GDO\Table\GDT_PageMenu;
 use GDO\UI\GDT_Button;
-use GDO\Util\Common;
 
 $table = GDO_ForumBoard::table();
-$boards = $table->full()[0]; # Get tree structure
-$board = $boards[Common::getRequestString('board', '1')];
 $board instanceof GDO_ForumBoard;
 
 # Children boards as list.
 $list = GDT_List::make();
-$list->result(new ArrayResult($board->children, $table));
+$list->result(new ArrayResult($board->authorizedChildren(), $table));
 $list->listMode(GDT_List::MODE_LIST);
 $list->rawlabel($board->displayDescription());
 echo $list->render();

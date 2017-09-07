@@ -14,6 +14,7 @@ use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 use GDO\Util\Common;
+use GDO\Forum\GDO_ForumBoard;
 /**
  * Start a new thread.
  * @author gizmore
@@ -25,12 +26,19 @@ final class CreateThread extends MethodForm
 {
     private $post;
     
+    private $board;
+    
     public function isUserRequired() { return true; }
     
     public function isGuestAllowed() { return Module_Forum::instance()->cfgGuestPosts(); }
     
     public function execute()
     {
+        $this->board = GDO_ForumBoard::findById(Common::getRequestString('board'));
+        if (!($this->board->canView(GDO_User::current())))
+        {
+            return $this->error('err_permission');
+        }
         $response = parent::execute();
         $tabs = Module_Forum::instance()->renderTabs();
         return $tabs->add($response);
@@ -41,7 +49,7 @@ final class CreateThread extends MethodForm
         $gdo = GDO_ForumThread::table();
         $posts = GDO_ForumPost::table();
         $form->addFields(array(
-            $gdo->gdoColumn('thread_board')->initial(Common::getRequestString('board'))->editable(false),
+            $gdo->gdoColumn('thread_board')->initial($this->board->getID())->editable(false),
             $gdo->gdoColumn('thread_title'),
             $posts->gdoColumn('post_message'),
             $posts->gdoColumn('post_attachment'),

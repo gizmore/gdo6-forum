@@ -66,6 +66,22 @@ final class GDO_ForumBoard extends GDO_Tree
     public function needsPermission() { return $this->getPermissionID() !== null; }
     public function canView(GDO_User $user) { return $this->needsPermission() ? $user->hasPermissionID($this->getPermissionID()) : true; }
     
+    public function authorizedChildren(GDO_User $user)
+    {
+        $authed = [];
+        if ($children = $this->children)
+        {
+            foreach ($children as $child)
+            {
+                if ($child->canView($user))
+                {
+                    $authed[$child->getID()] = $child; 
+                }
+            }
+        }
+        return $authed;
+    }
+    
     ##############
     ### Render ###
     ##############
