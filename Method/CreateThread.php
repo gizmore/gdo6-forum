@@ -35,7 +35,8 @@ final class CreateThread extends MethodForm
     public function execute()
     {
         $this->board = GDO_ForumBoard::findById(Common::getRequestString('board'));
-        if (!($this->board->canView(GDO_User::current())))
+        if ( (!$this->board->canView(GDO_User::current())) ||
+             (!$this->board->allowsThreads()) )
         {
             return $this->error('err_permission');
         }
