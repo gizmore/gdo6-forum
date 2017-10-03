@@ -5,16 +5,17 @@ use GDO\Forum\GDO_ForumThread;
 use GDO\Table\GDT_List;
 use GDO\Table\GDT_PageMenu;
 use GDO\UI\GDT_Button;
+use GDO\User\GDO_User;
 
 $table = GDO_ForumBoard::table();
 $board instanceof GDO_ForumBoard;
 
 # Children boards as list.
 $list = GDT_List::make();
-$list->result(new ArrayResult($board->authorizedChildren(), $table));
+$list->result(new ArrayResult($board->authorizedChildren(GDO_User::current()), $table));
 $list->listMode(GDT_List::MODE_LIST);
 $list->rawlabel($board->displayDescription());
-echo $list->render();
+echo $list->renderCell();
 
 # Create thread button
 if ($board->allowsThreads())
@@ -30,4 +31,4 @@ $pagemenu->filterQuery($query);
 $list->query($query);
 $list->listMode(GDT_List::MODE_LIST);
 // $list->label('list_title_board_threads', [$board->getThreadCount()]);
-echo $list->render();
+echo $list->renderCell();
