@@ -14,7 +14,7 @@ $board instanceof GDO_ForumBoard;
 $list = GDT_List::make();
 $list->result(new ArrayResult($board->authorizedChildren(GDO_User::current()), $table));
 $list->listMode(GDT_List::MODE_LIST);
-$list->rawlabel($board->displayDescription());
+$list->title($board->displayDescription());
 echo $list->renderCell();
 
 # Create thread button

@@ -124,7 +124,7 @@ final class Module_Forum extends GDO_Module
     ##############
     ### Render ###
     ##############
-    public function renderTabs() { return $this->templatePHP('tabs.php'); }
+    public function renderTabs() { return $this->responsePHP('tabs.php'); }
     public function hookLeftBar(GDT_Bar $navbar) { $this->templatePHP('sidebars.php', ['navbar'=>$navbar]); }
     public function hookTopBar(GDT_Bar $navbar)
     {
