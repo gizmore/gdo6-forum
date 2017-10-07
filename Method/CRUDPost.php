@@ -2,7 +2,7 @@
 namespace GDO\Forum\Method;
 
 use GDO\Core\GDT_Hook;
-use GDO\DB\GDO;
+use GDO\Core\GDO;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Hidden;
 use GDO\Form\MethodCrud;

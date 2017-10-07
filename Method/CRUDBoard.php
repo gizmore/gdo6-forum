@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Forum\Method;
 
-use GDO\DB\GDO;
+use GDO\Core\GDO;
 use GDO\Form\GDT_Form;
 use GDO\Form\MethodCrud;
 use GDO\Forum\GDO_ForumBoard;

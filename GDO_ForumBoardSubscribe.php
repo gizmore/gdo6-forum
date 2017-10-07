@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Forum;
 
-use GDO\DB\GDO;
+use GDO\Core\GDO;
 use GDO\User\GDT_User;
 use GDO\User\GDO_User;
 
