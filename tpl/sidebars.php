@@ -2,7 +2,7 @@
 use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\GDO_ForumRead;
 use GDO\Forum\Module_Forum;
-use GDO\Template\GDT_Bar;
+use GDO\UI\GDT_Bar;
 use GDO\UI\GDT_Link;
 use GDO\User\GDO_User;
 $navbar instanceof GDT_Bar;

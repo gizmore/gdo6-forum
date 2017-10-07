@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Forum\Method;
 
-use GDO\Cronjob\MethodCronjob;
+use GDO\Core\MethodCronjob;
 use GDO\Forum\GDO_ForumBoardSubscribe;
 use GDO\Forum\GDO_ForumPost;
 use GDO\Forum\GDO_ForumThreadSubscribe;

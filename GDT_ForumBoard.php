@@ -1,6 +1,6 @@
 <?php
 namespace GDO\Forum;
-use GDO\Template\GDT_Template;
+use GDO\Core\GDT_Template;
 use GDO\DB\GDT_ObjectSelect;
 /**
  * A selection for a forum board.

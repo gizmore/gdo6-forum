@@ -1,12 +1,16 @@
 <?php
 namespace GDO\Forum\Method;
-
 use GDO\Core\Method;
 use GDO\Forum\GDO_ForumPost;
-use GDO\GWF\Method\GetFile;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
-
+use GDO\File\Method\GetFile;
+/**
+ * Download a post attachment.
+ * @author gizmore
+ * @since 3.00
+ * @version 6.05
+ */
 final class DownloadAttachment extends Method
 {
     public function execute()
@@ -22,11 +26,7 @@ final class DownloadAttachment extends Method
         {
             return $this->error('err_post_has_no_attachment');
         }
-        return $this->dowloadAttachment($post, method('GWF', 'GetFile'));
-    }
-    
-    private function dowloadAttachment(GDO_ForumPost $post, GetFile $method)
-    {
-        return $method->executeWithId($post->getAttachmentID());
+        
+        return GetFile::make()->executeWithId($post->getAttachmentID());
     }
 }

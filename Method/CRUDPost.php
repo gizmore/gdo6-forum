@@ -13,7 +13,6 @@ use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 use GDO\Util\Common;
-use GDO\DB\Cache;
 
 final class CRUDPost extends MethodCrud
 {

@@ -62,7 +62,7 @@ final class GDO_ForumRead extends GDO
     public static function getUnreadBoards(GDO_User $user) { return self::getUnreadSection($user, 0); }
     public static function getUnreadThreads(GDO_User $user) { return self::getUnreadSection($user, 1); }
     public static function getUnreadPosts(GDO_User $user) { return self::getUnreadSection($user, 2); }
-    public static function getUnreadSection(GDO_User $user, int $section)
+    public static function getUnreadSection(GDO_User $user, $section)
     {
         $back = [];
         foreach (self::getUnread($user) as $data)

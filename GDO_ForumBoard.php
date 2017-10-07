@@ -7,10 +7,10 @@ use GDO\DB\Cache;
 use GDO\DB\GDT_AutoInc;
 use GDO\DB\GDT_CreatedAt;
 use GDO\DB\GDT_CreatedBy;
-use GDO\Template\GDT_Template;
-use GDO\Type\GDT_Checkbox;
-use GDO\Type\GDT_Int;
-use GDO\Type\GDT_String;
+use GDO\Core\GDT_Template;
+use GDO\DB\GDT_Checkbox;
+use GDO\DB\GDT_Int;
+use GDO\DB\GDT_String;
 use GDO\User\GDT_Permission;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
@@ -105,7 +105,7 @@ final class GDO_ForumBoard extends GDO_Tree
     
     public static function recacheAll()
     {
-        Cache::unset('gdo_forumboard_all');
+        Cache::remove('gdo_forumboard_all');
     }
     
     public function queryAll()
@@ -119,7 +119,7 @@ final class GDO_ForumBoard extends GDO_Tree
         parent::gdoAfterCreate();
     }
     
-    public function increaseCounters(int $threadsBy, int $postsBy)
+    public function increaseCounters($threadsBy, $postsBy)
     {
         Logger::logDebug(sprintf('ForumBoard::increaseCounters(%s, %s) ID:%s', $threadsBy, $postsBy, $this->getID()));
         $this->increase('board_threadcount', $threadsBy);

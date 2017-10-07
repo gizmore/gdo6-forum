@@ -10,10 +10,9 @@ use GDO\DB\GDT_EditedBy;
 use GDO\DB\GDT_Object;
 use GDO\File\GDO_File;
 use GDO\File\GDT_File;
-use GDO\Template\GDT_Template;
-use GDO\Type\GDT_Message;
+use GDO\Core\GDT_Template;
+use GDO\UI\GDT_Message;
 use GDO\User\GDO_User;
-use GDO\User\GDO_UserSetting;
 use GDO\User\GDO_UserSettingBlob;
 
 final class GDO_ForumPost extends GDO

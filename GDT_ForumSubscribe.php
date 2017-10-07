@@ -1,7 +1,7 @@
 <?php
 namespace GDO\Forum;
 
-use GDO\Form\GDT_Enum;
+use GDO\DB\GDT_Enum;
 
 final class GDT_ForumSubscribe extends GDT_Enum
 {
