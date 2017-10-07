@@ -1,15 +1,12 @@
-<?php
+<?php /** @var $thread \GDO\Forum\GDO_ForumThread **/
 use GDO\Avatar\GDO_Avatar;
 use GDO\Forum\GDO_ForumThread;
 use GDO\UI\GDT_Icon;
 use GDO\UI\GDT_IconButton;
 use GDO\User\GDO_User;
-
 $thread instanceof GDO_ForumThread;
-?>
-<?php $creator = $thread->getCreator(); ?>
-<?php $user = GDO_User::current(); ?>
-<?php
+$creator = $thread->getCreator();
+$user = GDO_User::current();
 $tid = $thread->getID();
 $readClass = $thread->hasUnreadPosts($user) ? 'gdo-forum-unread' : 'gdo-forum-read';
 $subscribed = $thread->hasSubscribed($user);
@@ -25,5 +22,5 @@ $subscribeClass = $subscribed ? 'gdo-forum gdo-forum-subscribed' : 'gdo-forum';
   <?= t('thread_postcount', [$thread->getPostCount()]); ?>
   <?= GDT_Icon::iconS('arrow_right'); ?>
   <?php $href = $subscribed ? href('Forum', 'Unsubscribe', '&thread='.$tid) : href('Forum', 'Subscribe', '&thread='.$tid)?>
-  <?= GDT_IconButton::make()->href($href)->icon('email'); ?>
+  <?= GDT_IconButton::make()->href($href)->icon('email')->render(); ?>
  </md-list-item>

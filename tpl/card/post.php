@@ -27,7 +27,7 @@ if ($unread) $post->markRead($user);
 <?php if ($post->hasAttachment()) : ?>
     <div class="gdo-attachment" layout="row" flex layout-fill layout-align="left center">
       <div><?= GDT_IconButton::make()->icon('file_download')->href($post->hrefAttachment()); ?></div>
-      <div><?= $post->getAttachment()->renderCell(); ?></div>
+      <div><?= $post->getAttachment()->render(); ?></div>
     </div>
 <?php endif; ?>
       <hr/>
@@ -35,9 +35,9 @@ if ($unread) $post->markRead($user);
   </md-card-content>
   <gdo-div></gdo-div>
   <md-card-actions layout="row" layout-align="end center">
-    <?= GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)); ?>
-    <?= GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()); ?>
-    <?= GDT_Button::make('btn_quote')->icon('reply_all')->href($post->hrefQuote()); ?>
+    <?= GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user))->render(); ?>
+    <?= GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply())->render(); ?>
+    <?= GDT_Button::make('btn_quote')->icon('quote')->href($post->hrefQuote())->render(); ?>
   </md-card-actions>
 </md-card>
 <!-- End ForumPost card -->

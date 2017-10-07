@@ -1,10 +1,7 @@
-<?php
-use GDO\Forum\GDO_ForumBoard;
+<?php /** @var $board \GDO\Forum\GDO_ForumBoard; **/ 
 use GDO\UI\GDT_Icon;
 use GDO\UI\GDT_IconButton;
 use GDO\User\GDO_User;
-
-$board instanceof GDO_ForumBoard;
 $user = GDO_User::current();
 $bid = $board->getID(); ?>
 <?php
@@ -21,7 +18,7 @@ $href = href('Forum', 'Boards', '&board='.$bid);
   </a>
   <span class="gdo-list-actions">
     <?php $href = $subscribed ? href('Forum', 'Unsubscribe', '&board='.$bid) : href('Forum', 'Subscribe', '&board='.$bid)?>
-    <?= GDT_IconButton::make()->href($href)->icon('email'); ?>
+    <?= GDT_IconButton::make()->href($href)->icon('email')->render(); ?>
     <?= GDT_Icon::iconS('arrow_right'); ?>
   </span>
 </li>
