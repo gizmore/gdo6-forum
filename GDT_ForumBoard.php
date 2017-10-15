@@ -34,7 +34,7 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 		return GDT_Template::php('Forum', 'cell/board.php', ['field'=>$this]);
 	}
 	
-	public function renderChoice()
+	public function renderChoice($choice)
 	{
 		return GDT_Template::php('Forum', 'choice/board.php', ['field'=>$this]);
 	}
