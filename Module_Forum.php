@@ -11,6 +11,7 @@ use GDO\UI\GDT_Message;
 use GDO\UI\GDT_IconButton;
 use GDO\User\GDT_Level;
 use GDO\User\GDO_User;
+use GDO\DB\GDT_Object;
 /**
  * GWF Forum Module
  * @author gizmore
@@ -22,7 +23,7 @@ final class Module_Forum extends GDO_Module
     ##############
     ### Module ###
     ##############
-    public $module_priority = 55;
+    public $module_priority = 45;
     public function getClasses() {
         return array(
             'GDO\Forum\GDO_ForumBoard',
@@ -72,6 +73,7 @@ final class Module_Forum extends GDO_Module
     public function getConfig()
     {
         return array(
+        	GDT_ForumBoard::make('forum_root')->editable(false),
             GDT_Checkbox::make('forum_guest_posts')->initial('1'),
             GDT_Checkbox::make('forum_attachments')->initial('1'),
             GDT_Level::make('forum_attachment_level')->initial('0'),
@@ -86,7 +88,8 @@ final class Module_Forum extends GDO_Module
     public function cfgPostLevel() { return $this->getConfigValue('forum_post_level'); }
     public function cfgLastPostDate() { return $this->getConfigVar('forum_latest_post_date'); }
     public function cfgLastPostMail() { return $this->getConfigVar('forum_mail_sent_for_post'); }
-    
+    public function cfgRootID() { return $this->getConfigVar('forum_root'); }
+    public function cfgRoot() { return $this->getConfigValue('forum_root'); }
     ###################
     ### Permissions ###
     ###################
@@ -100,9 +103,12 @@ final class Module_Forum extends GDO_Module
      */
     public function onInstall()
     {
-        if (!GDO_ForumBoard::getById('1'))
+        if (!$this->cfgRootID())
         {
-            GDO_ForumBoard::blank(['board_title' => 'GDOv6 Forum', 'board_description' => 'Welcome to the GDOv6 Forum Module'])->insert();
+            $root = GDO_ForumBoard::blank([
+            	'board_title' => 'GDOv6 Forum',
+            	'board_description' => 'Welcome to the GDOv6 Forum Module'])->insert();
+            $this->saveConfigVar('forum_root', $root->getID());
         }
     }
     

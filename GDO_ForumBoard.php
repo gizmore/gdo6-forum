@@ -23,6 +23,14 @@ use GDO\User\GDO_UserSetting;
  */
 final class GDO_ForumBoard extends GDO_Tree
 {
+	############
+	### Root ###
+	############
+	/**
+	 * @return self
+	 */
+    public static function getRoot() { return Module_Forum::instance()->cfgRoot(); }
+
     ############
     ### Tree ###
     ############
@@ -41,9 +49,10 @@ final class GDO_ForumBoard extends GDO_Tree
             GDT_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->max(256),
             GDT_Permission::make('board_permission'),
             GDT_CreatedAt::make('board_created'),
-            GDT_CreatedBy::make('board_creator'),
-            GDT_Checkbox::make('board_allow_threads')->initial('0'),
-            GDT_Int::make('board_threadcount')->initial('0'),
+            GDT_CreatedBy::make('board_creator')->cascadeNull(),
+        	GDT_Checkbox::make('board_allow_threads')->initial('0'),
+        	GDT_Checkbox::make('board_allow_guests')->initial('0'),
+        	GDT_Int::make('board_threadcount')->initial('0'),
             GDT_Int::make('board_postcount')->initial('0'),
         ), parent::gdoColumns());
     }
@@ -59,6 +68,7 @@ final class GDO_ForumBoard extends GDO_Tree
     
     public function getPermission() { return $this->getValue('board_permission'); }
     public function getPermissionID() { return $this->getVar('board_permission'); }
+    
     
     ##################
     ### Permission ###
@@ -129,7 +139,10 @@ final class GDO_ForumBoard extends GDO_Tree
             $parent->increaseCounters($threadsBy, $postsBy);
         }
     }
-    
+
+    ##############
+    ### Unread ###
+    ##############
     public function hasUnreadPosts(GDO_User $user)
     {
         $unread = GDO_ForumRead::getUnreadBoards($user);
@@ -154,6 +167,9 @@ final class GDO_ForumBoard extends GDO_Tree
         return false;
     }
     
+    ####################
+    ### Subscription ###
+    ####################
     public function hasSubscribed(GDO_User $user)
     {
         if (GDO_UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
