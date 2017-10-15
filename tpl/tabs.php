@@ -9,7 +9,7 @@ use GDO\Util\Common;
 $bar = GDT_Toolbar::make();
 $user = GDO_User::current();
 $boards = GDO_ForumBoard::table()->full()[0];
-$board = $boards[Common::getRequestString('board', '1')];
+$board = $boards[Common::getRequestString('board', array_keys($boards)[0])];
 
 # Header Create Board Button
 if ($user->isStaff())
