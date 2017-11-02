@@ -11,6 +11,7 @@ use GDO\DB\GDT_Int;
 use GDO\DB\GDT_String;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
+use GDO\UI\GDT_Title;
 /**
  * Forum thread database object.
  * @author gizmore
@@ -26,7 +27,7 @@ final class GDO_ForumThread extends GDO
         return array(
             GDT_AutoInc::make('thread_id'),
             GDT_ForumBoard::make('thread_board')->notNull()->label('board'),
-            GDT_String::make('thread_title')->utf8()->caseI()->notNull()->max(128)->label('title'),
+            GDT_Title::make('thread_title')->utf8()->caseI()->notNull()->max(128)->label('title'),
             GDT_Int::make('thread_postcount')->unsigned()->initial('0'),
             GDT_Int::make('thread_viewcount')->unsigned()->initial('0'),
         	GDT_Checkbox::make('thread_locked')->initial('0'),

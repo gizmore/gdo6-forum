@@ -14,6 +14,7 @@ use GDO\DB\GDT_String;
 use GDO\User\GDT_Permission;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
+use GDO\UI\GDT_Title;
 /**
  * A board inherits from GDO_Tree.
  * @author gizmore
@@ -45,8 +46,8 @@ final class GDO_ForumBoard extends GDO_Tree
     {
         return array_merge(array(
             GDT_AutoInc::make('board_id'),
-            GDT_String::make('board_title')->notNull()->utf8()->caseI()->label('title')->max(64),
-            GDT_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->max(256),
+            GDT_Title::make('board_title')->notNull()->utf8()->caseI()->label('title')->max(64),
+            GDT_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->icon('message')->max(256),
             GDT_Permission::make('board_permission'),
             GDT_CreatedAt::make('board_created'),
             GDT_CreatedBy::make('board_creator')->cascadeNull(),
