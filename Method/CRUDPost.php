@@ -32,14 +32,11 @@ final class CRUDPost extends MethodCrud
         # 1. Get thread
         $user = GDO_User::current();
         if ( ($pid = Common::getGetString('quote')) ||
+        	 ($pid = Common::getGetString('reply')) ||
              ($pid = Common::getGetString('id')) )
         {
             $post = GDO_ForumPost::table()->find($pid);
             $this->thread = $post->getThread();
-        }
-        elseif ($tid = Common::getGetString('reply'))
-        {
-            $this->thread = GDO_ForumThread::table()->find($tid);
         }
         else
         {
@@ -62,6 +59,13 @@ final class CRUDPost extends MethodCrud
         # 3. Execute
         $response = parent::execute();
         $tabs = Module_Forum::instance()->renderTabs();
+        
+        # 4. prepend reply
+        if (isset($post))
+        {
+        	$tabs->addHTML($post->renderCard());
+        }
+        
         return $tabs->add($response);
     }
     

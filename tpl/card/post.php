@@ -35,9 +35,23 @@ if ($unread) $post->markRead($user);
   </md-card-content>
   <gdo-div></gdo-div>
   <md-card-actions layout="row" layout-align="end center">
+   <md-menu>
     <?= GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user))->render(); ?>
+      <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+        <md-icon md-menu-origin md-svg-icon="call:phone"></md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item><?= GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user))->render(); ?></md-menu-item>
+        <md-menu-item>
     <?= GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply())->render(); ?>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
     <?= GDT_Button::make('btn_quote')->icon('quote')->href($post->hrefQuote())->render(); ?>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+
   </md-card-actions>
 </md-card>
 <!-- End ForumPost card -->

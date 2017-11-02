@@ -29,7 +29,7 @@ final class GDO_ForumThread extends GDO
             GDT_String::make('thread_title')->utf8()->caseI()->notNull()->max(128)->label('title'),
             GDT_Int::make('thread_postcount')->unsigned()->initial('0'),
             GDT_Int::make('thread_viewcount')->unsigned()->initial('0'),
-            GDT_Checkbox::make('thread_locked')->initial('0'),
+        	GDT_Checkbox::make('thread_locked')->initial('0'),
             GDT_CreatedAt::make('thread_created'),
             GDT_CreatedBy::make('thread_creator'),
         );

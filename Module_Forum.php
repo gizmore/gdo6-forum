@@ -12,6 +12,7 @@ use GDO\UI\GDT_IconButton;
 use GDO\User\GDT_Level;
 use GDO\User\GDO_User;
 use GDO\DB\GDT_Object;
+use GDO\DB\GDT_UInt;
 /**
  * GWF Forum Module
  * @author gizmore
@@ -31,7 +32,8 @@ final class Module_Forum extends GDO_Module
             'GDO\Forum\GDO_ForumPost',
             'GDO\Forum\GDO_ForumRead',
             'GDO\Forum\GDO_ForumThreadSubscribe',
-            'GDO\Forum\GDO_ForumBoardSubscribe');
+            'GDO\Forum\GDO_ForumBoardSubscribe',
+        	'GDO\Forum\GDO_ForumPostLikes');
     }
     public function onLoadLanguage() { $this->loadLanguage('lang/forum'); }
     public function onIncludeScripts()
@@ -61,8 +63,8 @@ final class Module_Forum extends GDO_Module
     public function getUserConfig()
     {
         return array(
-            GDT_Int::make('forum_posts')->unsigned()->initial('0'),
-            GDT_Int::make('forum_threads')->unsigned()->initial('0'),
+            GDT_UInt::make('forum_posts')->initial('0'),
+            GDT_UInt::make('forum_threads')->initial('0'),
             GDT_DateTime::make('forum_readmark')->label('forum_readmark'),
         );
     }

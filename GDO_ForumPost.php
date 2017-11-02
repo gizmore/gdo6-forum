@@ -14,9 +14,17 @@ use GDO\Core\GDT_Template;
 use GDO\UI\GDT_Message;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSettingBlob;
+use GDO\Vote\WithLikes;
+use GDO\Vote\GDT_LikeCount;
 
 final class GDO_ForumPost extends GDO
 {
+	#############
+	### Likes ###
+	#############
+	use WithLikes;
+	public function gdoLikeTable() { return GDO_ForumPostLikes::table(); }
+	
     ###########
     ### GDO ###
     ###########
@@ -26,6 +34,7 @@ final class GDO_ForumPost extends GDO
         return array(
             GDT_AutoInc::make('post_id'),
             GDT_Object::make('post_thread')->table(GDO_ForumThread::table())->notNull(),
+        	GDT_LikeCount::make('post_likes'),
             GDT_Message::make('post_message')->utf8()->caseI()->notNull(),
             GDT_File::make('post_attachment'),
             
@@ -65,15 +74,16 @@ final class GDO_ForumPost extends GDO
     public function getCreatorID() { return $this->getVar('post_creator'); }
     
     public function hrefEdit() { return href('Forum', 'CRUDPost', '&id='.$this->getID()); }
-    public function hrefReply() { return href('Forum', 'CRUDPost', '&reply='.$this->getThreadID()); }
+    public function hrefReply() { return href('Forum', 'CRUDPost', '&reply='.$this->getID()); }
     public function hrefQuote() { return href('Forum', 'CRUDPost', '&quote='.$this->getID()); }
     public function hrefAttachment() { return href('Forum', 'DownloadAttachment', '&post='.$this->getID()); }
     
     ##############
     ### Render ###
     ##############
+    public function hasSignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->getVar() != ''; }
     public function displaySignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->renderCell(); }
-    public function displayMessage() { return $this->gdoColumn('post_message')->renderCell(); }
+    public function displayMessage() { return $this->gdoColumn('post_message')->render(); }
     public function displayCreated() { return tt($this->getCreated()); }
     public function renderCard() { return GDT_Template::php('Forum', 'card/post.php', ['post'=>$this]); }
 
