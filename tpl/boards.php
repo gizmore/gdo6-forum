@@ -11,10 +11,11 @@ use GDO\User\GDO_User;
 $table = GDO_ForumBoard::table();
 
 # 1. Children boards as list.
-$list = GDT_List::make();
+$list = GDT_List::make('boards');
 $list->result(new ArrayResult($board->authorizedChildren(GDO_User::current()), $table));
 $list->listMode(GDT_List::MODE_LIST);
 $list->title($board->displayName());
+$list->paginateDefault();
 echo $list->render();
 
 # 2. Create thread button

@@ -83,6 +83,7 @@ final class GDO_ForumBoard extends GDO_Tree
         {
             foreach ($children as $child)
             {
+            	/** @var $child GDO_ForumBoard */
                 if ($child->canView($user))
                 {
                     $authed[$child->getID()] = $child; 
