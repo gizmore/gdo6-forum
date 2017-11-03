@@ -60,4 +60,5 @@ you can click on the link below.
 Kind Regards
 The %2$s Team',
 #######################################################################
+'div_user_textual_settings' => 'Textual Settings',
 );
