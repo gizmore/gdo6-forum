@@ -16,6 +16,7 @@ use GDO\User\GDO_User;
 use GDO\User\GDO_UserSettingBlob;
 use GDO\Vote\WithLikes;
 use GDO\Vote\GDT_LikeCount;
+use GDO\User\GDT_Level;
 
 final class GDO_ForumPost extends GDO
 {
@@ -36,6 +37,7 @@ final class GDO_ForumPost extends GDO
             GDT_Object::make('post_thread')->table(GDO_ForumThread::table())->notNull(),
         	GDT_LikeCount::make('post_likes'),
             GDT_Message::make('post_message')->utf8()->caseI()->notNull(),
+        	GDT_Level::make('post_level')->initial('0'),
             GDT_File::make('post_attachment'),
             
             GDT_CreatedAt::make('post_created'),
@@ -57,7 +59,7 @@ final class GDO_ForumPost extends GDO
      */
     public function getThread() { return $this->getValue('post_thread'); }
     public function getThreadID() { return $this->getVar('post_thread'); }
-    
+
     /**
      * @return GDO_File
      */
@@ -66,6 +68,7 @@ final class GDO_ForumPost extends GDO
     public function hasAttachment() { return $this->getAttachmentID() !== null; }
     
     public function getCreated() { return $this->getVar('post_created'); }
+    public function getLevel() { return $this->getVar('post_level'); }
     
     /**
      * @return GDO_User
@@ -83,9 +86,18 @@ final class GDO_ForumPost extends GDO
     ##############
     public function hasSignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->getVar() != ''; }
     public function displaySignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->renderCell(); }
-    public function displayMessage() { return $this->gdoColumn('post_message')->render(); }
     public function displayCreated() { return tt($this->getCreated()); }
     public function renderCard() { return GDT_Template::php('Forum', 'card/post.php', ['post'=>$this]); }
+    public function displayMessage()
+    {
+    	$user = GDO_User::current();
+    	if ($user->getLevel() < $this->getLevel())
+    	{
+    		return t('hidden_post_level', [$this->getLevel()]);
+    	}
+    	return $this->gdoColumn('post_message')->render();
+    }
+    
 
     ##############
     ### Unread ###

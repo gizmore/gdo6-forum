@@ -75,7 +75,8 @@ final class CRUDPost extends MethodCrud
         $boardId = Common::getRequestString('board');
         $form->addFields(array(
             GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
-            $gdo->gdoColumn('post_message'),
+        	$gdo->gdoColumn('post_level'),
+        	$gdo->gdoColumn('post_message'),
         ));
         if (Module_Forum::instance()->canUpload(GDO_User::current()))
         {

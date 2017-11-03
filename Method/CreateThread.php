@@ -52,7 +52,8 @@ final class CreateThread extends MethodForm
         $form->addFields(array(
             $gdo->gdoColumn('thread_board')->initial($this->board->getID())->editable(false),
             $gdo->gdoColumn('thread_title'),
-            $posts->gdoColumn('post_message'),
+        	$posts->gdoColumn('post_level'),
+        	$posts->gdoColumn('post_message'),
             $posts->gdoColumn('post_attachment'),
             GDT_Submit::make(),
             GDT_AntiCSRF::make(),
