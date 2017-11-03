@@ -25,9 +25,10 @@ if ($board->allowsThreads())
 }
 
 # 3. Threads as list
-$list = GDT_List::make();
+$list = GDT_List::make('threads');
 $pagemenu = GDT_PageMenu::make();
-$query = GDO_ForumThread::table()->select()->where("thread_board={$board->getID()}")->order('thread_created', false);
+$subquery = "( SELECT SUM(post_likes) FROM gdo_forumpost WHERE post_thread = thread_id ) as thread_likes";
+$query = GDO_ForumThread::table()->select("*, $subquery")->where("thread_board={$board->getID()}")->order('thread_created', false);
 $pagemenu->filterQuery($query);
 $list->query($query);
 $list->listMode(GDT_List::MODE_LIST);

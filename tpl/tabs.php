@@ -17,6 +17,9 @@ if ($user->isStaff())
     $bar->addField(GDT_IconButton::make()->icon('add')->href(href('Forum', 'CRUDBoard', '&board='.$board->getID())));
 }
 
+$bar->addField(GDT_IconButton::make()->icon('search')->href(href('Forum', 'Search', '&board='.$board->getID())));
+
+
 # Header Middle Board Selection
 $links = [];
 $p = $board;
