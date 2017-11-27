@@ -16,6 +16,8 @@ use GDO\Util\Common;
 
 final class CRUDPost extends MethodCrud
 {
+	private $post;
+	
     public function gdoTable() { return GDO_ForumPost::table(); }
     public function hrefList() { return href('Forum', 'Thread', '&thread='.$this->thread->getID()); }
    
@@ -35,7 +37,7 @@ final class CRUDPost extends MethodCrud
         	 ($pid = Common::getGetString('reply')) ||
              ($pid = Common::getGetString('id')) )
         {
-            $post = GDO_ForumPost::table()->find($pid);
+            $post = $this->post = GDO_ForumPost::table()->find($pid);
             $this->thread = $post->getThread();
         }
         else
@@ -61,7 +63,7 @@ final class CRUDPost extends MethodCrud
         $tabs = Module_Forum::instance()->renderTabs();
         
         # 4. prepend reply
-        if (isset($post))
+        if (isset($post) && (count($_POST)===0))
         {
         	$tabs->addHTML($post->renderCard());
         }
@@ -69,14 +71,27 @@ final class CRUDPost extends MethodCrud
         return $tabs->add($response);
     }
     
+    public function initialMessage()
+    {
+    	$msg = $this->post->displayMessage();
+    	return "Quote from Peter:<br/>$msg";
+    }
+    
+    public function initialPostLevel()
+    {
+    	return $this->post ? $this->post->getLevel() : '0';
+    }
+    
     public function createForm(GDT_Form $form)
     {
+    	$initialPostHTML = isset($_REQUEST['quote']) ? $this->initialMessage() : '';
+    	
         $gdo = $this->gdoTable();
         $boardId = Common::getRequestString('board');
         $form->addFields(array(
             GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
-        	$gdo->gdoColumn('post_level'),
-        	$gdo->gdoColumn('post_message'),
+        	$gdo->gdoColumn('post_level')->initial($this->initialPostLevel()),
+        	$gdo->gdoColumn('post_message')->initial($initialPostHTML),
         ));
         if (Module_Forum::instance()->canUpload(GDO_User::current()))
         {

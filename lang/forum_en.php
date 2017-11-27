@@ -13,6 +13,7 @@ return array(
 'thread_postcount' => '%s Posts',
 'posted_at' => 'Posted at %s',
 'li_thread_created' => 'By %s',
+'hidden_post_level' => 'You need a userlevel of %s to read this post.',
 #######################################################################
 'msg_subscribed' => 'You have subscribed via mail.',
 'msg_unsubscribed' => 'You have not subscribed via mail.',
@@ -26,6 +27,8 @@ return array(
 'ft_forum_editthread' => '[%s] Edit Thread',
 'msg_thread_moved' => 'Your thread has been moved to another board.',
 'msg_thread_edited' => 'Your thread has been edited successfully.',
+#######################################################################
+'list_forum_search' => '[%s] Search for %s',
 #######################################################################
 'signature' => 'Your signature',
 'forum_subscription_mode' => 'Forum E-Mail Subscription Mode',

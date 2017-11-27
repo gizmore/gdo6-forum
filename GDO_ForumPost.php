@@ -88,10 +88,10 @@ final class GDO_ForumPost extends GDO
     public function displaySignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->renderCell(); }
     public function displayCreated() { return tt($this->getCreated()); }
     public function renderCard() { return GDT_Template::php('Forum', 'card/post.php', ['post'=>$this]); }
+    public function canRead() { return GDO_User::current()->getLevel() >= $this->getLevel(); }
     public function displayMessage()
     {
-    	$user = GDO_User::current();
-    	if ($user->getLevel() < $this->getLevel())
+    	if (!$this->canRead())
     	{
     		return t('hidden_post_level', [$this->getLevel()]);
     	}
