@@ -8,7 +8,6 @@ use GDO\Form\GDT_Hidden;
 use GDO\Form\MethodCrud;
 use GDO\Forum\GDO_ForumPost;
 use GDO\Forum\GDO_ForumRead;
-use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
@@ -74,7 +73,11 @@ final class CRUDPost extends MethodCrud
     public function initialMessage()
     {
     	$msg = $this->post->displayMessage();
-    	return "Quote from Peter:<br/>$msg";
+    	$by = $this->post->getCreator()->displayNameLabel();
+    	$by = t('quote_by', [$by]);
+    	$at = tt($this->post->getCreated());
+    	$at = t('quote_at', [$at]);
+    	return sprintf('<blockquote><span class="quote-by">%s</span><span class="quote-from">%s</span>%s</blockquote>', $by, $at, $msg);
     }
     
     public function initialPostLevel()

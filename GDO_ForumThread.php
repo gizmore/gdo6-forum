@@ -12,6 +12,8 @@ use GDO\DB\GDT_String;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 use GDO\UI\GDT_Title;
+use GDO\User\GDT_User;
+use GDO\Date\GDT_DateTime;
 /**
  * Forum thread database object.
  * @author gizmore
@@ -33,6 +35,8 @@ final class GDO_ForumThread extends GDO
         	GDT_Checkbox::make('thread_locked')->initial('0'),
             GDT_CreatedAt::make('thread_created'),
             GDT_CreatedBy::make('thread_creator'),
+        	GDT_User::make('thread_lastposter')->notNull(),
+        	GDT_DateTime::make('thread_lastposted')->notNull(),
         );
     }
     
@@ -59,6 +63,13 @@ final class GDO_ForumThread extends GDO
     public function isLocked() { return $this->getValue('thread_locked'); }
     
     public function getCreated() { return $this->getVar('thread_created'); }
+    public function getLastPosted() { return $this->getVar('thread_lastposted'); }
+
+    /**
+     * @return GDO_User
+     */
+    public function getLastPoster() { return $this->getValue('thread_lastposter'); }
+    
     /**
      * @return GDO_User
      */

@@ -75,7 +75,8 @@ final class Search extends MethodQueryList
 		$term = GDO::escapeS($this->searchTerm());
 		$term = "'%$term%'";
 		$level = GDO_User::current()->getLevel();
-		$subselect = "(SELECT COUNT(*) FROM gdo_forumpost WHERE post_level >= $level AND post_thread=thread_id AND post_message LIKE $term)";
-		return $this->gdoTable()->select()->where("thread_title LIKE $term")->where($subselect, 'OR');
+		$subselect = "(SELECT COUNT(*) FROM gdo_forumpost WHERE $level >= post_level AND post_thread=thread_id AND post_message LIKE $term)";
+		$query = $this->gdoTable()->select()->where("thread_title LIKE $term")->where($subselect, 'OR');
+		return $query;
 	}
 }

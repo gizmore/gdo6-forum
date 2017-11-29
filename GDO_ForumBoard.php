@@ -70,6 +70,7 @@ final class GDO_ForumBoard extends GDO_Tree
     public function getPermission() { return $this->getValue('board_permission'); }
     public function getPermissionID() { return $this->getVar('board_permission'); }
     
+    public function isRoot() { return $this->getID() === Module_Forum::instance()->cfgRootID(); }
     
     ##################
     ### Permission ###

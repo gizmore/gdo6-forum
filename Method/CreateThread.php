@@ -70,8 +70,13 @@ final class CreateThread extends MethodForm
     public function formValidated(GDT_Form $form)
     {
         $module = Module_Forum::instance();
-        $thread = GDO_ForumThread::blank($form->getFormData())->insert();
-        $post = $this->post = GDO_ForumPost::blank($form->getFormData())->setVar('post_thread', $thread->getID())->insert();
+        $thread = GDO_ForumThread::blank($form->getFormData());
+        $thread->setValue('thread_lastposter', GDO_User::current());
+        $thread->setValue('thread_lastposted', time());
+        $thread->insert();
+        $post = $this->post = GDO_ForumPost::blank($form->getFormData());
+        $post->setVar('post_thread', $thread->getID());
+        $post->insert();
         $module->saveConfigVar('forum_latest_post_date', $post->getCreated());
         GDO_ForumRead::markRead(GDO_User::current(), $post);
         GDO_UserSetting::inc('forum_threads');

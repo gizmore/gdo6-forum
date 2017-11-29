@@ -7,8 +7,25 @@ use GDO\Table\GDT_List;
 use GDO\Table\GDT_PageMenu;
 use GDO\UI\GDT_Button;
 use GDO\User\GDO_User;
+use GDO\Forum\Module_Forum;
 
 $table = GDO_ForumBoard::table();
+
+# 0. Newest threads
+$numLatest = Module_Forum::instance()->cfgNumLatestThreads();
+if ($numLatest && $board->isRoot())
+{
+	$list = GDT_List::make('latest_thread');
+	$list->listMode(GDT_List::MODE_LIST);
+	$query = GDO_ForumThread::table()->select('*');
+	$query->joinObject('thread_lastposter');
+// 	$query->select("(SELECT MAX(post_created) FROM gdo_forumpost WHERE post_thread=thread_id) AS lastdate");
+	$query->order('thread_lastposted', false);
+	$query->limit($numLatest);
+	$list->query($query);
+	$list->title(t('forum_list_latest_threads'));
+	echo $list->render();
+}
 
 # 1. Children boards as list.
 $list = GDT_List::make('boards');
@@ -26,9 +43,10 @@ if ($board->allowsThreads())
 
 # 3. Threads as list
 $list = GDT_List::make('threads');
-$pagemenu = GDT_PageMenu::make();
+$pagemenu = GDT_PageMenu::make('tp');
 $subquery = "( SELECT SUM(post_likes) FROM gdo_forumpost WHERE post_thread = thread_id ) as thread_likes";
-$query = GDO_ForumThread::table()->select("*, $subquery")->where("thread_board={$board->getID()}")->order('thread_created', false);
+$query = GDO_ForumThread::table()->select("*, $subquery")->where("thread_board={$board->getID()}")->order('thread_lastposted', false);
+// $query->select("(SELECT MAX(post_created) FROM gdo_forumpost WHERE post_thread=thread_id) AS lastdate");
 $pagemenu->filterQuery($query);
 $list->query($query);
 $list->listMode(GDT_List::MODE_LIST);

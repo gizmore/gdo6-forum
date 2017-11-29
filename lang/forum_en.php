@@ -14,6 +14,8 @@ return array(
 'posted_at' => 'Posted at %s',
 'li_thread_created' => 'By %s',
 'hidden_post_level' => 'You need a userlevel of %s to read this post.',
+'forum_list_latest_threads' => 'Latest Forum Activiy',
+'last_post' => 'Last post; %s from %s',
 #######################################################################
 'msg_subscribed' => 'You have subscribed via mail.',
 'msg_unsubscribed' => 'You have not subscribed via mail.',
