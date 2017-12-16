@@ -6,7 +6,7 @@ use GDO\Table\GDT_PageMenu;
 # Posts as list
 $list = GDT_List::make();
 $pagemenu = GDT_PageMenu::make();
-$query = GDO_ForumPost::table()->select()->where("post_thread={$thread->getID()}");
+$query = GDO_ForumPost::table()->select()->where("post_thread={$thread->getID()}")->order('post_created');
 $pagemenu->filterQuery($query);
 $list->query($query);
 $list->listMode(GDT_List::MODE_CARD);

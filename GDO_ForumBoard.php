@@ -148,6 +148,10 @@ final class GDO_ForumBoard extends GDO_Tree
     ##############
     public function hasUnreadPosts(GDO_User $user)
     {
+    	if ($user->isGhost())
+    	{
+    		return false;
+    	}
         $unread = GDO_ForumRead::getUnreadBoards($user);
         return self::hasBoardUnreadPosts($this, $unread);
     }
@@ -175,6 +179,10 @@ final class GDO_ForumBoard extends GDO_Tree
     ####################
     public function hasSubscribed(GDO_User $user)
     {
+    	if ($user->isGhost())
+    	{
+    		return false;
+    	}
         if (GDO_UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
         {
             return true;

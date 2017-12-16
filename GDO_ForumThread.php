@@ -8,7 +8,6 @@ use GDO\DB\GDT_CreatedBy;
 use GDO\Core\GDT_Template;
 use GDO\DB\GDT_Checkbox;
 use GDO\DB\GDT_Int;
-use GDO\DB\GDT_String;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 use GDO\UI\GDT_Title;
@@ -46,6 +45,13 @@ final class GDO_ForumThread extends GDO
     public function canView(GDO_User $user) { return $this->getBoard()->canView($user); }
     public function canEdit(GDO_User $user) { return $user->isStaff() || ($this->getCreatorID() === $user->getID()); }
     
+    ############
+    ### HREF ###
+    ############
+    public function hrefFirstPost() { return href('Forum', 'Thread', "&thread={$this->getID()}"); }
+    public function hrefLastPost() { return $this->hrefPost($this->getLastPost()); }
+    public function hrefPost(GDO_ForumPost $post) { return href('Forum', 'Thread', "&post={$post->getID()}"); }
+    
     ##############
     ### Getter ###
     ##############
@@ -81,6 +87,7 @@ final class GDO_ForumThread extends GDO
     ##############
     public function displayTitle() { return html($this->getTitle()); }
     public function displayCreated() { return tt($this->getCreated()); }
+    public function displayLastPosted() { return tt($this->getLastPosted()); }
     
     public function renderList() { return GDT_Template::php('Forum', 'listitem/thread.php', ['thread'=>$this]); }
 
@@ -89,6 +96,10 @@ final class GDO_ForumThread extends GDO
     ##############
     public function hasUnreadPosts(GDO_User $user)
     {
+    	if ($user->isGhost())
+    	{
+    		return false;
+    	}
         $unread = GDO_ForumRead::getUnreadThreads($user);
         return isset($unread[$this->getID()]);
     }
@@ -111,6 +122,10 @@ final class GDO_ForumThread extends GDO
     #################
     public function hasSubscribed(GDO_User $user)
     {
+    	if ($user->isGhost())
+    	{
+    		return false;
+    	}
         if (GDO_UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
         {
             return true;
