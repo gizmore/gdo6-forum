@@ -44,9 +44,11 @@ EOT;
 }
 
 $html = <<<EOT
+<hr/>
 {$post->displayMessage()}
 {$attachment}
 {$post->displaySignature()}
+<hr/>
 EOT;
 
 $card->addField(GDT_HTML::withHTML($html));

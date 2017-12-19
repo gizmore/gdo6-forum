@@ -77,6 +77,22 @@ final class GDO_ForumThread extends GDO
     public function getLastPoster() { return $this->getValue('thread_lastposter'); }
     
     /**
+     * @return GDO_ForumPost
+     */
+    public function getLastPost($first=false)
+    {
+    	return GDO_ForumPost::table()->select('*')->where("post_thread={$this->getID()}")->order('post_created', $first)->first()->exec()->fetchObject();
+    }
+    
+    /**
+     * @return GDO_ForumPost
+     */
+    public function getFirstPost()
+    {
+    	return $this->getLastPost(true);
+    }
+    
+	/**
      * @return GDO_User
      */
     public function getCreator() { return $this->getValue('thread_creator'); }
