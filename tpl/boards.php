@@ -42,13 +42,14 @@ if ($board->allowsThreads())
 }
 
 # 3. Threads as list
-$list = GDT_List::make('threads');
-$pagemenu = GDT_PageMenu::make('tp');
 $subquery = "( SELECT SUM(post_likes) FROM gdo_forumpost WHERE post_thread = thread_id ) as thread_likes";
 $query = GDO_ForumThread::table()->select("*, $subquery")->where("thread_board={$board->getID()}")->order('thread_lastposted', false);
-// $query->select("(SELECT MAX(post_created) FROM gdo_forumpost WHERE post_thread=thread_id) AS lastdate");
-$pagemenu->filterQuery($query);
+$list = GDT_List::make('threads')->listMode(GDT_List::MODE_LIST);
 $list->query($query);
-$list->listMode(GDT_List::MODE_LIST);
+// $pagemenu = $list->getPageMenu();
+
+// GDT_PageMenu::make('tp');
+// $pagemenu->filterQuery($query);
+// $list->title(t('list_title_threads', [3]));
 // $list->label('list_title_board_threads', [$board->getThreadCount()]);
 echo $list->render();

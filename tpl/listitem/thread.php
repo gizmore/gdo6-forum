@@ -27,8 +27,8 @@ $subscribeClass = $subscribed ? 'gdo-forum gdo-forum-subscribed' : 'gdo-forum';
     <p><?=t('li_thread_no_replies')?></p>
 <?php endif; ?>
   </div>
-  <a class="gdt-actions">
+  <div class="gdt-actions">
     <?php $href = $subscribed ? href('Forum', 'Unsubscribe', '&thread='.$tid) : href('Forum', 'Subscribe', '&thread='.$tid)?>
     <?= GDT_IconButton::make()->href($href)->icon('email')->render(); ?>
-  </a>
+  </div>
 </li>
