@@ -46,10 +46,11 @@ $subquery = "( SELECT SUM(post_likes) FROM gdo_forumpost WHERE post_thread = thr
 $query = GDO_ForumThread::table()->select("*, $subquery")->where("thread_board={$board->getID()}")->order('thread_lastposted', false);
 $list = GDT_List::make('threads')->listMode(GDT_List::MODE_LIST);
 $list->query($query);
-// $pagemenu = $list->getPageMenu();
-
-// GDT_PageMenu::make('tp');
-// $pagemenu->filterQuery($query);
-// $list->title(t('list_title_threads', [3]));
-// $list->label('list_title_board_threads', [$board->getThreadCount()]);
-echo $list->render();
+$list->paginateDefault();
+$result = $list->getResult();
+$pagemenu = $list->getPageMenu();
+$list->title(t('list_threads', [$pagemenu->numItems]));
+if ($pagemenu->numItems)
+{
+	echo $list->render();
+}
