@@ -16,8 +16,10 @@ return array(
 'li_thread_replies' => '%s replies. Last by %s at %s',
 'li_thread_no_replies' => '- No replies yet -',
 'hidden_post_level' => 'You need a userlevel of %s to read this post.',
-'forum_list_latest_threads' => 'Latest Forum Activiy',
+'forum_list_latest_threads' => 'Latest Forum Activity',
 'last_post' => 'Last post from %s by %s',
+'list_threads' => '%s Threads in %s',
+'board_allow_threads' => 'Allow threads?',
 #######################################################################
 'msg_subscribed' => 'You have subscribed via mail.',
 'msg_unsubscribed' => 'You have not subscribed via mail.',

@@ -49,7 +49,7 @@ $list->query($query);
 $list->paginateDefault();
 $result = $list->getResult();
 $pagemenu = $list->getPageMenu();
-$list->title(t('list_threads', [$pagemenu->numItems]));
+$list->title(t('list_threads', [$pagemenu->numItems, $board->displayName()]));
 if ($pagemenu->numItems)
 {
 	echo $list->render();
