@@ -5,6 +5,7 @@ use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Toolbar;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
+use GDO\UI\GDT_Button;
 
 $bar = GDT_Toolbar::make();
 $user = GDO_User::current();
@@ -25,7 +26,7 @@ $links = [];
 $p = $board;
 while ($p)
 {
-    $link = GDT_Link::make()->rawlabel($p->displayName())->href(href('Forum', 'Boards', '&board='.$p->getID()));
+    $link = GDT_Button::make()->rawlabel($p->displayName())->href(href('Forum', 'Boards', '&board='.$p->getID()));
     array_unshift($links, $link);
     $p = $p->getParent();
 }
