@@ -18,7 +18,7 @@ if ($root = GDO_ForumBoard::getById('1'))
     {
         if (GDO_ForumRead::countUnread($user) > 0)
         {
-            $link->icon('notifications_active');
+            $link->icon('alert');
         }
     }
     $navbar->addField($link);
