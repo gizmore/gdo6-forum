@@ -137,11 +137,4 @@ final class Module_Forum extends GDO_Module
     ##############
     public function renderTabs() { return $this->responsePHP('tabs.php'); }
     public function hookLeftBar(GDT_Bar $navbar) { $this->templatePHP('sidebars.php', ['navbar'=>$navbar]); }
-    public function hookTopBar(GDT_Bar $navbar)
-    {
-        if (mo()==='Forum')
-        {
-            $navbar->addField(GDT_IconButton::make()->icon('settings')->href(href('Account', 'Settings', '&module=Forum')));
-        }
-    }
 }
