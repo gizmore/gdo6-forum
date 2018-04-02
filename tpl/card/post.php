@@ -16,7 +16,7 @@ $unread = $post->isUnread($user);
 $readClass = $unread ? 'gdo-forum-unread' : 'gdo-forum-read';
 if ($unread) $post->markRead($user);
 
-$card = GDT_Card::make("post_$id");
+$card = GDT_Card::make("post_$id")->gdo($post);
 $actions = $card->actions();
 $actions->addField(GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)));
 $actions->addField(GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()));

@@ -50,7 +50,7 @@ final class GDO_ForumThread extends GDO
     ############
     public function hrefFirstPost() { return href('Forum', 'Thread', "&thread={$this->getID()}"); }
     public function hrefLastPost() { return $this->hrefPost($this->getLastPost()); }
-    public function hrefPost(GDO_ForumPost $post) { return href('Forum', 'Thread', "&post={$post->getID()}"); }
+    public function hrefPost(GDO_ForumPost $post) { return href('Forum', 'Thread', "&post={$post->getID()}#card-{$post->getID()}"); }
     
     ##############
     ### Getter ###
