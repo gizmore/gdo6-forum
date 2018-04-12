@@ -10,11 +10,19 @@ use GDO\Forum\GDO_ForumThreadSubscribe;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
 
+/**
+ * Subscribe boards or thread
+ * Guest user is not allowed, because he does not have an email.
+ * @author gizmore
+ */
 final class Subscribe extends Method
 {
+	public function isUserRequired() { return true; }
+	
     public function execute()
     {
         $user = GDO_User::current();
+        
         if ($boardId = Common::getRequestString('board'))
         {
             if ($boardId === '1')
