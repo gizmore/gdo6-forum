@@ -77,7 +77,7 @@ final class CRUDPost extends MethodCrud
     	$by = t('quote_by', [$by]);
     	$at = tt($this->post->getCreated());
     	$at = t('quote_at', [$at]);
-    	return sprintf('<blockquote><span class="quote-by">%s</span><span class="quote-from">%s</span>%s</blockquote>', $by, $at, $msg);
+    	return sprintf("<div><blockquote><span class=\"quote-by\">%s</span> <span class=\"quote-from\">%s</span>\n%s</blockquote>&nbsp;</div>", $by, $at, $msg);
     }
     
     public function initialPostLevel()
