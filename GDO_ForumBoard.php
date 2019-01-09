@@ -134,7 +134,7 @@ final class GDO_ForumBoard extends GDO_Tree
     
     public function increaseCounters($threadsBy, $postsBy)
     {
-        Logger::logDebug(sprintf('ForumBoard::increaseCounters(%s, %s) ID:%s', $threadsBy, $postsBy, $this->getID()));
+//         Logger::logDebug(sprintf('ForumBoard::increaseCounters(%s, %s) ID:%s', $threadsBy, $postsBy, $this->getID()));
         $this->increase('board_threadcount', $threadsBy);
         $this->increase('board_postcount', $postsBy);
         if ($parent = $this->getParent())

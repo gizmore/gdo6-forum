@@ -74,7 +74,7 @@ final class EditThread extends MethodForm
     {
         $postsBy = $this->thread->getPostCount();
         $oldBoard = $this->thread->getBoard();
-        Logger::logDebug(sprintf('EditThread::changeBoard(%s => %s)', $oldBoard->getID(), $newBoard->getID()));
+//         Logger::logDebug(sprintf('EditThread::changeBoard(%s => %s)', $oldBoard->getID(), $newBoard->getID()));
         $oldBoard->increaseCounters(-1, -$postsBy);
         $newBoard->increaseCounters(1, $postsBy);
         $this->thread->saveVar('thread_board', $newBoard->getID());
