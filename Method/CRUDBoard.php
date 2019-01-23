@@ -31,7 +31,7 @@ final class CRUDBoard extends MethodCrud
     {
         $gdo = GDO_ForumBoard::table();
         
-        $boardId = Common::getRequestString('board', $this->gdo->getParentID());
+        $boardId = Common::getRequestString('board', $this->gdo ? $this->gdo->getParentID() : 0);
         $form->addFields(array(
             $gdo->gdoColumn('board_title'),
             $gdo->gdoColumn('board_description'),
