@@ -4,7 +4,6 @@ use GDO\DB\ArrayResult;
 use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\GDO_ForumThread;
 use GDO\Table\GDT_List;
-use GDO\Table\GDT_PageMenu;
 use GDO\UI\GDT_Button;
 use GDO\User\GDO_User;
 use GDO\Forum\Module_Forum;

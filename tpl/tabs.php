@@ -1,11 +1,11 @@
 <?php
 use GDO\Forum\GDO_ForumBoard;
 use GDO\UI\GDT_IconButton;
-use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Toolbar;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
-use GDO\UI\GDT_Button;
+use GDO\Form\GDT_Select;
+use GDO\Util\Arrays;
 
 $bar = GDT_Toolbar::make();
 $user = GDO_User::current();
@@ -23,14 +23,28 @@ $bar->addField(GDT_IconButton::make()->icon('search')->tooltip(t('tt_search_foru
 
 # Header Middle Board Selection
 $links = [];
+/**
+ * @var GDO_ForumBoard $p
+ */
 $p = $board;
+$boardselect = GDT_Select::make('board_select');
+$lastboard = null;
 while ($p)
 {
-    $link = GDT_Button::make()->rawlabel($p->displayName())->href(href('Forum', 'Boards', '&board='.$p->getID()));
-    array_unshift($links, $link);
+	$links[$p->getID()] = $p->displayName();
+	if ($lastboard === null)
+	{
+		$lastboard = $p->getID();
+	}
     $p = $p->getParent();
 }
-$bar->addFields($links);
+$links = Arrays::reverse($links);
+$boardselect->choices($links);
+$boardselect->initial($lastboard);
+
+$boardselect->attr('onchange', "window.location.href='?mo=Forum&me=Boards&board='+this.value;");
+$boardselect->css('flex', '1');
+$bar->addField($boardselect);
 
 # Header Edit button. Either edit board or thread
 if ($user->isStaff())

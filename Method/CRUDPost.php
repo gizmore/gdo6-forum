@@ -117,6 +117,6 @@ final class CRUDPost extends MethodCrud
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         GDO_UserSetting::inc('forum_posts');
         GDO_ForumRead::markRead(GDO_User::current(), $gdo);
-        GDT_Hook::call('ForumPostCreated', $gdo);
+        GDT_Hook::callWithIPC('ForumPostCreated', $gdo);
     }
 }

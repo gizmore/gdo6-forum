@@ -89,7 +89,7 @@ final class CreateThread extends MethodForm
     {
         if ($this->getForm()->validated)
         {
-            GDT_Hook::call('ForumPostCreated', $this->post);
+            GDT_Hook::callWithIPC('ForumPostCreated', $this->post);
         }
     }
 }
