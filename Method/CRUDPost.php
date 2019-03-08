@@ -12,6 +12,7 @@ use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 use GDO\Util\Common;
+use GDO\UI\GDT_Message;
 
 final class CRUDPost extends MethodCrud
 {
@@ -77,7 +78,8 @@ final class CRUDPost extends MethodCrud
     	$by = t('quote_by', [$by]);
     	$at = tt($this->post->getCreated());
     	$at = t('quote_at', [$at]);
-    	return sprintf("<div><blockquote><span class=\"quote-by\">%s</span> <span class=\"quote-from\">%s</span>\n%s</blockquote>&nbsp;</div>", $by, $at, $msg);
+    	$msg = sprintf("<div><blockquote><span class=\"quote-by\">%s</span> <span class=\"quote-from\">%s</span>\n%s</blockquote>&nbsp;</div>", $by, $at, $msg);
+    	return $msg;
     }
     
     public function initialPostLevel()
@@ -88,13 +90,12 @@ final class CRUDPost extends MethodCrud
     public function createForm(GDT_Form $form)
     {
     	$initialPostHTML = isset($_REQUEST['quote']) ? $this->initialMessage() : '';
-    	
         $gdo = $this->gdoTable();
         $boardId = Common::getRequestString('board');
         $form->addFields(array(
             GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
         	$gdo->gdoColumn('post_level')->initial($this->initialPostLevel()),
-        	$gdo->gdoColumn('post_message')->initial($initialPostHTML),
+        	GDT_Message::make('post_message')->initial($initialPostHTML),
         ));
         if (Module_Forum::instance()->canUpload(GDO_User::current()))
         {
