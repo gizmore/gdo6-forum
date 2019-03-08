@@ -34,11 +34,13 @@ $card->title($title);
 $attachment = $post->hasAttachment() ? $post->getAttachment() : '';
 if ($attachment)
 {
-	$downloadButton = GDT_IconButton::make()->icon('file_download')->href($post->hrefAttachment())->render();
+	$downloadButton = $attachment->isImageType() ?
+		'' :
+		GDT_IconButton::make()->icon('file_download')->href($post->hrefAttachment())->render();
 	$attachment = <<<EOT
 <div class="gdo-attachment" layout="row" flex layout-fill layout-align="left center">
   <div>{$downloadButton}</div>
-  <div>{$post->getAttachment()->render()}</div>
+  <div>{$post->getAttachment()->renderCell()}</div>
 </div>
 EOT;
 }
