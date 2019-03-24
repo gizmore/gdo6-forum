@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Forum\Method;
 
-use GDO\Core\MethodCronjob;
 use GDO\Forum\GDO_ForumBoardSubscribe;
 use GDO\Forum\GDO_ForumPost;
 use GDO\Forum\GDO_ForumThreadSubscribe;
@@ -10,6 +9,7 @@ use GDO\Mail\Mail;
 use GDO\UI\GDT_Link;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
+use GDO\Cronjob\MethodCronjob;
 
 final class CronjobMailer extends MethodCronjob
 {
