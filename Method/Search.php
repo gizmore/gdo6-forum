@@ -67,7 +67,7 @@ final class Search extends MethodQueryList
 
 	public function gdoDecorateList(GDT_List $list)
 	{
-		$list->title(t('list_forum_search', [sitename(), html($this->searchTerm())]));
+		$list->title(t('list_forum_search', [html($this->searchTerm())]));
 	}
 	
 	public function gdoQuery()

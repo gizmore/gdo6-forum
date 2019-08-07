@@ -31,14 +31,14 @@ return array(
 'no_parent' => 'No parent selected',
 'board_allow_threads' => 'Allow threads for this board',
 #######################################################################
-'ft_forum_createthread' => '[%s] Start new Thread',
+'ft_forum_createthread' => 'Start new Thread',
 'msg_thread_created' => 'Your thread has been created successfully.',
 #######################################################################
-'ft_forum_editthread' => '[%s] Edit Thread',
+'ft_forum_editthread' => 'Edit Thread',
 'msg_thread_moved' => 'Your thread has been moved to another board.',
 'msg_thread_edited' => 'Your thread has been edited successfully.',
 #######################################################################
-'list_forum_search' => '[%s] Search for %s',
+'list_forum_search' => 'Search for %s',
 #######################################################################
 'signature' => 'Your signature',
 'forum_subscription_mode' => 'Forum E-Mail Subscription Mode',
