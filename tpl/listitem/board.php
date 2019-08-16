@@ -1,5 +1,4 @@
 <?php /** @var $board \GDO\Forum\GDO_ForumBoard **/ 
-use GDO\UI\GDT_IconButton;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_ListItem;
 use GDO\UI\GDT_Headline;
