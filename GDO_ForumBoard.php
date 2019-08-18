@@ -15,6 +15,8 @@ use GDO\User\GDT_Permission;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 use GDO\UI\GDT_Title;
+use GDO\File\GDT_ImageFile;
+use GDO\File\GDO_File;
 /**
  * A board inherits from GDO_Tree.
  * @author gizmore
@@ -55,6 +57,7 @@ final class GDO_ForumBoard extends GDO_Tree
         	GDT_Checkbox::make('board_allow_guests')->initial('0'),
         	GDT_Int::make('board_threadcount')->initial('0'),
             GDT_Int::make('board_postcount')->initial('0'),
+        	GDT_ImageFile::make('board_image'),
         ), parent::gdoColumns());
     }
 
@@ -71,6 +74,12 @@ final class GDO_ForumBoard extends GDO_Tree
     public function getPermissionID() { return $this->getVar('board_permission'); }
     
     public function isRoot() { return $this->getID() === Module_Forum::instance()->cfgRootID(); }
+    
+    /**
+     * @return GDO_File
+     */
+    public function getImage() { return $this->getValue('board_image'); }
+    public function hasImage() { return !!$this->getVar('board_image'); }
     
     ##################
     ### Permission ###

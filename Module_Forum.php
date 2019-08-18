@@ -80,8 +80,8 @@ final class Module_Forum extends GDO_Module
             GDT_Checkbox::make('forum_attachments')->initial('1'),
             GDT_Level::make('forum_attachment_level')->initial('0'),
             GDT_Level::make('forum_post_level')->initial('0'),
-            GDT_DateTime::make('forum_latest_post_date'),
-            GDT_Int::make('forum_mail_sent_for_post')->initial('0'),
+            GDT_DateTime::make('forum_latest_post_date')->editable(false),
+            GDT_Int::make('forum_mail_sent_for_post')->initial('0')->editable(false),
         	GDT_UInt::make('forum_num_latest')->initial('6'),
         );
     }

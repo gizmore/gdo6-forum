@@ -5,6 +5,9 @@ use GDO\UI\GDT_Headline;
 use GDO\UI\GDT_Paragraph;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Button;
+use GDO\UI\GDT_Icon;
+use GDO\UI\GDT_Image;
+use GDO\Avatar\GDO_Avatar;
 $user = GDO_User::current();
 $bid = $board->getID(); ?>
 <?php
@@ -24,5 +27,14 @@ $li->actions()->addFields(array(
 	GDT_Button::make()->href($href)->icon('view')->label('btn_view'),
 	GDT_Button::make()->addClass($subscribeClass)->href($href2)->icon('email')->label($subscribeLabel),
 ));
+
+if ($board->hasImage())
+{
+	$li->image(GDT_Image::fromFile($board->getImage()));
+}
+else
+{
+	$li->image(GDT_Icon::make()->icon('book')->size(26));
+}
 
 echo $li->render();
