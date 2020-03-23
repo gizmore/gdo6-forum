@@ -52,7 +52,7 @@ final class GDO_ForumBoard extends GDO_Tree
             GDT_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->icon('message')->max(256),
             GDT_Permission::make('board_permission'),
             GDT_CreatedAt::make('board_created'),
-            GDT_CreatedBy::make('board_creator')->cascadeNull(),
+            GDT_CreatedBy::make('board_creator'),
         	GDT_Checkbox::make('board_allow_threads')->initial('0'),
         	GDT_Checkbox::make('board_allow_guests')->initial('0'),
         	GDT_Int::make('board_threadcount')->initial('0'),

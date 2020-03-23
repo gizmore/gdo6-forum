@@ -21,6 +21,8 @@ use GDO\DB\GDT_UInt;
  */
 final class Module_Forum extends GDO_Module
 {
+	public function getDependencies() { return ['File']; }
+	
     ##############
     ### Module ###
     ##############
