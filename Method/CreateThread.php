@@ -3,6 +3,7 @@ namespace GDO\Forum\Method;
 
 use GDO\Core\GDT_Hook;
 use GDO\Core\Website;
+use GDO\Date\Time;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
@@ -72,7 +73,7 @@ final class CreateThread extends MethodForm
         $module = Module_Forum::instance();
         $thread = GDO_ForumThread::blank($form->getFormData());
         $thread->setValue('thread_lastposter', GDO_User::current());
-        $thread->setValue('thread_lastposted', time());
+        $thread->setValue('thread_lastposted', Time::getDate());
         $thread->insert();
         $post = $this->post = GDO_ForumPost::blank($form->getFormData());
         $post->setVar('post_thread', $thread->getID());
