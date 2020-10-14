@@ -27,7 +27,7 @@ $links = [];
  * @var GDO_ForumBoard $p
  */
 $p = $board;
-$boardselect = GDT_Select::make('board_select');
+$boardselect = GDT_Select::make('board_select')->noLabel();
 $lastboard = null;
 while ($p)
 {

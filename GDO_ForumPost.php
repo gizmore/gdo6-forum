@@ -17,6 +17,7 @@ use GDO\User\GDO_UserSettingBlob;
 use GDO\Vote\WithLikes;
 use GDO\Vote\GDT_LikeCount;
 use GDO\User\GDT_Level;
+use GDO\DB\GDT_Checkbox;
 
 final class GDO_ForumPost extends GDO
 {
@@ -39,6 +40,7 @@ final class GDO_ForumPost extends GDO
             GDT_Message::make('post_message')->utf8()->caseI()->notNull(),
         	GDT_Level::make('post_level')->initial('0'),
             GDT_File::make('post_attachment'),
+            GDT_Checkbox::make('post_first')->initial('0'),
             
             GDT_CreatedAt::make('post_created'),
             GDT_CreatedBy::make('post_creator'),
@@ -60,10 +62,21 @@ final class GDO_ForumPost extends GDO
     public function getThread() { return $this->getValue('post_thread'); }
     public function getThreadID() { return $this->getVar('post_thread'); }
 
+    public function isFirstInThread() { return $this->getValue('post_first'); }
+
     /**
      * @return GDO_File
      */
-    public function getAttachment() { return $this->getValue('post_attachment'); }
+    public function getAttachment()
+    {
+        /** @var $file GDO_File **/
+        $file = $this->getValue('post_attachment');
+        if ($file->isImageType())
+        {
+            $file->tempHREF(href('Forum', 'PostImage', '&id=' . $this->getID()));
+        }
+        return $file;
+    }
     public function getAttachmentID() { return $this->getVar('post_attachment'); }
     public function hasAttachment() { return $this->getAttachmentID() !== null; }
     

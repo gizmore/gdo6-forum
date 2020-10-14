@@ -13,6 +13,10 @@ use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
 use GDO\Util\Common;
 use GDO\UI\GDT_Message;
+use GDO\File\GDT_File;
+use GDO\Date\Time;
+use GDO\Core\Website;
+use GDO\User\GDT_Level;
 
 final class CRUDPost extends MethodCrud
 {
@@ -90,22 +94,20 @@ final class CRUDPost extends MethodCrud
     public function createForm(GDT_Form $form)
     {
     	$initialPostHTML = isset($_REQUEST['quote']) ? $this->initialMessage() : '';
-        $gdo = $this->gdoTable();
-        $boardId = Common::getRequestString('board');
         $form->addFields(array(
             GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
-        	$gdo->gdoColumn('post_level')->initial($this->initialPostLevel()),
+        	GDT_Level::make('post_level')->initial($this->initialPostLevel()),
         	GDT_Message::make('post_message')->initial($initialPostHTML),
         ));
         if (Module_Forum::instance()->canUpload(GDO_User::current()))
         {
             $form->addFields(array(
-                $gdo->gdoColumn('post_attachment'),
+                GDT_File::make('post_attachment'),
             ));
             
             if ($this->gdo)
             {
-                $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$this->gdo->getID()}&file="));
+                $form->getField('post_attachment')->previewHREF(href('Forum', 'PostImage', "&id="));
             }
         }
         $this->createFormButtons($form);
@@ -116,8 +118,21 @@ final class CRUDPost extends MethodCrud
         $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$gdo->getID()}&file="));
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
+        $this->thread->saveVar('thread_lastposted', Time::getDate());
         GDO_UserSetting::inc('forum_posts');
         GDO_ForumRead::markRead(GDO_User::current(), $gdo);
         GDT_Hook::callWithIPC('ForumPostCreated', $gdo);
+        $id = $gdo->getID();
+        return Website::redirect(href('Forum', 'Thread', '&post='.$id.'#card-'.$id));
     }
+    
+    public function afterUpdate(GDT_Form $form, GDO $gdo)
+    {
+        $module = Module_Forum::instance();
+        $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
+        $this->thread->saveVar('thread_lastposted', Time::getDate());
+        $id = $gdo->getID();
+        return Website::redirect(href('Forum', 'Thread', '&post='.$id.'#card-'.$id));
+    }
+    
 }

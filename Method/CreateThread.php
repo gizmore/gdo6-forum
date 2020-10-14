@@ -53,7 +53,7 @@ final class CreateThread extends MethodForm
         $form->addFields(array(
             $gdo->gdoColumn('thread_board')->initial($this->board->getID())->editable(false),
             $gdo->gdoColumn('thread_title'),
-        	$posts->gdoColumn('post_level'),
+        	$posts->gdoColumn('post_level')->initial('0'),
         	$posts->gdoColumn('post_message'),
             $posts->gdoColumn('post_attachment'),
             GDT_Submit::make(),
@@ -77,6 +77,7 @@ final class CreateThread extends MethodForm
         $thread->insert();
         $post = $this->post = GDO_ForumPost::blank($form->getFormData());
         $post->setVar('post_thread', $thread->getID());
+        $post->setVar('post_first', '1');
         $post->insert();
         $module->saveConfigVar('forum_latest_post_date', $post->getCreated());
         GDO_ForumRead::markRead(GDO_User::current(), $post);

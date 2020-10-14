@@ -31,14 +31,16 @@ final class CRUDBoard extends MethodCrud
     {
         $gdo = GDO_ForumBoard::table();
         
-        $boardId = Common::getRequestString('board', $this->gdo ? $this->gdo->getParentID() : 0);
+        $parentId = Common::getRequestString('board', $this->gdo ? $this->gdo->getParentID() : 1);
+        $boardId = $this->gdo ? $this->gdo->getID() : 0;
+        
         $form->addFields(array(
             $gdo->gdoColumn('board_title'),
             $gdo->gdoColumn('board_description'),
-            GDT_ForumBoard::make('board_parent')->label('parent')->notNull()->initial($boardId)->writable($boardId>=1),
+            GDT_ForumBoard::make('board_parent')->label('parent')->notNull()->initial($parentId)->writable($boardId != 1),
             GDT_Permission::make('board_permission')->emptyInitial(t('sel_no_permissions')),
             $gdo->gdoColumn('board_allow_threads'),
-        	$gdo->gdoColumn('board_image'),
+            $gdo->gdoColumn('board_image')->previewHREF(href('Forum', 'BoardImage', '&board='.$boardId.'&id=')),
         ));
         
         $this->createFormButtons($form);

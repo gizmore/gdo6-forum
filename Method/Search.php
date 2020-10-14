@@ -38,7 +38,7 @@ final class Search extends MethodQueryList
 	{
 		if (!$this->form)
 		{
-			$this->form = GDT_Form::make()->method('GET');
+			$this->form = GDT_Form::make('form')->method('GET');
 			$this->form->addFields(array(
 				GDT_SearchField::make('search'),
 				GDT_Submit::make(),

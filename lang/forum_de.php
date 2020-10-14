@@ -87,4 +87,5 @@ Kind Regards
 The %2$s Team',
 #######################################################################
 'div_user_textual_settings' => 'Text Einstellungen',
+'board_select' => 'Board',
 );

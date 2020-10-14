@@ -57,7 +57,7 @@ final class GDO_ForumBoard extends GDO_Tree
         	GDT_Checkbox::make('board_allow_guests')->initial('0'),
         	GDT_Int::make('board_threadcount')->initial('0'),
             GDT_Int::make('board_postcount')->initial('0'),
-        	GDT_ImageFile::make('board_image'),
+        	GDT_ImageFile::make('board_image')->scaledVersion('thumb', 32, 32),
         ), parent::gdoColumns());
     }
 
@@ -78,8 +78,14 @@ final class GDO_ForumBoard extends GDO_Tree
     /**
      * @return GDO_File
      */
-    public function getImage() { return $this->getValue('board_image'); }
+    public function getImage()
+    {
+        $image = $this->getValue('board_image');
+        $image->tempHref(href('Forum', 'BoardImage', '&board='.$this->getID()));
+        return $image;
+    }
     public function hasImage() { return !!$this->getVar('board_image'); }
+    public function getImageId() { return $this->getVar('board_image'); }
     
     ##################
     ### Permission ###
