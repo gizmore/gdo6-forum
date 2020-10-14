@@ -13,6 +13,8 @@ use GDO\File\Method\GetFile;
  */
 final class DownloadAttachment extends Method
 {
+    public function saveLastUrl() { return false; }
+    
     public function execute()
     {
         $user = GDO_User::current();
