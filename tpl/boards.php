@@ -19,7 +19,7 @@ if ($numLatest && $board->isRoot())
 	$query = GDO_ForumThread::table()->select('*');
 	$query->joinObject('thread_lastposter');
 // 	$query->select("(SELECT MAX(post_created) FROM gdo_forumpost WHERE post_thread=thread_id) AS lastdate");
-	$query->order('thread_lastposted', false);
+	$query->orderDESC('thread_lastposted');
 	$query->limit($numLatest);
 	$list->query($query);
 	$list->title(t('forum_list_latest_threads'));
