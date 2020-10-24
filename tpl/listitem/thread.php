@@ -37,7 +37,7 @@ $li->subtitle(GDT_Paragraph::withHTML(t('li_thread_created', [$creator->displayN
 if ($replycount)
 {
 	$linkLastReply = GDT_Link::anchor($thread->hrefLastPost(), $thread->displayLastPosted());
-	$li->subtext(GDT_Paragraph::withHTML(t('li_thread_replies', [$thread->getPostCount()-1, $lastPoster->displayName(), $linkLastReply])));
+	$li->subtext(GDT_Paragraph::withHTML(t('li_thread_replies', [$thread->getPostCount()-1, $lastPoster->displayNameLabel(), $linkLastReply])));
 }
 else 
 {
