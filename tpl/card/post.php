@@ -19,11 +19,10 @@ $actions = $card->actions();
 $actions->addField(GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)));
 $actions->addField(GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()));
 $actions->addField(GDT_Button::make('btn_quote')->icon('quote')->href($post->hrefQuote()));
-$card->withCreator();
-$card->withCreated();
+$card->titleCreation();
 if ($post->isFirstInThread())
 {
-    $card->title($post->getThread()->getTitle());
+    $card->title($post->getThread()->gdoColumn('thread_title'));
 }
 
 $attachment = $post->hasAttachment() ? $post->getAttachment() : '';

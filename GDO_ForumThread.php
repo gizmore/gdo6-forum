@@ -44,6 +44,13 @@ final class GDO_ForumThread extends GDO
     ##################
     public function canView(GDO_User $user) { return $this->getBoard()->canView($user); }
     public function canEdit(GDO_User $user) { return $user->isStaff() || ($this->getCreatorID() === $user->getID()); }
+    public function hasPosted(GDO_User $user)
+    {
+        return GDO_ForumPost::table()->select('1')->
+        where("post_thread={$this->getID()}")->
+        where("post_creator={$user->getID()}")->
+        exec()->fetchValue() === '1';
+    }
     
     ############
     ### HREF ###
@@ -142,10 +149,19 @@ final class GDO_ForumThread extends GDO
     	{
     		return false;
     	}
-        if (GDO_UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
+    	$subscriptionMode = GDO_UserSetting::userGet($user, 'forum_subscription');
+        if ($subscriptionMode === GDT_ForumSubscribe::ALL)
         {
             return true;
         }
+        if ($subscriptionMode === GDT_ForumSubscribe::OWN)
+        {
+            if ($this->hasPosted($user))
+            {
+                return true;
+            }
+        }
+        
         return strpos($this->getForumSubscriptions($user), ",{$this->getID()},") !== false;
     }
     

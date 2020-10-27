@@ -1,6 +1,5 @@
 <?php /** @var $thread \GDO\Forum\GDO_ForumThread **/
 use GDO\Forum\GDO_ForumThread;
-use GDO\UI\GDT_IconButton;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_ListItem;
@@ -8,6 +7,7 @@ use GDO\Avatar\GDT_Avatar;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Paragraph;
 use GDO\UI\GDT_Button;
+use GDO\UI\GDT_Headline;
 $thread instanceof GDO_ForumThread;
 $creator = $thread->getCreator();
 $lastPoster = $thread->getLastPoster();
@@ -22,17 +22,17 @@ $subscribeLabel = $subscribed ? 'btn_unsubscribe' : 'btn_subscribe';
 
 # Generate @GDT_ListItem to be compat with all themes easily.
 
-$li = GDT_ListItem::make("thread_$tid");
+$li = GDT_ListItem::make("thread_$tid")->gdo($thread);
 
 $li->addClass($readClass);
 
-$li->image(GDT_Avatar::make()->user($creator));
+$li->titleCreation($thread->gdoColumn('thread_title'));
 
-$li->title(GDT_Container::makeWith(
-	GDT_Link::withHTML($thread->displayTitle())->href($thread->hrefFirstPost())->rawLabel($thread->displayTitle())
-));
+// $li->title(GDT_Container::makeWith(
+// 	GDT_Link::withHTML($thread->displayTitle())->href($thread->hrefFirstPost())->rawLabel($thread->displayTitle())
+// ));
 
-$li->subtitle(GDT_Paragraph::withHTML(t('li_thread_created', [$creator->displayNameLabel(), $thread->displayCreated()])));
+// $li->subtitle(GDT_Paragraph::withHTML(t('li_thread_created', [$creator->displayNameLabel(), $thread->displayCreated()])));
 
 if ($replycount)
 {

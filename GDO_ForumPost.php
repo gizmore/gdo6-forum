@@ -41,7 +41,6 @@ final class GDO_ForumPost extends GDO
         	GDT_Level::make('post_level')->initial('0'),
             GDT_File::make('post_attachment'),
             GDT_Checkbox::make('post_first')->initial('0'),
-            
             GDT_CreatedAt::make('post_created'),
             GDT_CreatedBy::make('post_creator'),
             GDT_EditedAt::make('post_edited'),
