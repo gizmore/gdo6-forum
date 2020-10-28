@@ -19,7 +19,7 @@ $actions = $card->actions();
 $actions->addField(GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)));
 $actions->addField(GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()));
 $actions->addField(GDT_Button::make('btn_quote')->icon('quote')->href($post->hrefQuote()));
-$card->titleCreation();
+$card->creatorHeader();
 if ($post->isFirstInThread())
 {
     $card->title($post->getThread()->gdoColumn('thread_title'));

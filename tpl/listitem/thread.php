@@ -26,7 +26,7 @@ $li = GDT_ListItem::make("thread_$tid")->gdo($thread);
 
 $li->addClass($readClass);
 
-$li->titleCreation($thread->gdoColumn('thread_title'));
+$li->creatorHeader($thread->gdoColumn('thread_title'));
 
 // $li->title(GDT_Container::makeWith(
 // 	GDT_Link::withHTML($thread->displayTitle())->href($thread->hrefFirstPost())->rawLabel($thread->displayTitle())

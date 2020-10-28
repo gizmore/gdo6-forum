@@ -130,6 +130,10 @@ final class GDO_ForumBoard extends GDO_Tree
             $cache = $this->queryAll();
             Cache::set('gdo_forumboard_all', $cache);
         }
+        else
+        {
+            Cache::heat('gdo_forumboard_all', $cache);
+        }
         return $cache;
     }
     
