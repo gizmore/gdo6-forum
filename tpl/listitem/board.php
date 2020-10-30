@@ -27,7 +27,7 @@ if ($board->hasImage())
 }
 else
 {
-    $li->image(GDT_Icon::make()->icon('book')->size(26));
+    $li->image(GDT_Icon::make()->icon('book')->iconSize(26));
 }
 
 # Name and description in content
