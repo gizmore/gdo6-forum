@@ -4,20 +4,21 @@ namespace GDO\Forum;
 use GDO\Core\GDO_Module;
 use GDO\DB\Cache;
 use GDO\Date\GDT_DateTime;
-use GDO\UI\GDT_Bar;
+use GDO\UI\GDT_Link;
 use GDO\DB\GDT_Checkbox;
 use GDO\DB\GDT_Int;
 use GDO\UI\GDT_Message;
-use GDO\UI\GDT_IconButton;
 use GDO\User\GDT_Level;
 use GDO\User\GDO_User;
-use GDO\DB\GDT_Object;
 use GDO\DB\GDT_UInt;
+use GDO\UI\GDT_Page;
+
 /**
- * GWF Forum Module
+ * GWF Forum Module.
+ * Quite unfinished.
  * @author gizmore
+ * @version 6.10
  * @since 2.0
- * @version 5.0
  */
 final class Module_Forum extends GDO_Module
 {
@@ -28,14 +29,15 @@ final class Module_Forum extends GDO_Module
     ##############
     public $module_priority = 45;
     public function getClasses() {
-        return array(
-            'GDO\Forum\GDO_ForumBoard',
-            'GDO\Forum\GDO_ForumThread',
-            'GDO\Forum\GDO_ForumPost',
-            'GDO\Forum\GDO_ForumRead',
-            'GDO\Forum\GDO_ForumThreadSubscribe',
-            'GDO\Forum\GDO_ForumBoardSubscribe',
-        	'GDO\Forum\GDO_ForumPostLikes');
+        return [
+            GDO_ForumBoard::class,
+            GDO_ForumThread::class,
+            GDO_ForumPost::class,
+            GDO_ForumRead::class,
+            GDO_ForumThreadSubscribe::class,
+            GDO_ForumBoardSubscribe::class,
+            GDO_ForumPostLikes::class,
+        ];
     }
     public function onLoadLanguage() { $this->loadLanguage('lang/forum'); }
     public function onIncludeScripts()
@@ -85,6 +87,7 @@ final class Module_Forum extends GDO_Module
             GDT_DateTime::make('forum_latest_post_date')->editable(false),
             GDT_Int::make('forum_mail_sent_for_post')->initial('0')->editable(false),
         	GDT_UInt::make('forum_num_latest')->initial('6'),
+            GDT_Checkbox::make('forum_hook_left_bar')->initial('1'),
         );
     }
     public function cfgGuestPosts() { return $this->getConfigValue('forum_guest_posts'); }
@@ -96,7 +99,8 @@ final class Module_Forum extends GDO_Module
     public function cfgRootID() { return $this->getConfigVar('forum_root'); }
     public function cfgRoot() { return $this->getConfigValue('forum_root'); }
     public function cfgNumLatestThreads() { return $this->getConfigVar('forum_num_latest'); }
-
+    public function cfgHookLeftBar() { return $this->getConfigValue('forum_hook_left_bar'); }
+    
     ###################
     ### Permissions ###
     ###################
@@ -138,5 +142,26 @@ final class Module_Forum extends GDO_Module
     ### Render ###
     ##############
     public function renderTabs() { return $this->responsePHP('tabs.php'); }
-    public function hookLeftBar(GDT_Bar $navbar) { $this->templatePHP('sidebars.php', ['navbar'=>$navbar]); }
+    
+    public function onInitSidebar()
+    {
+//         if ($this->cfgHookLeftBar())
+        {
+            $user = GDO_User::current();
+            if ($root = GDO_ForumBoard::getById('1'))
+            {
+                $posts = $root->getPostCount();
+                $link = GDT_Link::make()->label('link_forum', [$posts])->href(href('Forum', 'Boards'));
+                if ($user->isAuthenticated())
+                {
+                    if (GDO_ForumRead::countUnread($user) > 0)
+                    {
+                        $link->icon('alert');
+                    }
+                }
+                GDT_Page::$INSTANCE->leftNav->addField($link);
+            }
+        }
+    }
+
 }
