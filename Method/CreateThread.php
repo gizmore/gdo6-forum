@@ -13,9 +13,9 @@ use GDO\Forum\GDO_ForumRead;
 use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
-use GDO\User\GDO_UserSetting;
 use GDO\Util\Common;
 use GDO\Forum\GDO_ForumBoard;
+
 /**
  * Start a new thread.
  * @author gizmore
@@ -81,8 +81,8 @@ final class CreateThread extends MethodForm
         $post->insert();
         $module->saveConfigVar('forum_latest_post_date', $post->getCreated());
         GDO_ForumRead::markRead(GDO_User::current(), $post);
-        GDO_UserSetting::inc('forum_threads');
-        GDO_UserSetting::inc('forum_posts');
+        $module->increaseSetting('forum_threads');
+        $module->increaseSetting('forum_posts');
         $redirect = Website::redirectMessage(href('Forum', 'Thread', '&thread='.$thread->getID()));
         return $this->message('msg_thread_created')->add($redirect);
     }

@@ -2,7 +2,6 @@
 namespace GDO\Forum;
 
 use GDO\Category\GDO_Tree;
-use GDO\Core\Logger;
 use GDO\DB\Cache;
 use GDO\DB\GDT_AutoInc;
 use GDO\DB\GDT_CreatedAt;
@@ -13,10 +12,10 @@ use GDO\DB\GDT_Int;
 use GDO\DB\GDT_String;
 use GDO\User\GDT_Permission;
 use GDO\User\GDO_User;
-use GDO\User\GDO_UserSetting;
 use GDO\UI\GDT_Title;
 use GDO\File\GDT_ImageFile;
 use GDO\File\GDO_File;
+
 /**
  * A board inherits from GDO_Tree.
  * @author gizmore
@@ -204,7 +203,7 @@ final class GDO_ForumBoard extends GDO_Tree
     	{
     		return false;
     	}
-        if (GDO_UserSetting::userGet($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
+    	if (Module_Forum::instance()->userSettingVar($user, 'forum_subscription') === GDT_ForumSubscribe::ALL)
         {
             return true;
         }

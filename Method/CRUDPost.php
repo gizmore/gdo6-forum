@@ -10,7 +10,6 @@ use GDO\Forum\GDO_ForumPost;
 use GDO\Forum\GDO_ForumRead;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
-use GDO\User\GDO_UserSetting;
 use GDO\Util\Common;
 use GDO\UI\GDT_Message;
 use GDO\File\GDT_File;
@@ -119,7 +118,7 @@ final class CRUDPost extends MethodCrud
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         $this->thread->saveVar('thread_lastposted', Time::getDate());
-        GDO_UserSetting::inc('forum_posts');
+        $module->increaseSetting('forum_posts');
         GDO_ForumRead::markRead(GDO_User::current(), $gdo);
         GDT_Hook::callWithIPC('ForumPostCreated', $gdo);
         $id = $gdo->getID();

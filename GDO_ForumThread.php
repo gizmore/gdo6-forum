@@ -9,7 +9,6 @@ use GDO\Core\GDT_Template;
 use GDO\DB\GDT_Checkbox;
 use GDO\DB\GDT_Int;
 use GDO\User\GDO_User;
-use GDO\User\GDO_UserSetting;
 use GDO\UI\GDT_Title;
 use GDO\User\GDT_User;
 use GDO\Date\GDT_DateTime;
@@ -149,7 +148,7 @@ final class GDO_ForumThread extends GDO
     	{
     		return false;
     	}
-    	$subscriptionMode = GDO_UserSetting::userGet($user, 'forum_subscription');
+    	$subscriptionMode = Module_Forum::instance()->userSettingVar($user, 'forum_subscription');
         if ($subscriptionMode === GDT_ForumSubscribe::ALL)
         {
             return true;

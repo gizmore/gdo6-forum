@@ -5,7 +5,6 @@ use GDO\Core\GDO;
 use GDO\DB\GDT_Object;
 use GDO\User\GDT_User;
 use GDO\User\GDO_User;
-use GDO\User\GDO_UserSetting;
 
 final class GDO_ForumRead extends GDO
 {
@@ -47,11 +46,11 @@ final class GDO_ForumRead extends GDO
             if ($latest = $module->cfgLastPostDate())
             {
                 # And there are posts
-                $latestU = GDO_UserSetting::userGet($user, 'forum_readmark')->getVar();
+                $latestU = $module->userSettingVar($user, 'forum_readmark');
                 if ($latest !== $latestU)
                 {
                     # We have read all and can move the marker to current timestamp.
-                    GDO_UserSetting::userSet($user, 'forum_readmark', $latest);
+                    $module->saveUserSetting($user, 'forum_readmark', $latest);
                     GDO_ForumRead::table()->deleteWhere("read_user={$user->getID()}");
                 }
             }
@@ -87,7 +86,7 @@ final class GDO_ForumRead extends GDO
     {
         $module = Module_Forum::instance();
         $latest = $module->cfgLastPostDate();
-        $latestU = GDO_UserSetting::userGet($user, 'forum_readmark')->getVar();
+        $latestU = $module->userSettingVar($user, 'forum_readmark');
         $latestU = $latestU === null ? $user->getRegisterDate() : $latestU;
         if ( ($latest === $latestU) || (!$user->isAuthenticated()) ) 
         {

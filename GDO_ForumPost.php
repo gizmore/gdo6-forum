@@ -13,11 +13,11 @@ use GDO\File\GDT_File;
 use GDO\Core\GDT_Template;
 use GDO\UI\GDT_Message;
 use GDO\User\GDO_User;
-use GDO\User\GDO_UserSettingBlob;
 use GDO\Vote\WithLikes;
 use GDO\Vote\GDT_LikeCount;
 use GDO\User\GDT_Level;
 use GDO\DB\GDT_Checkbox;
+use function Something\sizeof\mymodule_form_callback;
 
 final class GDO_ForumPost extends GDO
 {
@@ -96,8 +96,9 @@ final class GDO_ForumPost extends GDO
     ##############
     ### Render ###
     ##############
-    public function hasSignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->getVar() != ''; }
-    public function displaySignature() { return GDO_UserSettingBlob::userGet($this->getCreator(), 'signature')->renderCell(); }
+    public function signatureField() { return Module_Forum::instance()->userSetting($this->getCreator(), 'signature'); }
+    public function hasSignature() { return !empty($this->signatureField()->var); }
+    public function displaySignature() { return $this->signatureField()->renderCell(); }
     public function displayCreated() { return tt($this->getCreated()); }
     public function renderCard() { return GDT_Template::php('Forum', 'card/post.php', ['post'=>$this]); }
     public function canRead() { return GDO_User::current()->getLevel() >= $this->getLevel(); }
