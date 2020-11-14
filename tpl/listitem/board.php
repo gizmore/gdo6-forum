@@ -32,12 +32,12 @@ else
 
 # Name and description in content
 $c = GDT_Container::make();
-$c->addField(GDT_Link::make()->href($href)->rawLabel($board->displayName()));
+$c->addField(GDT_Link::make()->href($href)->labelRaw($board->displayName()));
 $c->addField(GDT_Paragraph::make()->html($board->displayDescription()));
 $li->content($c);
 
 # Stats in subtext
-$li->subtext(GDT_Paragraph::withHTML(t('board_stats', [$board->getThreadCount(), $board->getPostCount()])));
+$li->subtext(GDT_Paragraph::make()->text('board_stats', [$board->getThreadCount(), $board->getPostCount()]));
 
 # Menu
 $li->actions()->addFields(array(

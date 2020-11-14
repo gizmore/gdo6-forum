@@ -28,20 +28,14 @@ $li->addClass($readClass);
 
 $li->creatorHeader($thread->gdoColumn('thread_title'));
 
-// $li->title(GDT_Container::makeWith(
-// 	GDT_Link::withHTML($thread->displayTitle())->href($thread->hrefFirstPost())->rawLabel($thread->displayTitle())
-// ));
-
-// $li->subtitle(GDT_Paragraph::withHTML(t('li_thread_created', [$creator->displayNameLabel(), $thread->displayCreated()])));
-
 if ($replycount)
 {
 	$linkLastReply = GDT_Link::anchor($thread->hrefLastPost(), $thread->displayLastPosted());
-	$li->subtext(GDT_Paragraph::withHTML(t('li_thread_replies', [$thread->getPostCount()-1, $lastPoster->displayNameLabel(), $linkLastReply])));
+	$li->subtext(GDT_Paragraph::make()->text('li_thread_replies', [$thread->getPostCount()-1, $lastPoster->displayNameLabel(), $linkLastReply]));
 }
 else 
 {
-	$li->subtext(GDT_Paragraph::withHTML(t('li_thread_no_replies')));
+	$li->subtext(GDT_Paragraph::make()->text('li_thread_no_replies'));
 }
 
 # Actions

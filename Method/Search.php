@@ -70,7 +70,7 @@ final class Search extends MethodQueryList
 		$list->title(t('list_forum_search', [html($this->searchTerm())]));
 	}
 	
-	public function gdoQuery()
+	public function getQuery()
 	{
 		$term = GDO::escapeS($this->searchTerm());
 		$term = "'%$term%'";

@@ -48,5 +48,4 @@ EOT;
 
 $card->addField(GDT_HTML::withHTML($html));
 
-echo $card->render();
-?>
+echo $card->renderCell();
