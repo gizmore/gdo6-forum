@@ -83,8 +83,9 @@ final class CreateThread extends MethodForm
         GDO_ForumRead::markRead(GDO_User::current(), $post);
         $module->increaseSetting('forum_threads');
         $module->increaseSetting('forum_posts');
-        $redirect = Website::redirectMessage(href('Forum', 'Thread', '&thread='.$thread->getID()));
-        return $this->message('msg_thread_created')->add($redirect);
+        
+        $href = href('Forum', 'Thread', '&thread='.$thread->getID());
+        return Website::redirectMessage('msg_thread_created', null, $href);
     }
     
     public function afterExecute()

@@ -66,8 +66,8 @@ final class EditThread extends MethodForm
         {
             $response = $this->changeBoard($form->getFormValue('thread_board'));
         }
-        $redirect = Website::redirectMessage(href('Forum', 'Thread', '&thread='.$this->thread->getID()));
-        return $this->message('msg_thread_edited')->add($response)->add($redirect);
+        $url = href('Forum', 'Thread', '&thread='.$this->thread->getID());
+        return Website::redirectMessage('msg_thread_edited', null, $url);
     }
     
     private function changeBoard(GDO_ForumBoard $newBoard)

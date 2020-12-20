@@ -23,18 +23,18 @@ final class Unsubscribe extends Method
                 return $this->error('err_please_use_subscribe_all');
             }
             $board = GDO_ForumBoard::findById($boardId);
-            GDO_ForumBoardSubscribe::table()->deleteWhere("subscribe_user=$uid AND subscribe_board=$boardId")->exec();
+            GDO_ForumBoardSubscribe::table()->deleteWhere("subscribe_user=$uid AND subscribe_board=$boardId");
             $user->tempUnset('gdo_forum_board_subsciptions');
             $user->recache();
-            $redirect = Website::redirectMessage(href('Forum', 'Boards', '&board='.$board->getParent()->getID()));
+            $redirect = Website::redirect(href('Forum', 'Boards', '&board='.$board->getParent()->getID()));
         }
         elseif ($threadId = Common::getRequestInt('thread'))
         {
             $thread = GDO_ForumThread::findById($threadId);
-            GDO_ForumThreadSubscribe::table()->deleteWhere("subscribe_user=$uid AND subscribe_thread=$threadId")->exec();
+            GDO_ForumThreadSubscribe::table()->deleteWhere("subscribe_user=$uid AND subscribe_thread=$threadId");
             $user->tempUnset('gdo_forum_thread_subsciptions');
             $user->recache();
-            $redirect = Website::redirectMessage(href('Forum', 'Boards', '&boardid='.$thread->getBoard()->getID()));
+            $redirect = Website::redirect(href('Forum', 'Boards', '&boardid='.$thread->getBoard()->getID()));
         }
         
         return $this->message('msg_unsubscribed')->add($redirect);

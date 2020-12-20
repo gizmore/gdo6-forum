@@ -33,7 +33,7 @@ else
 # Name and description in content
 $c = GDT_Container::make();
 $c->addField(GDT_Link::make()->href($href)->labelRaw($board->displayName()));
-$c->addField(GDT_Paragraph::make()->html($board->displayDescription()));
+$c->addField(GDT_Paragraph::make()->textRaw($board->displayDescription()));
 $li->content($c);
 
 # Stats in subtext
