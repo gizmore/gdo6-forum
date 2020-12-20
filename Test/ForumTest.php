@@ -16,7 +16,7 @@ final class ForumTest extends TestCase
             'board_allow_threads' => '1',
         ];
         $response = MethodTest::make()->method(CRUDBoard::make())->parameters($p)->execute();
-        assert($response->code === 200);
+        assertTrue($response->code === 200, "Check if boards can be created");
     }
     
     public function testThreadCreation()
