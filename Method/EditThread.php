@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Forum\Method;
 
-use GDO\Core\Logger;
 use GDO\Core\Website;
 use GDO\Form\GDT_AntiCSRF;
 use GDO\Form\GDT_Form;
@@ -12,12 +11,15 @@ use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
+
 /**
  * Start a new thread.
  * @author gizmore
  * @see GDO_ForumBoard
  * @see GDO_ForumThread
  * @see GDO_ForumPost
+ * @version 6.10
+ * @since 6.03
  */
 final class EditThread extends MethodForm
 {
@@ -29,6 +31,11 @@ final class EditThread extends MethodForm
     public function isUserRequired() { return true; }
     public function isGuestAllowed() { return Module_Forum::instance()->cfgGuestPosts(); }
     
+    public function beforeExecute()
+    {
+        Module_Forum::instance()->renderTabs();
+    }
+    
     public function execute()
     {
         $this->thread = GDO_ForumThread::table()->find(Common::getGetString('id'));
@@ -36,9 +43,7 @@ final class EditThread extends MethodForm
         {
             return $this->error('err_permission');
         }
-        $response = parent::execute();
-        $tabs = Module_Forum::instance()->renderTabs();
-        return $tabs->add($response);
+        return parent::execute();
     }
     
     public function createForm(GDT_Form $form)
@@ -60,11 +65,10 @@ final class EditThread extends MethodForm
     
     public function formValidated(GDT_Form $form)
     {
-        $response = null;
         $this->thread->saveVar('thread_title', $form->getFormVar('thread_title'));
         if ($form->hasChanged('thread_board'))
         {
-            $response = $this->changeBoard($form->getFormValue('thread_board'));
+            $this->changeBoard($form->getFormValue('thread_board'));
         }
         $url = href('Forum', 'Thread', '&thread='.$this->thread->getID());
         return Website::redirectMessage('msg_thread_edited', null, $url);
@@ -74,10 +78,10 @@ final class EditThread extends MethodForm
     {
         $postsBy = $this->thread->getPostCount();
         $oldBoard = $this->thread->getBoard();
-//         Logger::logDebug(sprintf('EditThread::changeBoard(%s => %s)', $oldBoard->getID(), $newBoard->getID()));
         $oldBoard->increaseCounters(-1, -$postsBy);
         $newBoard->increaseCounters(1, $postsBy);
         $this->thread->saveVar('thread_board', $newBoard->getID());
         return $this->message('msg_thread_moved');
     }
+    
 }

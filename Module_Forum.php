@@ -12,6 +12,7 @@ use GDO\User\GDT_Level;
 use GDO\User\GDO_User;
 use GDO\DB\GDT_UInt;
 use GDO\UI\GDT_Page;
+use GDO\Core\GDT_Template;
 
 /**
  * GWF Forum Module.
@@ -141,11 +142,15 @@ final class Module_Forum extends GDO_Module
     ##############
     ### Render ###
     ##############
-    public function renderTabs() { return $this->responsePHP('tabs.php'); }
+    public function renderTabs()
+    {
+        GDT_Page::$INSTANCE->topTabs->addField(
+            GDT_Template::make()->template($this->getName(), 'tabs.php'));
+    }
     
     public function onInitSidebar()
     {
-//         if ($this->cfgHookLeftBar())
+        if ($this->cfgHookLeftBar())
         {
             $user = GDO_User::current();
             if ($root = GDO_ForumBoard::getById('1'))

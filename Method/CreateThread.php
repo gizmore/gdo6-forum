@@ -33,6 +33,11 @@ final class CreateThread extends MethodForm
     
     public function isGuestAllowed() { return Module_Forum::instance()->cfgGuestPosts(); }
     
+    public function beforeExecute()
+    {
+        Module_Forum::instance()->renderTabs();
+    }
+    
     public function execute()
     {
         $this->board = GDO_ForumBoard::findById(Common::getRequestString('board'));
@@ -41,9 +46,7 @@ final class CreateThread extends MethodForm
         {
             return $this->error('err_permission');
         }
-        $response = parent::execute();
-        $tabs = Module_Forum::instance()->renderTabs();
-        return $tabs->add($response);
+        return parent::execute();
     }
     
     public function createForm(GDT_Form $form)
@@ -83,8 +86,7 @@ final class CreateThread extends MethodForm
         GDO_ForumRead::markRead(GDO_User::current(), $post);
         $module->increaseSetting('forum_threads');
         $module->increaseSetting('forum_posts');
-        
-        $href = href('Forum', 'Thread', '&thread='.$thread->getID());
+        $href = href('Forum', 'Thread', "&board={$thread->getBoardID()}&thread={$thread->getID()}");
         return Website::redirectMessage('msg_thread_created', null, $href);
     }
     
@@ -95,4 +97,5 @@ final class CreateThread extends MethodForm
             GDT_Hook::callWithIPC('ForumPostCreated', $this->post);
         }
     }
+
 }

@@ -20,14 +20,18 @@ use GDO\User\GDO_User;
  */
 final class Search extends MethodQueryList
 {
+    public function beforeExecute()
+    {
+        Module_Forum::instance()->renderTabs();
+    }
+    
 	public function execute()
 	{
-		$tabs = Module_Forum::instance()->renderTabs();
 		if (isset($_REQUEST['submit']))
 		{
-			return $tabs->add($this->renderForm())->add(parent::execute());
+			return $this->renderForm()->add(parent::execute());
 		}
-		return $tabs->add($this->renderForm());
+		return $this->renderForm();
 	}
 
 	###################

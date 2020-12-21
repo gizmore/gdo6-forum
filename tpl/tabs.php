@@ -1,13 +1,13 @@
 <?php
 use GDO\Forum\GDO_ForumBoard;
 use GDO\UI\GDT_IconButton;
-use GDO\UI\GDT_Toolbar;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
 use GDO\Form\GDT_Select;
 use GDO\Util\Arrays;
+use GDO\UI\GDT_Menu;
 
-$bar = GDT_Toolbar::make();
+$bar = GDT_Menu::make()->label('actions');
 $user = GDO_User::current();
 $boards = GDO_ForumBoard::table()->full()[0];
 $board = $boards[Common::getRequestString('board', array_keys($boards)[0])];

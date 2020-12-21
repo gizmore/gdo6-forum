@@ -7,12 +7,18 @@ use GDO\Forum\Module_Forum;
 use GDO\Util\Common;
 use GDO\User\GDO_User;
 use GDO\Forum\GDO_ForumPost;
+
 /**
  * Display a forum thread.
  * @author gizmore
  */
 final class Thread extends Method
 {
+    public function beforeExecute()
+    {
+        Module_Forum::instance()->renderTabs();
+    }
+    
     public function execute()
     {
     	if ($postid = Common::getGetInt('post'))
@@ -30,8 +36,9 @@ final class Thread extends Method
         {
             return $this->error('err_permission');
         }
+        
         $_REQUEST['board'] = $thread->getBoardID();
-        $tabs = Module_Forum::instance()->renderTabs();
-        return $tabs->add($this->templatePHP('thread.php', ['thread' => $thread]));
+        return $this->templatePHP('thread.php', ['thread' => $thread]);
     }
+    
 }

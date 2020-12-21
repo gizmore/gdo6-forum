@@ -9,6 +9,11 @@ use GDO\User\GDO_User;
 
 final class Boards extends Method
 {
+    public function beforeExecute()
+    {
+        Module_Forum::instance()->renderTabs();
+    }
+    
     public function execute()
     {
         $boards = GDO_ForumBoard::table()->full()[0]; # Get tree structure
@@ -17,13 +22,10 @@ final class Boards extends Method
         {
             return $this->error('err_permission');
         }
-        
-        $tabs = Module_Forum::instance()->renderTabs();
-        
         $tVars = array(
             'board' => $board,
             'boards' => $boards,
         );
-        return $tabs->add($this->templatePHP('boards.php', $tVars));
+        return $this->templatePHP('boards.php', $tVars);
     }
 }

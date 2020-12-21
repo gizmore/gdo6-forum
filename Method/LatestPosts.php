@@ -1,12 +1,14 @@
 <?php
 namespace GDO\Forum\Method;
+
 use GDO\Table\MethodQueryList;
 use GDO\Forum\GDO_ForumThread;
+
 /**
  * Display a list of latest threads.
  * @author gizmore
- * @since 3.00
  * @version 6.07
+ * @since 3.00
  */
 final class LatestPosts extends MethodQueryList
 {
@@ -14,6 +16,5 @@ final class LatestPosts extends MethodQueryList
 	{
 		return GDO_ForumThread::table();
 	}
-
 	
 }

@@ -16,6 +16,7 @@ use GDO\File\GDT_File;
 use GDO\Date\Time;
 use GDO\Core\Website;
 use GDO\User\GDT_Level;
+use GDO\Core\GDT_ResponseCard;
 
 final class CRUDPost extends MethodCrud
 {
@@ -31,6 +32,11 @@ final class CRUDPost extends MethodCrud
     public function canDelete(GDO $gdo) { return GDO_User::current()->isAdmin(); }
     
     private $thread;
+    
+    public function beforeExecute()
+    {
+        Module_Forum::instance()->renderTabs();
+    }
     
     public function execute()
     {
@@ -63,15 +69,16 @@ final class CRUDPost extends MethodCrud
 
         # 3. Execute
         $response = parent::execute();
-        $tabs = Module_Forum::instance()->renderTabs();
         
-        # 4. prepend reply
-        if (isset($post) && (count($_POST)===0))
-        {
-        	$tabs->addHTML($post->renderCard());
-        }
+//         # 4. prepend reply
+//         if (isset($post) && (count($_POST)===0))
+//         {
+//         	$tabs->addHTML($post->renderCard());
+//         }
         
-        return $tabs->add($response);
+//         return $tabs->add($response);
+        
+        return GDT_ResponseCard::make()->gdo($post)->add($response);
     }
     
     public function initialMessage()

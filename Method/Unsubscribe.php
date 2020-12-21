@@ -16,6 +16,7 @@ final class Unsubscribe extends Method
     {
         $user = GDO_User::current();
         $uid = $user->getID();
+        
         if ($boardId = Common::getRequestInt('board'))
         {
             if ($boardId === 1)
@@ -26,17 +27,19 @@ final class Unsubscribe extends Method
             GDO_ForumBoardSubscribe::table()->deleteWhere("subscribe_user=$uid AND subscribe_board=$boardId");
             $user->tempUnset('gdo_forum_board_subsciptions');
             $user->recache();
-            $redirect = Website::redirect(href('Forum', 'Boards', '&board='.$board->getParent()->getID()));
+            $href = href('Forum', 'Boards', '&board='.$board->getParent()->getID());
         }
+
         elseif ($threadId = Common::getRequestInt('thread'))
         {
             $thread = GDO_ForumThread::findById($threadId);
             GDO_ForumThreadSubscribe::table()->deleteWhere("subscribe_user=$uid AND subscribe_thread=$threadId");
             $user->tempUnset('gdo_forum_thread_subsciptions');
             $user->recache();
-            $redirect = Website::redirect(href('Forum', 'Boards', '&boardid='.$thread->getBoard()->getID()));
+            $href = href('Forum', 'Boards', '&boardid='.$thread->getBoard()->getID());
         }
         
-        return $this->message('msg_unsubscribed')->add($redirect);
+        return Website::redirectMessage('msg_unsubscribed', null, $href);
     }
+
 }

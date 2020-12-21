@@ -1,15 +1,17 @@
 <?php
 namespace GDO\Forum\Method;
+
 use GDO\Core\Method;
 use GDO\Forum\GDO_ForumPost;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
 use GDO\File\Method\GetFile;
+
 /**
  * Download a post attachment.
  * @author gizmore
- * @since 3.00
  * @version 6.05
+ * @since 3.00
  */
 final class DownloadAttachment extends Method
 {
@@ -31,4 +33,5 @@ final class DownloadAttachment extends Method
         
         return GetFile::make()->executeWithId($post->getAttachmentID());
     }
+    
 }

@@ -36,8 +36,10 @@ final class Subscribe extends Method
             ))->replace();
             $user->tempUnset('gdo_forum_board_subsciptions');
             $user->recache();
-            $redirect = Website::redirect(href('Forum', 'Boards', '&board='.$board->getParent()->getID()));
+            $href = href('Forum', 'Boards', '&board='.$board->getParent()->getID());
+            return Website::redirectMessage('msg_subscribed', null, $href);
         }
+        
         elseif ($threadId = Common::getRequestString('thread'))
         {
             $thread = GDO_ForumThread::findById($threadId);
@@ -47,9 +49,9 @@ final class Subscribe extends Method
             ))->replace();
             $user->tempUnset('gdo_forum_thread_subsciptions');
             $user->recache();
-            $redirect = Website::redirect(href('Forum', 'Boards', '&boardid='.$thread->getBoard()->getID()));
+            $href = href('Forum', 'Boards', '&board='.$thread->getBoard()->getID());
+            return Website::redirectMessage('msg_subscribed', null, $href);
         }
-        
-        return $this->message('msg_subscribed')->add($redirect);
     }
+
 }
