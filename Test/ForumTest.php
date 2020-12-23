@@ -8,6 +8,10 @@ use function PHPUnit\Framework\assertTrue;
 use GDO\Forum\GDO_ForumBoard;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
+use GDO\Forum\Method\Boards;
+use GDO\Forum\Method\CreateThread;
+use GDO\Forum\GDO_ForumThread;
+use function PHPUnit\Framework\assertStringContainsString;
 
 final class ForumTest extends TestCase
 {
@@ -37,8 +41,29 @@ final class ForumTest extends TestCase
     
     public function testThreadCreation()
     {
-        $boards = GDO_ForumBoard::table()->queryAll();
-        assertCount(3, $boards, 'Check if we have 3 forums');
+        # Look at boards again to make sure we are not in a deadloop.
+        $this->callMethod(Boards::make());
+
+        $gp = [
+            'board' => '3',
+        ];
+        $p = [
+            'thread_title' => 'Test Thread 1',
+            'post_message' => 'Test Thread Message 1',
+        ];
+        MethodTest::make()->method(CreateThread::make())->getParameters($gp)->parameters($p)->execute();
+        $this->assert200("Check if CreateThread results in code 200.");
+        $threads = GDO_ForumThread::table()->all();
+        assertCount(1, $threads, 'Check if we have 1 thread');
+        assertStringContainsString("Thread", $threads[1]->getTitle(), 'check if thread title is set');
+        
+        $post = $threads[1]->getFirstPost();
+        $message = $post->displayMessage();
+        assertStringContainsString("Thread", $message, 'check if post message is set.');
+        assertStringContainsString("<div", $message, 'check if post message display is output prerendered.');
+        
+        # Look at boards again to make sure we are not in a deadloop.
+        $this->callMethod(Boards::make());
     }
     
 }

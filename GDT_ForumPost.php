@@ -9,7 +9,7 @@ final class GDT_ForumPost extends GDT_Object
 {
 	public function defaultLabel() { return $this->label('post'); }
 	
-	public function __construct()
+	protected function __construct()
 	{
 	    $this->table(GDO_ForumPost::table());
 	}

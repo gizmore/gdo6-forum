@@ -50,13 +50,13 @@ final class GDO_ForumBoard extends GDO_Tree
             GDT_Title::make('board_title')->notNull()->utf8()->caseI()->label('title')->max(64),
             GDT_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->icon('message')->max(256),
             GDT_Permission::make('board_permission'),
-            GDT_CreatedAt::make('board_created'),
-            GDT_CreatedBy::make('board_creator'),
         	GDT_Checkbox::make('board_allow_threads')->initial('0'),
         	GDT_Checkbox::make('board_allow_guests')->initial('0'),
         	GDT_Int::make('board_threadcount')->initial('0'),
             GDT_Int::make('board_postcount')->initial('0'),
         	GDT_ImageFile::make('board_image')->scaledVersion('thumb', 48, 48),
+            GDT_CreatedAt::make('board_created'),
+            GDT_CreatedBy::make('board_creator'),
         ), parent::gdoColumns());
     }
 

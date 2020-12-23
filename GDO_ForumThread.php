@@ -12,6 +12,7 @@ use GDO\User\GDO_User;
 use GDO\UI\GDT_Title;
 use GDO\User\GDT_User;
 use GDO\Date\GDT_DateTime;
+use GDO\DB\GDT_UInt;
 /**
  * Forum thread database object.
  * @author gizmore
@@ -27,13 +28,13 @@ final class GDO_ForumThread extends GDO
         return array(
             GDT_AutoInc::make('thread_id'),
             GDT_ForumBoard::make('thread_board')->notNull()->label('board'),
-            GDT_Title::make('thread_title')->utf8()->caseI()->notNull()->max(128)->label('title'),
-            GDT_Int::make('thread_postcount')->unsigned()->initial('0'),
-            GDT_Int::make('thread_viewcount')->unsigned()->initial('0'),
+            GDT_Title::make('thread_title')->max(128),
+            GDT_UInt::make('thread_postcount')->initial('0'),
+            GDT_UInt::make('thread_viewcount')->initial('0'),
         	GDT_Checkbox::make('thread_locked')->initial('0'),
             GDT_CreatedAt::make('thread_created'),
             GDT_CreatedBy::make('thread_creator'),
-        	GDT_User::make('thread_lastposter')->notNull(),
+        	GDT_User::make('thread_lastposter'), # can be removed without thread loss
         	GDT_DateTime::make('thread_lastposted')->notNull(),
         );
     }

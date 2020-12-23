@@ -10,7 +10,7 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 {
 	public function defaultLabel() { return $this->label('board'); }
 	
-	public function __construct()
+	protected function __construct()
 	{
 	    $this->table(GDO_ForumBoard::table());
 		$this->emptyLabel('no_parent');

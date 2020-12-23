@@ -15,10 +15,10 @@ $board = $boards[Common::getRequestString('board', array_keys($boards)[0])];
 # Header Create Board Button
 if ($user->isStaff())
 {
-    $bar->addField(GDT_IconButton::make()->icon('add')->href(href('Forum', 'CRUDBoard', '&board='.$board->getID())));
+    $bar->addField(GDT_IconButton::make()->label('board')->icon('add')->href(href('Forum', 'CRUDBoard', '&board='.$board->getID())));
 }
 
-$bar->addField(GDT_IconButton::make()->icon('search')->tooltip(t('tt_search_forum'))->href(href('Forum', 'Search', '&board='.$board->getID())));
+$bar->addField(GDT_IconButton::make()->label('search')->icon('search')->tooltip(t('tt_search_forum'))->href(href('Forum', 'Search', '&board='.$board->getID())));
 
 
 # Header Middle Board Selection
@@ -51,12 +51,12 @@ if ($user->isStaff())
 {
     if (isset($_GET['thread']))
     {
-        $bar->addField(GDT_IconButton::make()->icon('edit')->href(href('Forum', 'EditThread', '&id='.Common::getGetString('thread'))));
+        $bar->addField(GDT_IconButton::make()->label('thread')->icon('edit')->href(href('Forum', 'EditThread', '&id='.Common::getGetString('thread'))));
         
     }
     else
     {
-        $bar->addField(GDT_IconButton::make()->icon('edit')->href(href('Forum', 'CRUDBoard', '&id='.$board->getID())));
+        $bar->addField(GDT_IconButton::make()->label('board')->icon('edit')->href(href('Forum', 'CRUDBoard', '&id='.$board->getID())));
     }
 }
 
