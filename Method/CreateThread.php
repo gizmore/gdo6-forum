@@ -78,7 +78,8 @@ final class CreateThread extends MethodForm
         $thread->setValue('thread_lastposter', GDO_User::current());
         $thread->setValue('thread_lastposted', Time::getDate());
         $thread->insert();
-        $post = $this->post = GDO_ForumPost::blank($form->getFormData());
+        $data = $form->getFormData();
+        $post = $this->post = GDO_ForumPost::blank($data);
         $post->setVar('post_thread', $thread->getID());
         $post->setVar('post_first', '1');
         $post->insert();
