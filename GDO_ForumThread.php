@@ -7,12 +7,12 @@ use GDO\DB\GDT_CreatedAt;
 use GDO\DB\GDT_CreatedBy;
 use GDO\Core\GDT_Template;
 use GDO\DB\GDT_Checkbox;
-use GDO\DB\GDT_Int;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Title;
 use GDO\User\GDT_User;
 use GDO\Date\GDT_DateTime;
 use GDO\DB\GDT_UInt;
+
 /**
  * Forum thread database object.
  * @author gizmore

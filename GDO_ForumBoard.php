@@ -48,7 +48,7 @@ final class GDO_ForumBoard extends GDO_Tree
         return array_merge(array(
             GDT_AutoInc::make('board_id'),
             GDT_Title::make('board_title')->notNull()->utf8()->caseI()->label('title')->max(64),
-            GDT_String::make('board_description')->notNull()->utf8()->caseI()->label('description')->icon('message')->max(256),
+            GDT_String::make('board_description')->utf8()->caseI()->label('description')->icon('message')->max(256),
             GDT_Permission::make('board_permission'),
         	GDT_Checkbox::make('board_allow_threads')->initial('0'),
         	GDT_Checkbox::make('board_allow_guests')->initial('0'),
