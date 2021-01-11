@@ -88,4 +88,8 @@ The %2$s Team',
 #######################################################################
 'div_user_textual_settings' => 'Textual Settings',
 'board_select' => 'Board',
+# 6.10
+'ft_forum_repair' => 'Reparieren',
+'info_forum_repair' => 'Repariere verschieden Variablen via Post- und Thread Daten.<br/>Zb. Postcount, Threadcount, LastPoster, etc...',
+'cfg_forum_hook_left_bar' => 'Forum in das linke Menu hängen?',
 );

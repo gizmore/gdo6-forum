@@ -24,6 +24,7 @@ use GDO\Core\GDT_Template;
 final class Module_Forum extends GDO_Module
 {
 	public function getDependencies() { return ['File']; }
+	public function href_administrate_module() { return $this->href('Admin'); }
 	
     ##############
     ### Module ###

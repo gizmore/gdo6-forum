@@ -25,6 +25,8 @@ use GDO\File\GDO_File;
  */
 final class GDO_ForumBoard extends GDO_Tree
 {
+    public static $BUILD_TREE_UPON_SAVE = true;
+    
 	############
 	### Root ###
 	############
@@ -136,6 +138,12 @@ final class GDO_ForumBoard extends GDO_Tree
         return $cache;
     }
     
+    public function clearCache()
+    {
+        self::recacheAll();
+        parent::clearCache();
+    }
+    
     public static function recacheAll()
     {
         Cache::remove('gdo_forumboard_all');
@@ -149,12 +157,14 @@ final class GDO_ForumBoard extends GDO_Tree
     public function gdoAfterCreate()
     {
         $this->recacheAll();
-        parent::gdoAfterCreate();
+        if (self::$BUILD_TREE_UPON_SAVE)
+        {
+            parent::gdoAfterCreate();
+        }
     }
     
     public function increaseCounters($threadsBy, $postsBy)
     {
-//         Logger::logDebug(sprintf('ForumBoard::increaseCounters(%s, %s) ID:%s', $threadsBy, $postsBy, $this->getID()));
         $this->increase('board_threadcount', $threadsBy);
         $this->increase('board_postcount', $postsBy);
         if ($parent = $this->getParent())

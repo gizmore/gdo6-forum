@@ -88,4 +88,8 @@ The %2$s Team',
 #######################################################################
 'div_user_textual_settings' => 'Textual Settings',
 'board_select' => 'Board',
+# 6.10
+'ft_forum_repair' => 'Repair',
+'info_forum_repair' => 'Repair certain values from post and thread data.<br/>Postcount, Threadcount, LastPost, Readmark, etc...',
+'cfg_forum_hook_left_bar' => 'Hook forum into left sidebar?',
 );

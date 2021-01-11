@@ -63,6 +63,16 @@ final class GDO_ForumPost extends GDO
 
     public function isFirstInThread() { return $this->getValue('post_first'); }
 
+    public function isEdited() { return !!$this->getEdited(); }
+    public function getEdited() { return $this->getVar('post_edited'); }
+    
+    /**
+     * @return GDO_User
+     */
+    public function getEditor() { return $this->getValue('post_editor'); }
+    public function getEditorID() { return $this->getVar('post_editor'); }
+    
+    
     /**
      * @return GDO_File
      */
