@@ -147,6 +147,7 @@ final class Repair extends MethodForm
     {
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $this->getLastPost()->getCreated());
+        $module->saveConfigVar('forum_mail_sent_for_post', $this->getLastPost()->getID());
     }
     
     /**

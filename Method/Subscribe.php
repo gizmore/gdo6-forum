@@ -9,6 +9,7 @@ use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\GDO_ForumThreadSubscribe;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
+use GDO\Forum\Module_Forum;
 
 /**
  * Subscribe boards or thread
@@ -25,7 +26,7 @@ final class Subscribe extends Method
         
         if ($boardId = Common::getRequestString('board'))
         {
-            if ($boardId === '1')
+            if ($boardId == Module_Forum::instance()->cfgRootID())
             {
                 return $this->error('err_please_use_subscribe_all');
             }

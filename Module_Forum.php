@@ -88,6 +88,7 @@ final class Module_Forum extends GDO_Module
             GDT_Level::make('forum_post_level')->initial('0'),
             GDT_DateTime::make('forum_latest_post_date')->editable(false),
             GDT_Int::make('forum_mail_sent_for_post')->initial('0')->editable(false),
+            GDT_Checkbox::make('forum_mail_enable')->initial('1'),
         	GDT_UInt::make('forum_num_latest')->initial('6'),
             GDT_Checkbox::make('forum_hook_left_bar')->initial('1'),
         );
@@ -102,6 +103,7 @@ final class Module_Forum extends GDO_Module
     public function cfgRoot() { return $this->getConfigValue('forum_root'); }
     public function cfgNumLatestThreads() { return $this->getConfigVar('forum_num_latest'); }
     public function cfgHookLeftBar() { return $this->getConfigValue('forum_hook_left_bar'); }
+    public function cfgMailEnabled() { return $this->getConfigValue('forum_mail_enable'); }
     
     ###################
     ### Permissions ###
