@@ -31,7 +31,7 @@ final class CronjobMailer extends MethodCronjob
     
     private function mailSubscriptions(Module_Forum $module, GDO_ForumPost $post)
     {
-        $this->logNotice(sprintf("Sending mails for {$post->getThread()->getTitle()}"));
+        $this->logNotice("Sending mails for {$post->getThread()->getTitle()}");
         
         if (!$module->cfgMailEnabled())
         {
