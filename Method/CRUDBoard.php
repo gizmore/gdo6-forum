@@ -44,10 +44,15 @@ final class CRUDBoard extends MethodCrud
         $this->createFormButtons($form);
     }
 
+    public function afterCreate(GDT_Form $form, GDO $gdo)
+    {
+        $this->afterUpdate($form, $gdo);
+    }
+    
     public function afterUpdate(GDT_Form $form, GDO $gdo)
     {
         GDO_ForumBoard::recacheAll();
-        $this->gdo->recache();
+        $gdo->recache();
     }
     
 }
