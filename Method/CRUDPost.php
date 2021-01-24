@@ -16,7 +16,10 @@ use GDO\File\GDT_File;
 use GDO\Date\Time;
 use GDO\Core\Website;
 use GDO\User\GDT_Level;
-use GDO\Core\GDT_ResponseCard;
+use GDO\Form\GDT_Submit;
+use GDO\UI\GDT_Card;
+use GDO\Core\GDT_Response;
+use GDO\UI\GDT_CardView;
 
 final class CRUDPost extends MethodCrud
 {
@@ -78,7 +81,8 @@ final class CRUDPost extends MethodCrud
         
 //         return $tabs->add($response);
         
-        return GDT_ResponseCard::make()->gdo($post)->add($response);
+        $card = GDT_CardView::make()->gdo($post);
+        return GDT_Response::makeWith($card)->add($response);
     }
     
     public function initialMessage()
@@ -117,6 +121,7 @@ final class CRUDPost extends MethodCrud
             }
         }
         $this->createFormButtons($form);
+        $form->addField(GDT_Submit::make('preview')->label('preview')->icon('view'));
     }
     
     public function afterCreate(GDT_Form $form, GDO $gdo)
@@ -139,6 +144,13 @@ final class CRUDPost extends MethodCrud
         $this->thread->saveVar('thread_lastposted', Time::getDate());
         $id = $gdo->getID();
         return Website::redirect(href('Forum', 'Thread', '&post='.$id.'#card-'.$id));
+    }
+    
+    public function onSubmit_preview(GDT_Form $form)
+    {
+        $response = parent::renderPage($form);
+        $preview = GDO_ForumPost::blank($form->getFormData());
+        return $response->addField(GDT_CardView::make()->gdo($preview));
     }
     
 }

@@ -18,6 +18,7 @@ use GDO\Vote\GDT_LikeCount;
 use GDO\User\GDT_Level;
 use GDO\DB\GDT_Checkbox;
 use function Something\sizeof\mymodule_form_callback;
+use GDO\Core\GDT_Error;
 
 final class GDO_ForumPost extends GDO
 {
@@ -26,6 +27,12 @@ final class GDO_ForumPost extends GDO
 	#############
 	use WithLikes;
 	public function gdoLikeTable() { return GDO_ForumPostLikes::table(); }
+	public function gdoCanLike(GDO_User $user)
+	{
+	    return
+	       $this->getThread()->canView($user) &&
+	       $user !== $this->getCreator();
+	}
 	
     ###########
     ### GDO ###
@@ -103,6 +110,7 @@ final class GDO_ForumPost extends GDO
     public function hrefQuote() { return href('Forum', 'CRUDPost', '&quote='.$this->getID()); }
     public function hrefAttachment() { return href('Forum', 'DownloadAttachment', '&post='.$this->getID()); }
     public function hrefPreview() { return $this->hrefAttachment() . '&att='; }
+    public function href_preview() { return $_SERVER['REQUEST_URI']; }
     
     ##############
     ### Render ###

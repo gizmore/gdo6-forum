@@ -149,7 +149,7 @@ final class Repair extends MethodForm
             $thread->saveVars([
                 'thread_lastposter' => $post->isEdited() ? $post->getEditorID() : $post->getCreatorID(),
                 'thread_lastposted' => $post->isEdited() ? $post->getEdited() : $post->getCreated() ,
-            ]);
+            ], false);
         }
     }
     
@@ -161,7 +161,7 @@ final class Repair extends MethodForm
             $thread->saveVars([
                 'thread_creator' => $post->getCreatorID(),
                 'thread_created' => $post->getCreated() ,
-            ]);
+            ], false);
         }
     }
     
@@ -280,6 +280,11 @@ final class Repair extends MethodForm
             if ($count)
             {
                 $module->saveUserSetting($user, 'forum_posts', $count);
+            }
+            $count = GDO_ForumPost::table()->countWhere("thread_creator={$user->getID()}");
+            if ($count)
+            {
+                $module->saveUserSetting($user, 'forum_threads', $count);
             }
         }
     }

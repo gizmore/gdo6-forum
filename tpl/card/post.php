@@ -23,10 +23,13 @@ if ($unread) $post->markRead($user);
 
 $card = GDT_Card::make("post_$id")->gdo($post)->addClass('forum-post')->addClass($readClass);
 $actions = $card->actions();
-$actions->addField(GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)));
-$actions->addField(GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()));
-$actions->addField(GDT_Button::make('btn_quote')->icon('quote')->href($post->hrefQuote()));
-$actions->addField(GDT_LikeButton::make()->gdo($post));
+if ($post->isPersisted())
+{
+    $actions->addField(GDT_EditButton::make()->href($post->hrefEdit())->editable($post->canEdit($user)));
+    $actions->addField(GDT_Button::make('btn_reply')->icon('reply')->href($post->hrefReply()));
+    $actions->addField(GDT_Button::make('btn_quote')->icon('quote')->href($post->hrefQuote()));
+    $actions->addField(GDT_LikeButton::make()->gdo($post));
+}
 
 $card->creatorHeader();
 if ($post->isFirstInThread())

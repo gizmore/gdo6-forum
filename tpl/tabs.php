@@ -49,7 +49,7 @@ $bar->addField($boardselect);
 # Header Edit button. Either edit board or thread
 if ($user->isStaff())
 {
-    if (isset($_GET['thread']))
+    if (isset($_REQUEST['thread']))
     {
         $bar->addField(GDT_IconButton::make()->label('thread')->icon('edit')->href(href('Forum', 'EditThread', '&id='.Common::getGetString('thread'))));
         
