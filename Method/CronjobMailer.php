@@ -20,7 +20,9 @@ final class CronjobMailer extends MethodCronjob
         $post = true;
         while ($post)
         {
-            if ($post = GDO_ForumPost::table()->select()->where("post_id > $lastId")->order('post_id')->first()->exec()->fetchObject())
+            if ($post = GDO_ForumPost::table()->select()->
+                where("post_id > $lastId")->
+                order('post_id')->first()->exec()->fetchObject())
             {
                 $this->mailSubscriptions($module, $post);
                 $lastId = $post->getID();
@@ -120,7 +122,7 @@ final class CronjobMailer extends MethodCronjob
         $poster = $post->getCreator()->displayNameLabel();
         $title = $thread->displayTitle();
         $message = $post->displayMessage();
-        $linkUnsub = GDT_Link::anchor(url('Forum', 'UnsubscribeAll', '&token='.$user->gdoHashcode()));
+        $linkUnsub = GDT_Link::anchor(url('Forum', 'UnsubscribeAll', '&uid='.$user->getID().'&token='.$user->gdoHashcode()));
         $args = [$username, $sitename, $title, $poster, $message, $linkUnsub];
         $mail->setSubject(tusr($user, 'mail_subj_forum_post', [$sitename, $title]));
         $mail->setBody(tusr($user, 'mail_body_forum_post', $args));

@@ -13,7 +13,7 @@ return array(
 'btn_unsubscribe' => 'Unsubscribe',
 'btn_view_first_post' => 'First post',
 'btn_view_last_post' => 'Last post',
-'list_title_board_threads' => 'There are %s threads in this board',
+'forum_board_threads' => '%2$s threads in %1$s',
 'list_title_thread_posts' => '%s – %s Posts',
 'thread_postcount' => '%s Posts',
 'posted_at' => 'Posted at %s',
@@ -92,4 +92,5 @@ The %2$s Team',
 'ft_forum_repair' => 'Repair',
 'info_forum_repair' => 'Repair certain values from post and thread data.<br/>Postcount, Threadcount, LastPost, Readmark, etc...',
 'cfg_forum_hook_left_bar' => 'Hook forum into left sidebar?',
+'num_posts' => 'Posts:&nbsp;'
 );

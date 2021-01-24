@@ -1,44 +1,110 @@
 <?php
 namespace GDO\Forum\Method;
 
-use GDO\Core\Method;
 use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
-use GDO\Util\Common;
-use GDO\User\GDO_User;
 use GDO\Forum\GDO_ForumPost;
+use GDO\Table\MethodQueryCards;
+use GDO\Forum\GDO_ForumBoard;
+use GDO\Forum\GDT_ForumPost;
+use GDO\Table\GDT_Table;
+use GDO\User\GDO_User;
 
 /**
  * Display a forum thread.
  * @author gizmore
  */
-final class Thread extends Method
+final class Thread extends MethodQueryCards
 {
+    public function isPaginated() { return true; }
+    public function isOrdered() { return false; }
+    public function isSearched() { return false; }
+    
+    public function getDefaultOrder() { return 'IFNULL(post_edited, post_created)'; }
+    public function getDefaultOrderDir() { return true; }
+    
+    public function getDefaultIPP() { return 10; }
+    
     public function beforeExecute()
     {
         Module_Forum::instance()->renderTabs();
     }
     
-    public function execute()
+    public function gdoParameters()
     {
-    	if ($postid = Common::getGetInt('post'))
-    	{
-    		$post = GDO_ForumPost::getById($postid);
-    		$thread = $post->getThread();
-    	}
-    	else
-    	{
-    		$thread = GDO_ForumThread::table()->find(Common::getRequestString('thread'));
-    		$post = $thread->getFirstPost();
-    	}
-    	
-        if (!$thread->canView(GDO_User::current()))
+        return [
+            GDT_ForumPost::make('post')->notNull(),
+        ];
+    }
+    
+    /**
+     * @return GDO_ForumThread
+     */
+    public function getThread()
+    {
+        return $this->getPost()->getThread();
+    }
+    
+    /**
+     * @return GDO_ForumPost
+     */
+    public function getPost()
+    {
+        return $this->gdoParameterValue('post');
+    }
+    
+    /**
+     * @return GDO_ForumBoard
+     */
+    public function getBoard()
+    {
+        return $this->getThread()->getBoard();   
+    }
+    
+    public function hasPermission($user)
+    {
+        return $this->getThread()->canView($user);
+    }
+    public function gdoTable()
+    {
+        return GDO_ForumPost::table();
+    }
+    
+    public function getQuery()
+    {
+        $thread = $this->getThread();
+        $uid = GDO_User::current()->getID();
+        return
+            parent::getQuery()->
+            join("LEFT JOIN gdo_forumpostlikes ON like_user={$uid} AND like_object=post_id")->
+            where("post_thread={$thread->getID()}");
+    }
+    
+    public function setupTitle(GDT_Table $table)
+    {
+        $thread = $this->getThread();
+        $table->title(t('list_title_thread_posts', 
+            [$thread->displayTitle(), $table->countItems()]));
+    }
+
+    /**
+     * Set board correctly on init.
+     * Go to default page for a post.
+     */
+    public function init()
+    {
+        $_REQUEST['board'] = $this->getThread()->getBoardID();
+    }
+    
+    protected function beforeCalculateTable(GDT_Table $table)
+    {
+        $o = $this->table->headers->name;
+        if (!isset($_REQUEST[$o]['page']))
         {
-            return $this->error('err_permission');
+            $defaultPage = $this->table->getPageFor($this->getPost());
+            $_REQUEST[$o]['page'] = "$defaultPage";
+            $this->table->pagemenu->page($defaultPage);
         }
-        
-        $_REQUEST['board'] = $thread->getBoardID();
-        return $this->templatePHP('thread.php', ['thread' => $thread]);
     }
     
 }

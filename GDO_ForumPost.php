@@ -80,7 +80,7 @@ final class GDO_ForumPost extends GDO
     {
         /** @var $file GDO_File **/
         $file = $this->getValue('post_attachment');
-        if ($file->isImageType())
+        if ($file && $file->isImageType())
         {
             $file->tempHREF(href('Forum', 'PostImage', '&id=' . $this->getID()));
         }
@@ -102,6 +102,7 @@ final class GDO_ForumPost extends GDO
     public function hrefReply() { return href('Forum', 'CRUDPost', '&reply='.$this->getID()); }
     public function hrefQuote() { return href('Forum', 'CRUDPost', '&quote='.$this->getID()); }
     public function hrefAttachment() { return href('Forum', 'DownloadAttachment', '&post='.$this->getID()); }
+    public function hrefPreview() { return $this->hrefAttachment() . '&att='; }
     
     ##############
     ### Render ###

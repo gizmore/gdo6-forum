@@ -44,9 +44,11 @@ final class Repair extends MethodForm
         $form->addFields([
             GDT_Checkbox::make('repair_firstpost_flag')->initial('0'),
             GDT_Checkbox::make('repair_thread_lastpost')->initial('0'),
+            GDT_Checkbox::make('repair_thread_firstpost')->initial('0'),
             GDT_Checkbox::make('repair_forum_lastpost')->initial('0'),
             GDT_Checkbox::make('repair_postcount')->initial('0'),
             GDT_Checkbox::make('repair_threadcount')->initial('0'),
+            GDT_Checkbox::make('repair_user_postcount')->initial('0'),
             GDT_Checkbox::make('repair_readmark')->initial('0'),
             GDT_Submit::make(),
             GDT_AntiCSRF::make(),
@@ -75,11 +77,15 @@ final class Repair extends MethodForm
         {
             $this->repairThreadLastPoster();
         }
+        if ($form->getFormValue('repair_thread_firstpost'))
+        {
+            $this->repairThreadFirstPoster();
+        }
         if ($form->getFormValue('repair_forum_lastpost'))
         {
             $this->repairLastPostInForum();
         }
-        if (true)
+        if (true) # style
         {
             $pc = $form->getFormValue('repair_postcount');
             $tc = $form->getFormValue('repair_threadcount');
@@ -89,8 +95,12 @@ final class Repair extends MethodForm
         {
             $this->repairReadmark();
         }
+        if ($form->getFormValue('repair_user_postcount'))
+        {
+            $this->repairUserPostcount();
+        }
     }
-  
+    
     ############
     ### Util ###
     ############
@@ -119,7 +129,7 @@ final class Repair extends MethodForm
     {
         $firstPost = GDO_ForumPost::table()->select()->
             where("post_thread={$thread->getID()}")->
-            order('post_created', false)->
+            order('post_created', true)->
             first()->exec()->fetchObject();
         if (!$firstPost)
         {
@@ -127,7 +137,7 @@ final class Repair extends MethodForm
         }
         else
         {
-            $firstPost->saveVar('post_first', '1');
+            $firstPost->saveVar('post_first', '1', false);
         }
     }
     
@@ -139,6 +149,18 @@ final class Repair extends MethodForm
             $thread->saveVars([
                 'thread_lastposter' => $post->isEdited() ? $post->getEditorID() : $post->getCreatorID(),
                 'thread_lastposted' => $post->isEdited() ? $post->getEdited() : $post->getCreated() ,
+            ]);
+        }
+    }
+    
+    private function repairThreadFirstPoster()
+    {
+        foreach (GDO_ForumThread::table()->all() as $thread)
+        {
+            $post = $thread->getLastPost(true);
+            $thread->saveVars([
+                'thread_creator' => $post->getCreatorID(),
+                'thread_created' => $post->getCreated() ,
             ]);
         }
     }
@@ -241,6 +263,24 @@ final class Repair extends MethodForm
         while ($user = $users->fetchObject())
         {
             $module->saveUserSetting($user, 'forum_readmark', $lastPost->getCreated());
+        }
+    }
+
+    #############################
+    ### Postcount in settings ###
+    #############################
+    private function repairUserPostcount()
+    {
+        $module = Module_Forum::instance();
+        $result = GDO_User::table()->select()->exec();
+        /** @var $user GDO_User **/
+        while ($user = $result->fetchObject())
+        {
+            $count = GDO_ForumPost::table()->countWhere("post_creator={$user->getID()}");
+            if ($count)
+            {
+                $module->saveUserSetting($user, 'forum_posts', $count);
+            }
         }
     }
     

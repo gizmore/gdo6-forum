@@ -13,7 +13,7 @@ return array(
 'btn_unsubscribe' => 'Unsubscribe',
 'btn_view_first_post' => 'Primo post',
 'btn_view_last_post' => 'Ultimo post',
-'list_title_board_threads' => 'Ci sono %s threads su questo board',
+'forum_board_threads' => 'Ci sono %2$s threads su %1$s',
 'list_title_thread_posts' => '%s – %s Posts',
 'thread_postcount' => '%s Posts',
 'posted_at' => 'Postat il %s',
@@ -92,4 +92,5 @@ The %2$s Team',
 'ft_forum_repair' => 'Reparieren',
 'info_forum_repair' => 'Repariere verschieden Variablen via Post- und Thread Daten.<br/>Zb. Postcount, Threadcount, LastPoster, etc...',
 'cfg_forum_hook_left_bar' => 'Forum in das linke Menu hängen?',
+'num_posts' => 'Beiträge:&nbsp;'
 );

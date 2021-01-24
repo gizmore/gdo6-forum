@@ -55,7 +55,7 @@ final class GDO_ForumThread extends GDO
     ############
     ### HREF ###
     ############
-    public function hrefFirstPost() { return href('Forum', 'Thread', "&thread={$this->getID()}"); }
+    public function hrefFirstPost() { return $this->hrefPost($this->getLastPost(true)); }
     public function hrefLastPost() { return $this->hrefPost($this->getLastPost()); }
     public function hrefPost(GDO_ForumPost $post) { return href('Forum', 'Thread', "&post={$post->getID()}#card-{$post->getID()}"); }
     
@@ -88,7 +88,7 @@ final class GDO_ForumThread extends GDO
      */
     public function getLastPost($first=false)
     {
-    	return GDO_ForumPost::table()->select('*')->where("post_thread={$this->getID()}")->order('post_created', $first)->first()->exec()->fetchObject();
+    	return GDO_ForumPost::table()->select()->where("post_thread={$this->getID()}")->order('IFNULL(post_edited, post_created)', $first)->first()->exec()->fetchObject();
     }
     
     /**

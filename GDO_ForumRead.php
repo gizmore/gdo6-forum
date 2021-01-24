@@ -102,6 +102,7 @@ final class GDO_ForumRead extends GDO
         $query->where("post_edited > '$latestU' OR (post_edited IS NULL AND post_created > '$latestU')");
         $query->where("read_post IS NULL");
         $query->where("perm_perm_id IS NULL OR perm_user_id IS NOT NULL");
+        $query->debug();
         return $query->exec()->fetchAllRows();
     }
 }

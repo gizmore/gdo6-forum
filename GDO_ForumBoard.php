@@ -76,6 +76,19 @@ final class GDO_ForumBoard extends GDO_Tree
     
     public function isRoot() { return $this->getID() === Module_Forum::instance()->cfgRootID(); }
     
+    
+    public function getLastThread()
+    {
+        return GDO_ForumPost::table()->
+            select('gdo_forumthread.*, gdo_forumpost.*')->
+            joinObject('post_thread')->
+            where("thread_board={$this->getID()}")->
+            order("IFNULL(post_edited,post_created)", false)->
+            limit(1)->
+            exec()->
+            fetchAs(GDO_ForumThread::table());
+    }
+    
     /**
      * @return GDO_File
      */

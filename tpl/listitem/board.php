@@ -7,6 +7,7 @@ use GDO\UI\GDT_Button;
 use GDO\UI\GDT_Icon;
 use GDO\UI\GDT_Image;
 use GDO\UI\GDT_Container;
+use GDO\UI\GDT_Headline;
 $user = GDO_User::current();
 $bid = $board->getID(); ?>
 <?php
@@ -23,21 +24,36 @@ $li->addClass($readClass);
 # Image content
 if ($board->hasImage())
 {
-    $li->image(GDT_Image::fromFile($board->getImage()));
+    $li->rawIcon(GDT_Image::fromFile($board->getImage())->renderCell());
 }
 else
 {
-    $li->image(GDT_Icon::make()->icon('book')->iconSize(26));
+    $li->icon('book')->iconSize(26);
 }
 
-# Name and description in content
-$c = GDT_Container::make();
-$c->addField(GDT_Link::make()->href($href)->labelRaw($board->displayName()));
-$c->addField(GDT_Paragraph::make()->textRaw($board->displayDescription()));
-$li->content($c);
+$li->title(GDT_Headline::make()->level(4)->textRaw($board->displayName()));
+$li->subtitle(GDT_Headline::make()->level(5)->textRaw($board->displayDescription()));
 
-# Stats in subtext
-$li->subtext(GDT_Paragraph::make()->text('board_stats', [$board->getThreadCount(), $board->getPostCount()]));
+$li->right(GDT_Container::make()->horizontal()->addFields([
+    GDT_Paragraph::make()->text('board_stats', [$board->getThreadCount(), $board->getPostCount()])
+]));
+
+$lastThread = $board->getLastThread();
+
+if ($lastThread)
+{
+    $li->subtext(GDT_Paragraph::make()->text('forum_board_last_subtext', [$lastThread->displayTitle()]));
+}
+
+
+# Name and description in content
+// $c = GDT_Container::make();
+// $c->addField(GDT_Link::make()->href($href)->labelRaw($board->displayName()));
+// $c->addField(GDT_Paragraph::make()->textRaw($board->displayDescription()));
+// $li->content($c);
+
+// # Stats in subtext
+// $li->subtext(GDT_Paragraph::make()->text('board_stats', [$board->getThreadCount(), $board->getPostCount()]));
 
 # Menu
 $li->actions()->addFields(array(
