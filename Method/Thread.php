@@ -61,7 +61,7 @@ final class Thread extends MethodQueryCards
         return $this->getThread()->getBoard();   
     }
     
-    public function hasPermission($user)
+    public function hasPermission(GDO_User $user)
     {
         return $this->getThread()->canView($user);
     }
