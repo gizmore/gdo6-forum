@@ -58,6 +58,8 @@ $html = <<<EOT
 {$post->displaySignature()}
 EOT;
 
+$card->editorFooter();
+
 $card->addField(GDT_HTML::withHTML($html));
 
 $cont = GDT_Container::make();

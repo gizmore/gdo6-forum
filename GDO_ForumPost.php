@@ -136,13 +136,12 @@ final class GDO_ForumPost extends GDO
     ##############
     public function isUnread(GDO_User $user)
     {
-        $unread = GDO_ForumRead::getUnreadPosts($user);
-        return isset($unread[$this->getID()]);
+        return GDO_ForumUnread::isPostUnread($user, $this);
     }
     
     public function markRead(GDO_User $user)
     {
-        return GDO_ForumRead::markRead($user, $this);
+        return GDO_ForumUnread::markRead($user, $this);
     }
     
     #############

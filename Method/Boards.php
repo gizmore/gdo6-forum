@@ -20,7 +20,7 @@ final class Boards extends Method
         $board = $boards[Common::getRequestString('board', array_keys($boards)[0])];
         if ( (!$board) || (!$board->canView(GDO_User::current())) )
         {
-            return $this->error('err_permission');
+            return $this->error('err_permission_read');
         }
         $tVars = array(
             'board' => $board,

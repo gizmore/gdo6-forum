@@ -7,7 +7,6 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Hidden;
 use GDO\Form\MethodCrud;
 use GDO\Forum\GDO_ForumPost;
-use GDO\Forum\GDO_ForumRead;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
@@ -17,9 +16,9 @@ use GDO\Date\Time;
 use GDO\Core\Website;
 use GDO\User\GDT_Level;
 use GDO\Form\GDT_Submit;
-use GDO\UI\GDT_Card;
 use GDO\Core\GDT_Response;
 use GDO\UI\GDT_CardView;
+use GDO\Forum\GDO_ForumUnread;
 
 final class CRUDPost extends MethodCrud
 {
@@ -63,7 +62,7 @@ final class CRUDPost extends MethodCrud
         # 2. Check permission
         if (!$this->thread->canView($user))
         {
-            return $this->error('err_permission');
+            return $this->error('err_permission_create');
         }
         if ($this->thread->isLocked())
         {
@@ -131,8 +130,9 @@ final class CRUDPost extends MethodCrud
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         $this->thread->saveVar('thread_lastposted', Time::getDate());
         $module->increaseSetting('forum_posts');
-        GDO_ForumRead::markRead(GDO_User::current(), $gdo);
+        GDO_ForumUnread::markRead(GDO_User::current(), $gdo);
         GDT_Hook::callWithIPC('ForumPostCreated', $gdo);
+        $this->thread->updateBoardLastPost($gdo);
         $id = $gdo->getID();
         return Website::redirect(href('Forum', 'Thread', '&post='.$id.'#card-'.$id));
     }
@@ -143,6 +143,7 @@ final class CRUDPost extends MethodCrud
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         $this->thread->saveVar('thread_lastposted', Time::getDate());
         $id = $gdo->getID();
+        $this->thread->updateBoardLastPost($gdo);
         return Website::redirect(href('Forum', 'Thread', '&post='.$id.'#card-'.$id));
     }
     

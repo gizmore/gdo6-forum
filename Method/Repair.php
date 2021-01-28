@@ -42,6 +42,8 @@ final class Repair extends MethodForm
     {
         $form->info(t('info_forum_repair'));
         $form->addFields([
+            GDT_Checkbox::make('repair_empty_threads')->initial('0'),
+            GDT_Checkbox::make('repair_tree')->initial('0'),
             GDT_Checkbox::make('repair_firstpost_flag')->initial('0'),
             GDT_Checkbox::make('repair_thread_lastpost')->initial('0'),
             GDT_Checkbox::make('repair_thread_firstpost')->initial('0'),
@@ -69,6 +71,14 @@ final class Repair extends MethodForm
     {
         set_time_limit(60*30); # 0.5h should be plenty- 
         
+        if ($form->getFormValue('repair_empty_threads'))
+        {
+            $this->repairEmptyThreads();
+        }
+        if ($form->getFormValue('repair_tree'))
+        {
+            $this->repairTree();
+        }
         if ($form->getFormValue('repair_firstpost_flag'))
         {
             $this->repairIsFirstPost();
@@ -112,6 +122,16 @@ final class Repair extends MethodForm
     ###############
     ### Repairs ###
     ###############
+    private function repairEmptyThreads()
+    {
+        GDO_ForumThread::table()->deleteWhere("thread_postcount = 0");
+    }
+    
+    private function repairTree()
+    {
+        GDO_ForumBoard::table()->rebuildFullTree();
+    }
+    
     /**
      * Repair the post_first indicator in posts table.
      */
@@ -281,7 +301,7 @@ final class Repair extends MethodForm
             {
                 $module->saveUserSetting($user, 'forum_posts', $count);
             }
-            $count = GDO_ForumPost::table()->countWhere("thread_creator={$user->getID()}");
+            $count = GDO_ForumThread::table()->countWhere("thread_creator={$user->getID()}");
             if ($count)
             {
                 $module->saveUserSetting($user, 'forum_threads', $count);

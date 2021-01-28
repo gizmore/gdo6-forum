@@ -1,0 +1,132 @@
+<?php
+namespace GDO\Forum;
+
+use GDO\Core\GDO;
+use GDO\DB\GDT_UInt;
+use GDO\User\GDT_User;
+use GDO\User\GDO_User;
+use GDO\DB\GDT_Index;
+use GDO\DB\GDT_Join;
+use GDO\User\GDO_Permission;
+use GDO\DB\Database;
+use GDO\User\GDO_UserPermission;
+
+/**
+ * When a post is created, entries will be made for all users.
+ * @author gizmore
+ */
+final class GDO_ForumUnread extends GDO
+{
+    ###########
+    ### GDO ###
+    ###########
+    public function gdoEngine() { return self::MYISAM; } # Faster inserts
+    public function gdoCached() { return false; } # No L1/L2 cache
+    public function gdoColumns()
+    {
+        return [
+            GDT_User::make('unread_user')->primary(),
+            GDT_ForumPost::make('unread_post')->primary(),
+            GDT_Index::make('unread_user_index')->indexColumns('unread_user'),
+            GDT_Join::make('unread_post_thread')->join("gdo_forumthread AS ft ON ft.thread_id=post_thread"),
+            GDT_Join::make('unread_post_board')->join("gdo_forumboard AS fb ON ft.thread_board=fb.board_id"),
+        ];
+    }
+    
+    ################
+    ### MarkRead ###
+    ################
+    public static function markRead(GDO_User $user, GDO_ForumPost $post)
+    {
+        self::table()->
+            deleteWhere("unread_user={$user->getID()} AND unread_post={$post->getID()}");
+    }
+    
+    public static function markUnread(GDO_ForumPost $post)
+    {
+        $thread = $post->getThread();
+        $perm = $thread->getBoard()->getPermissionID();
+//         $level = $post->getLevel();
+        
+        if ($perm)
+        {
+            $query = GDO_UserPermission::table()->select('user_id')->
+            joinObject('perm_user_id')->
+            where('perm_perm_id=$perm');
+        }
+        else
+        {
+            $query = GDO_User::table()->select()->
+            where('user_type IN ("guest", "member")');
+        }
+        $query->where("user_id != {$post->getCreatorID()}");
+        
+        $bulkSize = 250;
+        $postID = $post->getID();
+        $users = $query->exec();
+        $fields = [GDT_UInt::make('unread_user'), GDT_UInt::make('unread_post')];
+        $bulk = [];
+        while ($userID = $users->fetchValue())
+        {
+            $bulk[] = [$userID, $postID];
+            if (count($bulk) >= 100)
+            {
+                self::table()->bulkInsert($fields, $bulk, $bulkSize);
+                $bulk = [];
+            }
+        }
+        if (count($bulk))
+        {
+            self::table()->bulkInsert($fields, $bulk, $bulkSize);
+        }
+    }
+    
+    public static function countUnread(GDO_User $user)
+    {
+        return self::table()->countWhere("unread_user={$user->getID()}");
+    }
+    
+    public static function isThreadUnread(GDO_User $user, GDO_ForumThread $thread)
+    {
+        return
+            self::table()->select('COUNT(*)')->
+            joinObject('unread_post')->
+            joinObject('unread_post_thread')->
+            where("thread_id={$thread->getID()}")->
+            where("unread_user={$user->getID()}")->
+            exec()->fetchValue();
+    }
+    
+    public static function isBoardUnread(GDO_User $user, GDO_ForumBoard $board)
+    {
+        return
+        self::table()->select('COUNT(*)')->
+        joinObject('unread_post')->
+        joinObject('unread_post_thread')->
+        joinObject('unread_post_board')->
+        where("board_id={$board->getID()}")->
+        where("unread_user={$user->getID()}")->
+        exec()->fetchValue();
+    }
+
+    public static function isPostUnread(GDO_User $user, GDO_ForumPost $post)
+    {
+        return !!self::getById($user->getID(), $post->getID());
+    }
+    
+    /**
+     * Mark new available posts as unread for a user.
+     * @param GDO_User $user
+     * @param GDO_Permission $permission
+     */
+    public static function markUnreadForPermission(GDO_User $user, GDO_Permission $permission)
+    {
+        $query =
+            "REPLACE INTO gdo_forumunread SELECT {$user->getID()}, post_id FROM gdo_forumpost ".
+            "JOIN gdo_forumthread ft ON post_thread=thread_id ".
+            "JOIN gdo_forumboard fb ON thread_board=board_id ".
+            "WHERE (board_permission={$permission->getID()})";
+        return Database::instance()->queryWrite($query);
+    }
+    
+}

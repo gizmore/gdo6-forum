@@ -123,8 +123,7 @@ final class GDO_ForumThread extends GDO
     	{
     		return false;
     	}
-        $unread = GDO_ForumRead::getUnreadThreads($user);
-        return isset($unread[$this->getID()]);
+    	return GDO_ForumUnread::isThreadUnread($user, $this);
     }
     
     #############
@@ -136,6 +135,17 @@ final class GDO_ForumThread extends GDO
         while ($board)
         {
             $board->increase('board_threadcount');
+            $board = $board->getParent();
+        }
+    }
+    
+    public function updateBoardLastPost(GDO_ForumPost $post)
+    {
+        $pid = $post->getID();
+        $board = $this->getBoard();
+        while ($board)
+        {
+            $board->increase('board_lastpost='.$pid);
             $board = $board->getParent();
         }
     }

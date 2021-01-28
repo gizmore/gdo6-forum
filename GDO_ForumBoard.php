@@ -47,7 +47,7 @@ final class GDO_ForumBoard extends GDO_Tree
     public function memCached() { return true; } # uses cacheall in memcached (see further down), so no single row storage for memcached
     public function gdoColumns()
     {
-        return array_merge(array(
+        return array_merge([
             GDT_AutoInc::make('board_id'),
             GDT_Title::make('board_title')->notNull()->utf8()->caseI()->label('title')->max(64),
             GDT_String::make('board_description')->utf8()->caseI()->label('description')->icon('message')->max(256),
@@ -55,11 +55,13 @@ final class GDO_ForumBoard extends GDO_Tree
         	GDT_Checkbox::make('board_allow_threads')->initial('0'),
         	GDT_Checkbox::make('board_allow_guests')->initial('0'),
         	GDT_Int::make('board_threadcount')->initial('0'),
+            GDT_ForumBoardThreadcount::make('board_user_count_'), # thread- and postcount via an ugly hack @see GDT_ForumBoardThreadcount
             GDT_Int::make('board_postcount')->initial('0'),
+            GDT_ForumPost::make('board_lastpost'),
         	GDT_ImageFile::make('board_image')->scaledVersion('thumb', 48, 48),
             GDT_CreatedAt::make('board_created'),
             GDT_CreatedBy::make('board_creator'),
-        ), parent::gdoColumns());
+        ], parent::gdoColumns());
     }
 
     ##############
@@ -69,24 +71,32 @@ final class GDO_ForumBoard extends GDO_Tree
     public function getTitle() { return $this->getVar('board_title'); }
     public function getDescription() { return $this->getVar('board_description'); }
     public function getThreadCount() { return $this->getVar('board_threadcount'); }
+    public function getUserThreadCount() { return $this->gdoColumn('board_user_count_')->getThreadCount(); }
+    public function getUserPostCount() { return $this->gdoColumn('board_user_count_')->getPostCount(); }
     public function getPostCount() { return $this->getVar('board_postcount'); }
     
     public function getPermission() { return $this->getValue('board_permission'); }
     public function getPermissionID() { return $this->getVar('board_permission'); }
     
     public function isRoot() { return $this->getID() === Module_Forum::instance()->cfgRootID(); }
+
+    /**
+     * @return GDO_ForumPost
+     */
+    public function getLastPost()
+    {
+        return $this->getValue('board_lastpost');
+    }
     
-    
+    /**
+     * @return GDO_ForumThread
+     */
     public function getLastThread()
     {
-        return GDO_ForumPost::table()->
-            select('gdo_forumthread.*, gdo_forumpost.*')->
-            joinObject('post_thread')->
-            where("thread_board={$this->getID()}")->
-            order("IFNULL(post_edited,post_created)", false)->
-            limit(1)->
-            exec()->
-            fetchAs(GDO_ForumThread::table());
+        if ($post = $this->getLastPost())
+        {
+            return $post->getThread();
+        }
     }
     
     /**
@@ -137,8 +147,13 @@ final class GDO_ForumBoard extends GDO_Tree
     #############
     ### Cache ###
     #############
+    private static $CACHE = null;
     public function all()
     {
+        if (self::$CACHE !== null)
+        {
+            return self::$CACHE;
+        }
         if (false === ($cache = Cache::get('gdo_forumboard_all')))
         {
             $cache = $this->queryAll();
@@ -148,11 +163,13 @@ final class GDO_ForumBoard extends GDO_Tree
         {
             Cache::heat('gdo_forumboard_all', $cache);
         }
+        self::$CACHE = $cache;
         return $cache;
     }
     
     public function clearCache()
     {
+        self::$CACHE = null;
         self::recacheAll();
         parent::clearCache();
     }
@@ -164,12 +181,13 @@ final class GDO_ForumBoard extends GDO_Tree
     
     public function queryAll()
     {
-        return self::table()->select()->order('board_left')->exec()->fetchAllArray2dObject();
+        $cache = self::table()->select()->order('board_left')->exec()->fetchAllArray2dObject();
+        return $cache;
     }
 
     public function gdoAfterCreate()
     {
-        $this->recacheAll();
+        $this->clearCache();
         if (self::$BUILD_TREE_UPON_SAVE)
         {
             parent::gdoAfterCreate();
@@ -195,26 +213,7 @@ final class GDO_ForumBoard extends GDO_Tree
     	{
     		return false;
     	}
-        $unread = GDO_ForumRead::getUnreadBoards($user);
-        return self::hasBoardUnreadPosts($this, $unread);
-    }
-
-    public static function hasBoardUnreadPosts(GDO_ForumBoard $board, array $unread)
-    {
-        if (isset($unread[$board->getID()]))
-        {
-            return true;
-        }
-        
-        foreach ($board->children as $child)
-        {
-            if (self::hasBoardUnreadPosts($child, $unread))
-            {
-                return true;
-            }
-        }
-        
-        return false;
+    	return GDO_ForumUnread::isBoardUnread($user, $this);
     }
     
     ####################

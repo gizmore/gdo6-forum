@@ -13,6 +13,7 @@ use GDO\User\GDO_User;
 use GDO\DB\GDT_UInt;
 use GDO\UI\GDT_Page;
 use GDO\Core\GDT_Template;
+use GDO\User\GDO_Permission;
 
 /**
  * GWF Forum Module.
@@ -35,7 +36,7 @@ final class Module_Forum extends GDO_Module
             GDO_ForumBoard::class,
             GDO_ForumThread::class,
             GDO_ForumPost::class,
-            GDO_ForumRead::class,
+            GDO_ForumUnread::class,
             GDO_ForumThreadSubscribe::class,
             GDO_ForumBoardSubscribe::class,
             GDO_ForumPostLikes::class,
@@ -141,6 +142,17 @@ final class Module_Forum extends GDO_Module
         GDO_ForumBoard::recacheAll();
         Cache::flush();
     }
+
+    /**
+     * On granting a permission,
+     * the new available forum threads are marked as unred.
+     * @param GDO_User $user
+     * @param GDO_Permission $permission
+     */
+    public function hookUserPermissionGranted(GDO_User $user, GDO_Permission $permission)
+    {
+        GDO_ForumUnread::markUnreadForPermission($user, $permission);
+    }
     
     ##############
     ### Render ###
@@ -162,7 +174,7 @@ final class Module_Forum extends GDO_Module
                 $link = GDT_Link::make()->label('link_forum', [$posts])->href(href('Forum', 'Boards'));
                 if ($user->isAuthenticated())
                 {
-                    if (GDO_ForumRead::countUnread($user) > 0)
+                    if (GDO_ForumUnread::countUnread($user) > 0)
                     {
                         $link->icon('alert');
                     }

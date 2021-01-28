@@ -6,6 +6,7 @@ use GDO\Util\Common;
 use GDO\Form\GDT_Select;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Menu;
+use GDO\Forum\GDO_ForumUnread;
 
 $bar = GDT_Menu::make()->label('actions');
 $user = GDO_User::current();
@@ -60,6 +61,8 @@ if ($user->isStaff())
     }
 }
 
+# Unread
+$bar->addField(GDT_IconButton::make()->href(href('Forum', 'UnreadThreads'))->label('tab_forum_unread', [GDO_ForumUnread::countUnread($user)]));
 
 # Render Bar
 echo $bar->renderCell();

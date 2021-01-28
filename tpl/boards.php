@@ -18,17 +18,6 @@ $numLatest = Module_Forum::instance()->cfgNumLatestThreads();
 if ($numLatest && $board->isRoot())
 {
     echo LatestPosts::make()->execute()->render();
-// 	$list = GDT_List::make('latest_thread');
-// 	$list->setupHeaders(false, true);
-// 	$list->listMode(GDT_List::MODE_LIST);
-// 	$query = GDO_ForumThread::table()->select('*');
-// 	$query->joinObject('thread_lastposter');
-// // 	$query->select("(SELECT MAX(post_created) FROM gdo_forumpost WHERE post_thread=thread_id) AS lastdate");
-// 	$query->orderDESC('thread_lastposted');
-// 	$query->limit($numLatest);
-// 	$list->query($query);
-// 	$list->title(t('forum_list_latest_threads'));
-// 	echo $list->render();
 }
 
 # 1. Children boards as list.

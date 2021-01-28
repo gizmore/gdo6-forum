@@ -2,13 +2,17 @@
 use GDO\User\GDO_User;
 use GDO\UI\GDT_ListItem;
 use GDO\UI\GDT_Paragraph;
-use GDO\UI\GDT_Link;
 use GDO\UI\GDT_Button;
-use GDO\UI\GDT_Icon;
 use GDO\UI\GDT_Image;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Headline;
 $user = GDO_User::current();
+
+if ( (!$board->allowsThreads()) && (!$board->authorizedChildren($user)) )
+{
+    return;
+}
+
 $bid = $board->getID(); ?>
 <?php
 $subscribed = $board->hasSubscribed($user);
@@ -35,7 +39,7 @@ $li->title(GDT_Headline::make()->level(4)->textRaw($board->displayName()));
 $li->subtitle(GDT_Headline::make()->level(5)->textRaw($board->displayDescription()));
 
 $li->right(GDT_Container::make()->horizontal()->addFields([
-    GDT_Paragraph::make()->text('board_stats', [$board->getThreadCount(), $board->getPostCount()])
+    GDT_Paragraph::make()->text('board_stats', [$board->getUserThreadCount(), $board->getUserPostCount()])
 ]));
 
 $lastThread = $board->getLastThread();

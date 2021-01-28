@@ -9,12 +9,12 @@ use GDO\Form\GDT_Form;
 use GDO\Form\GDT_Submit;
 use GDO\Form\MethodForm;
 use GDO\Forum\GDO_ForumPost;
-use GDO\Forum\GDO_ForumRead;
 use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\Util\Common;
 use GDO\Forum\GDO_ForumBoard;
+use GDO\Forum\GDO_ForumUnread;
 
 /**
  * Start a new thread.
@@ -44,7 +44,7 @@ final class CreateThread extends MethodForm
         if ( (!$this->board->canView(GDO_User::current())) ||
              (!$this->board->allowsThreads()) )
         {
-            return $this->error('err_permission');
+            return $this->error('err_permission_create');
         }
         return parent::execute();
     }
@@ -84,7 +84,8 @@ final class CreateThread extends MethodForm
         $post->setVar('post_first', '1');
         $post->insert();
         $module->saveConfigVar('forum_latest_post_date', $post->getCreated());
-        GDO_ForumRead::markRead(GDO_User::current(), $post);
+        GDO_ForumUnread::markUnread($post);
+        $thread->updateBoardLastPost($post);
         $module->increaseSetting('forum_threads');
         $module->increaseSetting('forum_posts');
         $href = href('Forum', 'Thread', "&board={$thread->getBoardID()}&thread={$thread->getID()}");

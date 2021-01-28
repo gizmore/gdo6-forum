@@ -24,7 +24,7 @@ final class DownloadAttachment extends Method
         $post = $table->find(Common::getGetString('post'));
         if (!$post->canView($user))
         {
-            return $this->error('err_permission');
+            return $this->error('err_permission_read');
         }
         if (!$post->hasAttachment())
         {
