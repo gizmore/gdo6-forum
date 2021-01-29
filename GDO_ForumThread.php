@@ -141,11 +141,11 @@ final class GDO_ForumThread extends GDO
     
     public function updateBoardLastPost(GDO_ForumPost $post)
     {
-        $pid = $post->getID();
+        $postID = $post->getID();
         $board = $this->getBoard();
         while ($board)
         {
-            $board->increase('board_lastpost='.$pid);
+            $board->saveVar('board_lastpost', $postID);
             $board = $board->getParent();
         }
     }

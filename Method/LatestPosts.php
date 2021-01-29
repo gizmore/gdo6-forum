@@ -27,7 +27,7 @@ final class LatestPosts extends MethodQueryList
 	
 	protected function setupTitle(GDT_Table $table)
 	{
-// 	    $table->titletitleRaw('')
+	    $table->title('forum_list_latest_threads');
 	}
 	
 	public function getQuery()

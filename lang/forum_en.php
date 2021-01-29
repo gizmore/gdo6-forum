@@ -96,4 +96,5 @@ The %2$s Team',
 'msg_forum_marked_all_unread' => 'We have marked all posts as read.',    
 'list_forum_unreadthreads' => 'You have %2$s unread posts in %1$s threads',
 'tab_forum_unread' => '%s new posts',
+'mark_all_read' => 'Mark all as read',
 );

@@ -7,6 +7,9 @@ use GDO\Forum\GDO_ForumUnread;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\Table\GDT_Table;
+use GDO\Core\GDT_Response;
+use GDO\UI\GDT_Container;
+use GDO\UI\GDT_IconButton;
 
 /**
  * List all new threads for a user.
@@ -27,6 +30,14 @@ final class UnreadThreads extends MethodQueryList
     public function gdoTable()
     {
         return GDO_ForumThread::table();
+    }
+    
+    public function execute()
+    {
+        $cont = GDT_Container::make();
+        $cont->addField(GDT_IconButton::make()->label('mark_all_read')->icon('check')->href(href('Forum', 'MarkAllRead')));
+        $response = GDT_Response::makeWith($cont);
+        return $response->add(parent::execute());
     }
     
     public function getQuery()

@@ -15,7 +15,6 @@ use GDO\Vote\GDT_LikeButton;
 
 $id = $post->getID();
 
-// $creator = $post->getCreator();
 $user = GDO_User::current();
 $unread = $post->isUnread($user);
 $readClass = $unread ? 'gdo-forum-unread' : 'gdo-forum-read';
@@ -66,7 +65,7 @@ $cont = GDT_Container::make();
 $user = $post->getCreator();
 $numPosts = Module_Forum::instance()->userSettingVar($user, 'forum_posts');
 $cont->addFields([
-    GDT_UInt::make()->var($numPosts)->label('num_posts'),
+    GDT_Container::makeWith(GDT_UInt::make()->var($numPosts)->label('num_posts')),
 ]);
 GDT_Hook::callHook('DecoratePostUser', $card, $cont, $user);
 $card->image($cont);
