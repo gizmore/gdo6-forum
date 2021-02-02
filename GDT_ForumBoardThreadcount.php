@@ -9,6 +9,7 @@ use GDO\User\GDO_User;
 /**
  * Virtual board column.
  * Visible threadcount for a user.
+ * Visible postcount for a user.
  * @author gizmore
  */
 final class GDT_ForumBoardThreadcount extends GDT_Virtual
@@ -63,7 +64,7 @@ final class GDT_ForumBoardThreadcount extends GDT_Virtual
             "WHERE (perm_user_id={$user->getID()} AND perm_perm_id=fb.board_permission) ) ) ".
             "AND fb.board_left BETWEEN gdo_forumboard.board_left AND gdo_forumboard.board_right )";
         $query->select("$subquery AS {$this->name}");
-//         $query->debug();
     }
+
 }
 

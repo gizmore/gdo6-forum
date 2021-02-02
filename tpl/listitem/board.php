@@ -6,12 +6,17 @@ use GDO\UI\GDT_Button;
 use GDO\UI\GDT_Image;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Headline;
+use GDO\Table\GDT_PageMenu;
+use GDO\Forum\Method\Threads;
+use GDO\Core\GDT_Fields;
+use GDO\Forum\Module_Forum;
+use GDO\Forum\GDT_ForumSubscribe;
 $user = GDO_User::current();
 
-if ( (!$board->allowsThreads()) && (!$board->authorizedChildren($user)) )
-{
-    return;
-}
+// if ( (!$board->allowsThreads()) && (!$board->authorizedChildren($user)) )
+// {
+//     return;
+// }
 
 $bid = $board->getID(); ?>
 <?php
@@ -42,6 +47,12 @@ $li->right(GDT_Container::make()->horizontal()->addFields([
     GDT_Paragraph::make()->text('board_stats', [$board->getUserThreadCount(), $board->getUserPostCount()])
 ]));
 
+// $li->content(
+//     GDT_PageMenu::make()->
+//     headers(GDT_Fields::make('t')->addFields(Threads::make()->gdoParameters()))->
+//     href(href('Forum', 'Threads', "&board={$board->getID()}"))->
+//     ipp(20)->items(40)->shown(1000000));
+
 $lastThread = $board->getLastThread();
 
 if ($lastThread)
@@ -60,10 +71,16 @@ if ($lastThread)
 // $li->subtext(GDT_Paragraph::make()->text('board_stats', [$board->getThreadCount(), $board->getPostCount()]));
 
 # Menu
-$li->actions()->addFields(array(
+$li->actions()->addFields([
 	GDT_Button::make()->href($href)->icon('view')->label('btn_view'),
-	GDT_Button::make()->addClass($subscribeClass)->href($href2)->icon('email')->label($subscribeLabel),
-));
+]);
 
+$module = Module_Forum::instance();
+if ($module->userSettingVar($user, 'forum_subscription') !== GDT_ForumSubscribe::ALL)
+{
+    $li->actions()->addField(
+    	GDT_Button::make()->addClass($subscribeClass)->href($href2)->icon('email')->label($subscribeLabel),
+    );
+}
 
 echo $li->render();

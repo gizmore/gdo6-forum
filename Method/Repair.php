@@ -197,79 +197,79 @@ final class Repair extends MethodForm
      * @param boolean $pc
      * @param boolean $tc
      */
-    private function repairPostCount($pc=true, $tc=true)
-    {
-        if (!($pc||$tc))
-        {
-            return;
-        }
+//     private function repairPostCount($pc=true, $tc=true)
+//     {
+//         if (!($pc||$tc))
+//         {
+//             return;
+//         }
         
-        $module = Module_Forum::instance();
+//         $module = Module_Forum::instance();
         
-        # Reset all to zero
-        if ($pc)
-        {
-            GDO_ForumThread::table()->update()->set('thread_postcount=0')->exec();
-            GDO_ForumBoard::table()->update()->set('board_postcount=0')->exec();
-        }
-        if ($tc)
-        {
-            GDO_ForumBoard::table()->update()->set('board_threadcount=0')->exec();
-        }
+//         # Reset all to zero
+//         if ($pc)
+//         {
+//             GDO_ForumThread::table()->update()->set('thread_postcount=0')->exec();
+//             GDO_ForumBoard::table()->update()->set('board_postcount=0')->exec();
+//         }
+//         if ($tc)
+//         {
+//             GDO_ForumBoard::table()->update()->set('board_threadcount=0')->exec();
+//         }
         
-        # Reset users to zero
-        $users = GDO_User::table()->select()->exec();
-        /** @var $user GDO_User **/
-        while ($user = $users->fetchObject())
-        {
-            if ($pc)
-            {
-                $module->saveUserSetting($user, 'forum_posts', '0');
-            }
-            if ($tc)
-            {
-                $module->saveUserSetting($user, 'forum_threads', '0');
-            }
-        }
+//         # Reset users to zero
+//         $users = GDO_User::table()->select()->exec();
+//         /** @var $user GDO_User **/
+//         while ($user = $users->fetchObject())
+//         {
+//             if ($pc)
+//             {
+//                 $module->saveUserSetting($user, 'forum_posts', '0');
+//             }
+//             if ($tc)
+//             {
+//                 $module->saveUserSetting($user, 'forum_threads', '0');
+//             }
+//         }
         
-        ClearCache::make()->clearCache();
+//         ClearCache::make()->clearCache();
         
-        $posts = GDO_ForumPost::table()->select()->exec();
-        /** @var $post GDO_ForumPost **/
-        while ($post = $posts->fetchObject())
-        {
-            $creator = $post->getCreator();
-            if ($pc)
-            {
-                $module->increaseUserSetting($creator, 'forum_posts');
-            }
-            $thread = $post->getThread();
-            if ($tc)
-            {
-                if ($post->isFirstInThread())
-                {
-                    $module->increaseUserSetting($creator, 'forum_threads');
-                    $board = $thread->getBoard();
-                    do
-                    {
-                        $board->increase('board_threadcount');
-                    }
-                    while ($board = $board->getParent());
-                }
-            }
+//         $posts = GDO_ForumPost::table()->select()->exec();
+//         /** @var $post GDO_ForumPost **/
+//         while ($post = $posts->fetchObject())
+//         {
+//             $creator = $post->getCreator();
+//             if ($pc)
+//             {
+//                 $module->increaseUserSetting($creator, 'forum_posts');
+//             }
+//             $thread = $post->getThread();
+//             if ($tc)
+//             {
+//                 if ($post->isFirstInThread())
+//                 {
+//                     $module->increaseUserSetting($creator, 'forum_threads');
+//                     $board = $thread->getBoard();
+//                     do
+//                     {
+//                         $board->increase('board_threadcount');
+//                     }
+//                     while ($board = $board->getParent());
+//                 }
+//             }
 
-            if ($pc)
-            {
-                $thread->increase('thread_postcount');
-                $board = $thread->getBoard();
-                do
-                {
-                    $board->increase('board_postcount');
-                }
-                while ($board = $board->getParent());
-            }
-        }
-    }
+//             if ($pc)
+//             {
+//                 $thread->increase('thread_postcount');
+//                 $board = $thread->getBoard();
+//                 do
+//                 {
+//                     $board->increase('board_postcount');
+//                 }
+//                 while ($board = $board->getParent());
+//             }
+//         }
+//     }
     
     /**
      * Repair readmark and lastpost.

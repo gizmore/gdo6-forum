@@ -17,8 +17,6 @@ use GDO\Vote\WithLikes;
 use GDO\Vote\GDT_LikeCount;
 use GDO\User\GDT_Level;
 use GDO\DB\GDT_Checkbox;
-use function Something\sizeof\mymodule_form_callback;
-use GDO\Core\GDT_Error;
 
 final class GDO_ForumPost extends GDO
 {
@@ -147,15 +145,15 @@ final class GDO_ForumPost extends GDO
     #############
     ### Hooks ###
     #############
-    public function gdoAfterCreate()
-    {
-        $thread = $this->getThread();
-        $thread->increase('thread_postcount');
-        $board = $thread->getBoard();
-        while ($board)
-        {
-            $board->increase('board_postcount');
-            $board = $board->getParent();
-        }
-    }
+//     public function gdoAfterCreate()
+//     {
+//         $thread = $this->getThread();
+//         $thread->increase('thread_postcount');
+//         $board = $thread->getBoard();
+//         while ($board)
+//         {
+//             $board->increase('board_postcount');
+//             $board = $board->getParent();
+//         }
+//     }
 }

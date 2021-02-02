@@ -129,15 +129,15 @@ final class GDO_ForumThread extends GDO
     #############
     ### Hooks ###
     #############
-    public function gdoAfterCreate()
-    {
-        $board = $this->getBoard();
-        while ($board)
-        {
-            $board->increase('board_threadcount');
-            $board = $board->getParent();
-        }
-    }
+//     public function gdoAfterCreate()
+//     {
+//         $board = $this->getBoard();
+//         while ($board)
+//         {
+//             $board->increase('board_threadcount');
+//             $board = $board->getParent();
+//         }
+//     }
     
     public function updateBoardLastPost(GDO_ForumPost $post)
     {

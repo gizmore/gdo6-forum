@@ -7,11 +7,15 @@ use GDO\Form\GDT_Select;
 use GDO\Util\Arrays;
 use GDO\UI\GDT_Menu;
 use GDO\Forum\GDO_ForumUnread;
+use GDO\Forum\Module_Forum;
 
 $bar = GDT_Menu::make()->label('actions');
 $user = GDO_User::current();
-$boards = GDO_ForumBoard::table()->full()[0];
-$board = $boards[Common::getRequestString('board', array_keys($boards)[0])];
+$module = Module_Forum::instance();
+
+$board = GDO_ForumBoard::getById(Common::getRequestString('board', $module->cfgRootID()));
+
+$bar->addField(GDT_IconButton::make()->icon('settings')->label('link_settings')->href(href('Account', 'Settings', '&module=Forum')));
 
 # Header Create Board Button
 if ($user->isStaff())
@@ -32,7 +36,7 @@ $boardselect = GDT_Select::make('board_select')->noLabel();
 $lastboard = null;
 while ($p)
 {
-	$links[$p->getID()] = $p->displayName();
+	$links[$p->getID()] = str_repeat('+', $p->getDepth()) . $p->displayName();
 	if ($lastboard === null)
 	{
 		$lastboard = $p->getID();

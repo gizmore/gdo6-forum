@@ -5,6 +5,8 @@ use GDO\UI\GDT_Link;
 use GDO\UI\GDT_ListItem;
 use GDO\UI\GDT_Paragraph;
 use GDO\UI\GDT_Button;
+use GDO\Forum\Module_Forum;
+use GDO\Forum\GDT_ForumSubscribe;
 $thread instanceof GDO_ForumThread;
 // $creator = $thread->getCreator();
 $lastPoster = $thread->getLastPoster();
@@ -37,10 +39,15 @@ else
 
 # Actions
 $href = $subscribed ? href('Forum', 'Unsubscribe', '&thread='.$tid) : href('Forum', 'Subscribe', '&thread='.$tid);
-$li->actions()->addFields(array(
+$li->actions()->addFields([
 	GDT_Button::make()->href($thread->hrefFirstPost())->icon('view')->label('btn_view_first_post'),
 	GDT_Button::make()->href($thread->hrefLastPost())->icon('view')->label('btn_view_last_post'),
-	GDT_Button::make()->href($href)->icon('email')->label($subscribeLabel)->addClass($subscribeClass),
-));
+]);
 
+if (GDT_ForumSubscribe::ALL !== Module_Forum::instance()->userSettingVar($user, 'forum_subscription'))
+{
+    $li->actions()->addField(
+        GDT_Button::make()->href($href)->icon('email')->label($subscribeLabel)->addClass($subscribeClass),
+    );
+}
 echo $li->render();

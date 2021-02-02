@@ -10,16 +10,19 @@ use GDO\Table\GDT_Table;
 
 /**
  * Show one page of a thread.
+ * The order is ascending, so old links show the same page.
  * @author gizmore
  */
 final class Threads extends MethodQueryList
 {
+    public function getHeaderName() { return 't'; }
+    
     public function isOrdered() { return false; }
     public function isPaginated() { return true; }
     public function isSearched() { return false; }
     
-    public function getDefaultOrder() { return 'thread_lastposted'; }
-    public function getDefaultOrderDir() { return false; }
+    public function getDefaultOrder() { return 'thread_created'; }
+    public function getDefaultOrderDir() { return true; }
     
     public function gdoParameters()
     {

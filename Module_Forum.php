@@ -168,7 +168,7 @@ final class Module_Forum extends GDO_Module
         if ($this->cfgHookLeftBar())
         {
             $user = GDO_User::current();
-            if ($root = GDO_ForumBoard::getById('1'))
+            if ($root = GDO_ForumBoard::getById(Module_Forum::instance()->cfgRootID()))
             {
                 $posts = $root->getPostCount();
                 $link = GDT_Link::make()->label('link_forum', [$posts])->href(href('Forum', 'Boards'));

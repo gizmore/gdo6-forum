@@ -104,7 +104,7 @@ final class GDO_ForumUnread extends GDO
         joinObject('unread_post')->
         joinObject('unread_post_thread')->
         joinObject('unread_post_board')->
-        where("board_id={$board->getID()}")->
+        where("board_left BETWEEN {$board->getLeft()} AND {$board->getRight()}")->
         where("unread_user={$user->getID()}")->
         exec()->fetchValue();
     }

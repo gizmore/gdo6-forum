@@ -38,6 +38,7 @@ final class CRUDBoard extends MethodCrud
             GDT_ForumBoard::make('board_parent')->label('parent')->notNull()->initial($parentId)->writable($boardId != 1),
             GDT_Permission::make('board_permission')->emptyInitial(t('sel_no_permissions')),
             $gdo->gdoColumn('board_allow_threads'),
+            $gdo->gdoColumn('board_sticky'),
             $gdo->gdoColumn('board_image')->previewHREF(href('Forum', 'BoardImage', '&board='.$boardId.'&id=')),
         ));
         
