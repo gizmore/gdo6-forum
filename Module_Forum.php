@@ -170,7 +170,7 @@ final class Module_Forum extends GDO_Module
             $user = GDO_User::current();
             if ($root = GDO_ForumBoard::getById(Module_Forum::instance()->cfgRootID()))
             {
-                $posts = $root->getPostCount();
+                $posts = $root->getUserPostCount();
                 $link = GDT_Link::make()->label('link_forum', [$posts])->href(href('Forum', 'Boards'));
                 if ($user->isAuthenticated())
                 {
