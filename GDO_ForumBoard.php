@@ -2,13 +2,11 @@
 namespace GDO\Forum;
 
 use GDO\Category\GDO_Tree;
-use GDO\DB\Cache;
 use GDO\DB\GDT_AutoInc;
 use GDO\DB\GDT_CreatedAt;
 use GDO\DB\GDT_CreatedBy;
 use GDO\Core\GDT_Template;
 use GDO\DB\GDT_Checkbox;
-use GDO\DB\GDT_Int;
 use GDO\DB\GDT_String;
 use GDO\User\GDT_Permission;
 use GDO\User\GDO_User;
@@ -55,8 +53,6 @@ final class GDO_ForumBoard extends GDO_Tree
         	GDT_Checkbox::make('board_allow_threads')->initial('0'),
         	GDT_Checkbox::make('board_allow_guests')->initial('0'),
             GDT_Checkbox::make('board_sticky')->initial('0'),
-//         	GDT_Int::make('board_threadcount')->initial('0'),
-//             GDT_Int::make('board_postcount')->initial('0'),
             GDT_ForumBoardThreadcount::make('board_user_count_'), # thread- and postcount via an ugly hack @see GDT_ForumBoardThreadcount
             GDT_ForumPost::make('board_lastpost'),
         	GDT_ImageFile::make('board_image')->scaledVersion('thumb', 48, 48),
@@ -71,10 +67,8 @@ final class GDO_ForumBoard extends GDO_Tree
     public function allowsThreads() { return $this->getValue('board_allow_threads'); }
     public function getTitle() { return $this->getVar('board_title'); }
     public function getDescription() { return $this->getVar('board_description'); }
-//     public function getThreadCount() { return $this->getVar('board_threadcount'); }
     public function getUserThreadCount() { return $this->gdoColumn('board_user_count_')->getThreadCount(); }
     public function getUserPostCount() { return $this->gdoColumn('board_user_count_')->getPostCount(); }
-//     public function getPostCount() { return $this->getVar('board_postcount'); }
     
     public function getPermission() { return $this->getValue('board_permission'); }
     public function getPermissionID() { return $this->getVar('board_permission'); }
@@ -120,23 +114,6 @@ final class GDO_ForumBoard extends GDO_Tree
     public function needsPermission() { return $this->getPermissionID() !== null; }
     public function canView(GDO_User $user) { return $this->needsPermission() ? $user->hasPermissionID($this->getPermissionID()) : true; }
     
-//     public function authorizedChildren(GDO_User $user)
-//     {
-//         $authed = [];
-//         if ($children = $this->children)
-//         {
-//             foreach ($children as $child)
-//             {
-//             	/** @var $child GDO_ForumBoard */
-//                 if ($child->canView($user))
-//                 {
-//                     $authed[$child->getID()] = $child; 
-//                 }
-//             }
-//         }
-//         return $authed;
-//     }
-    
     ##############
     ### Render ###
     ##############
@@ -148,44 +125,6 @@ final class GDO_ForumBoard extends GDO_Tree
     #############
     ### Cache ###
     #############
-//     private static $CACHE = null;
-//     public function all()
-//     {
-//         if (self::$CACHE !== null)
-//         {
-//             return self::$CACHE;
-//         }
-//         if (false === ($cache = Cache::get('gdo_forumboard_all')))
-//         {
-//             $cache = $this->queryAll();
-//             Cache::set('gdo_forumboard_all', $cache);
-//         }
-//         else
-//         {
-//             Cache::heat('gdo_forumboard_all', $cache);
-//         }
-//         self::$CACHE = $cache;
-//         return $cache;
-//     }
-    
-//     public function clearCache()
-//     {
-//         self::$CACHE = null;
-// //         self::recacheAll();
-//         parent::clearCache();
-//     }
-    
-//     public static function recacheAll()
-//     {
-//         Cache::remove('gdo_forumboard_all');
-//     }
-    
-//     public function queryAll()
-//     {
-//         $cache = self::table()->select()->order('board_left')->exec()->fetchAllArray2dObject();
-//         return $cache;
-//     }
-
     public function gdoAfterCreate()
     {
         $this->clearCache();
@@ -195,16 +134,6 @@ final class GDO_ForumBoard extends GDO_Tree
         }
     }
     
-//     public function increaseCounters($threadsBy, $postsBy)
-//     {
-//         $this->increase('board_threadcount', $threadsBy);
-//         $this->increase('board_postcount', $postsBy);
-//         if ($parent = $this->getParent())
-//         {
-//             $parent->increaseCounters($threadsBy, $postsBy);
-//         }
-//     }
-
     ##############
     ### Unread ###
     ##############
