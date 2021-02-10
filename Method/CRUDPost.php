@@ -130,6 +130,7 @@ final class CRUDPost extends MethodCrud
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         $this->thread->saveVar('thread_lastposted', Time::getDate());
         $module->increaseSetting('forum_posts');
+        $this->thread->increase('thread_postcount');
         GDO_ForumUnread::markRead(GDO_User::current(), $gdo);
         GDT_Hook::callWithIPC('ForumPostCreated', $gdo);
         $this->thread->updateBoardLastPost($gdo);

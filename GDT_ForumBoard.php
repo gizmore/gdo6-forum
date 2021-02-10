@@ -1,8 +1,9 @@
 <?php
 namespace GDO\Forum;
+
 use GDO\Core\GDT_Template;
 use GDO\DB\GDT_ObjectSelect;
-use GDO\Form\GDT_Select;
+
 /**
  * A selection for a forum board.
  * @author gizmore
@@ -72,4 +73,5 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 	{
 		return GDT_Template::php('Forum', 'choice/board.php', ['field'=>$this,'board' =>$choice]);
 	}
+	
 }

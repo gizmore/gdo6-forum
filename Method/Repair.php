@@ -12,8 +12,8 @@ use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
 use GDO\Core\MethodAdmin;
 use GDO\UI\GDT_Page;
-use GDO\Admin\Method\ClearCache;
 use GDO\DB\GDT_Checkbox;
+use GDO\DB\Database;
 
 /**
  * Repair values like likes, lastposter, lastpostdate, etc.
@@ -42,16 +42,15 @@ final class Repair extends MethodForm
     {
         $form->info(t('info_forum_repair'));
         $form->addFields([
-            GDT_Checkbox::make('repair_empty_threads')->initial('0'),
-            GDT_Checkbox::make('repair_tree')->initial('0'),
-            GDT_Checkbox::make('repair_firstpost_flag')->initial('0'),
-            GDT_Checkbox::make('repair_thread_lastpost')->initial('0'),
-            GDT_Checkbox::make('repair_thread_firstpost')->initial('0'),
-            GDT_Checkbox::make('repair_forum_lastpost')->initial('0'),
-            GDT_Checkbox::make('repair_postcount')->initial('0'),
-            GDT_Checkbox::make('repair_threadcount')->initial('0'),
-            GDT_Checkbox::make('repair_user_postcount')->initial('0'),
-            GDT_Checkbox::make('repair_readmark')->initial('0'),
+            GDT_Checkbox::make('repair_empty_threads')->initial('1'),
+            GDT_Checkbox::make('repair_tree')->initial('1'),
+            GDT_Checkbox::make('repair_firstpost_flag')->initial('1'),
+            GDT_Checkbox::make('repair_thread_lastpost')->initial('1'),
+            GDT_Checkbox::make('repair_thread_firstpost')->initial('1'),
+            GDT_Checkbox::make('repair_thread_postcount')->initial('1'),
+            GDT_Checkbox::make('repair_forum_lastpost')->initial('1'),
+            GDT_Checkbox::make('repair_user_postcount')->initial('1'),
+            GDT_Checkbox::make('repair_readmark')->initial('1'),
             GDT_Submit::make(),
             GDT_AntiCSRF::make(),
         ]);
@@ -95,12 +94,6 @@ final class Repair extends MethodForm
         {
             $this->repairLastPostInForum();
         }
-        if (true) # style
-        {
-            $pc = $form->getFormValue('repair_postcount');
-            $tc = $form->getFormValue('repair_threadcount');
-            $this->repairPostCount($pc, $tc);
-        }
         if ($form->getFormValue('repair_readmark'))
         {
             $this->repairReadmark();
@@ -109,6 +102,10 @@ final class Repair extends MethodForm
         {
             $this->repairUserPostcount();
         }
+        if ($form->getFormValue('repair_thread_postcount'))
+        {
+            $this->repairThreadPostcount();
+        }
     }
     
     ############
@@ -116,7 +113,10 @@ final class Repair extends MethodForm
     ############
     private function getLastPost()
     {
-        return GDO_ForumPost::table()->select()->first()->order('post_created', false)->exec()->fetchObject();
+        return
+            GDO_ForumPost::table()->select()->
+            first()->order('post_created', false)->
+            exec()->fetchObject();
     }
     
     ###############
@@ -124,7 +124,8 @@ final class Repair extends MethodForm
     ###############
     private function repairEmptyThreads()
     {
-        GDO_ForumThread::table()->deleteWhere("thread_postcount = 0");
+        $subquery = "SELECT COUNT(*) FROM gdo_forumpost WHERE post_thread=thread_id";
+        GDO_ForumThread::table()->deleteWhere("( $subquery ) = 0");
     }
     
     private function repairTree()
@@ -193,85 +194,6 @@ final class Repair extends MethodForm
     }
     
     /**
-     * Repair post- and threadcount.
-     * @param boolean $pc
-     * @param boolean $tc
-     */
-//     private function repairPostCount($pc=true, $tc=true)
-//     {
-//         if (!($pc||$tc))
-//         {
-//             return;
-//         }
-        
-//         $module = Module_Forum::instance();
-        
-//         # Reset all to zero
-//         if ($pc)
-//         {
-//             GDO_ForumThread::table()->update()->set('thread_postcount=0')->exec();
-//             GDO_ForumBoard::table()->update()->set('board_postcount=0')->exec();
-//         }
-//         if ($tc)
-//         {
-//             GDO_ForumBoard::table()->update()->set('board_threadcount=0')->exec();
-//         }
-        
-//         # Reset users to zero
-//         $users = GDO_User::table()->select()->exec();
-//         /** @var $user GDO_User **/
-//         while ($user = $users->fetchObject())
-//         {
-//             if ($pc)
-//             {
-//                 $module->saveUserSetting($user, 'forum_posts', '0');
-//             }
-//             if ($tc)
-//             {
-//                 $module->saveUserSetting($user, 'forum_threads', '0');
-//             }
-//         }
-        
-//         ClearCache::make()->clearCache();
-        
-//         $posts = GDO_ForumPost::table()->select()->exec();
-//         /** @var $post GDO_ForumPost **/
-//         while ($post = $posts->fetchObject())
-//         {
-//             $creator = $post->getCreator();
-//             if ($pc)
-//             {
-//                 $module->increaseUserSetting($creator, 'forum_posts');
-//             }
-//             $thread = $post->getThread();
-//             if ($tc)
-//             {
-//                 if ($post->isFirstInThread())
-//                 {
-//                     $module->increaseUserSetting($creator, 'forum_threads');
-//                     $board = $thread->getBoard();
-//                     do
-//                     {
-//                         $board->increase('board_threadcount');
-//                     }
-//                     while ($board = $board->getParent());
-//                 }
-//             }
-
-//             if ($pc)
-//             {
-//                 $thread->increase('thread_postcount');
-//                 $board = $thread->getBoard();
-//                 do
-//                 {
-//                     $board->increase('board_postcount');
-//                 }
-//                 while ($board = $board->getParent());
-//             }
-//         }
-//     }
-    
-    /**
      * Repair readmark and lastpost.
      */
     private function repairReadmark()
@@ -307,6 +229,13 @@ final class Repair extends MethodForm
                 $module->saveUserSetting($user, 'forum_threads', $count);
             }
         }
+    }
+    
+    private function repairThreadPostcount()
+    {
+        $subselect = "SELECT COUNT(*) FROM gdo_forumpost WHERE post_thread=thread_id";
+        $query = "UPDATE gdo_forumthread SET thread_postcount = ( $subselect )";
+        Database::instance()->queryWrite($query);
     }
     
 }

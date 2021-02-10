@@ -1,7 +1,8 @@
 <?php
 namespace GDO\Forum;
+
 use GDO\DB\GDT_Object;
-use GDO\Core\GDT;
+
 /**
  * A selection for a forum post.
  * @author gizmore

@@ -1,7 +1,6 @@
 <?php
 namespace GDO\Forum;
 
-use GDO\Core\GDT_Template;
 use GDO\DB\GDT_ObjectSelect;
 
 /**
