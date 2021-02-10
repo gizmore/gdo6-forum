@@ -20,46 +20,48 @@ use GDO\User\GDO_User;
  */
 final class Search extends MethodQueryList
 {
+    public function isSearched() { return true; }
+    
     public function beforeExecute()
     {
         Module_Forum::instance()->renderTabs();
     }
     
-	public function execute()
-	{
-		if (isset($_REQUEST['submit']))
-		{
-			return $this->renderForm()->add(parent::execute());
-		}
-		return $this->renderForm();
-	}
+// 	public function execute()
+// 	{
+// 		if (isset($_REQUEST['form']['submit']))
+// 		{
+// 			return $this->renderForm()->add(parent::execute());
+// 		}
+// 		return $this->renderForm();
+// 	}
 
 	###################
 	### Search Form ###
 	###################
-	private $form;
-	public function formSearch()
-	{
-		if (!$this->form)
-		{
-			$this->form = GDT_Form::make('form')->method('GET');
-			$this->form->addFields(array(
-				GDT_SearchField::make('search'),
-				GDT_Submit::make(),
-			));
-		}
-		return $this->form;
-	}
+// 	private $form;
+// 	public function formSearch()
+// 	{
+// 		if (!$this->form)
+// 		{
+// 			$this->form = GDT_Form::make('form')->method('GET');
+// 			$this->form->addFields(array(
+// 				GDT_SearchField::make('search'),
+// 				GDT_Submit::make(),
+// 			));
+// 		}
+// 		return $this->form;
+// 	}
 	
-	public function renderForm()
-	{
-		return GDT_Response::makeWith($this->formSearch());
-	}
+// 	public function renderForm()
+// 	{
+// 		return GDT_Response::makeWith($this->formSearch());
+// 	}
 
-	private function searchTerm()
-	{
-		return (string)@$_REQUEST['form']['search'];
-	}
+// 	private function searchTerm()
+// 	{
+// 		return (string)@$_REQUEST['form']['search'];
+// 	}
 	
 	#######################
 	### MethodQueryList ###
@@ -74,13 +76,13 @@ final class Search extends MethodQueryList
 		$list->title(t('list_forum_search', [html($this->searchTerm())]));
 	}
 	
-	public function getQuery()
-	{
-		$term = GDO::escapeS($this->searchTerm());
-		$term = "'%$term%'";
-		$level = GDO_User::current()->getLevel();
-		$subselect = "(SELECT COUNT(*) FROM gdo_forumpost WHERE $level >= post_level AND post_thread=thread_id AND post_message LIKE $term)";
-		$query = $this->gdoTable()->select()->where("thread_title LIKE $term")->where($subselect, 'OR');
-		return $query;
-	}
+// 	public function getQuery()
+// 	{
+// 		$term = GDO::escapeS($this->searchTerm());
+// 		$term = "'%$term%'";
+// 		$level = GDO_User::current()->getLevel();
+// 		$subselect = "(SELECT COUNT(*) FROM gdo_forumpost WHERE $level >= post_level AND post_thread=thread_id AND post_message LIKE $term)";
+// 		$query = $this->gdoTable()->select()->where("thread_title LIKE $term")->where($subselect, 'OR');
+// 		return $query;
+// 	}
 }
