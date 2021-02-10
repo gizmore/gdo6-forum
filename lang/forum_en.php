@@ -97,4 +97,8 @@ The %2$s Team',
 'list_forum_unreadthreads' => 'You have %2$s unread posts in %1$s threads',
 'tab_forum_unread' => '%s new posts',
 'mark_all_read' => 'Mark all as read',
+'url_subscribe' => 'subscribe to %s',
+'url_unsubscribe' => 'unsubscribe from %s',
+'cfg_forum_threads_per_page' => 'Threads per page',
+'cfg_forum_mail_enable' => 'Enable mail alerts?',
 );

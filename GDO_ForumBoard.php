@@ -13,6 +13,8 @@ use GDO\User\GDO_User;
 use GDO\UI\GDT_Title;
 use GDO\File\GDT_ImageFile;
 use GDO\File\GDO_File;
+use GDO\Table\GDT_PageMenu;
+use GDO\Table\GDT_Sort;
 
 /**
  * A board inherits from GDO_Tree.
@@ -23,7 +25,7 @@ use GDO\File\GDO_File;
  */
 final class GDO_ForumBoard extends GDO_Tree
 {
-    public static $BUILD_TREE_UPON_SAVE = true;
+    public static $BUILD_TREE_UPON_SAVE = true; # set to false for faster board creation during import.
     
 	############
 	### Root ###
@@ -56,6 +58,7 @@ final class GDO_ForumBoard extends GDO_Tree
             GDT_ForumBoardThreadcount::make('board_user_count_'), # thread- and postcount via an ugly hack @see GDT_ForumBoardThreadcount
             GDT_ForumPost::make('board_lastpost'),
         	GDT_ImageFile::make('board_image')->scaledVersion('thumb', 48, 48),
+            GDT_Sort::make('board_sort')->notNull()->initial('0'),
             GDT_CreatedAt::make('board_created'),
             GDT_CreatedBy::make('board_creator'),
         ], parent::gdoColumns());
@@ -121,6 +124,13 @@ final class GDO_ForumBoard extends GDO_Tree
     public function displayDescription() { return html($this->getDescription()); }
     public function renderList() { return GDT_Template::php('Forum', 'listitem/board.php', ['board'=>$this]); }
     public function renderChoice() { return sprintf('%s - %s', $this->getID(), $this->displayName()); }
+    
+    public function getPageCount()
+    {
+        $count = GDO_ForumThread::table()->countWhere('thread_board='.$this->getID());
+        $ipp = Module_Forum::instance()->cfgThreadsPerPage();
+        return GDT_PageMenu::getPageCountS($count, $ipp);
+    }
     
     #############
     ### Cache ###

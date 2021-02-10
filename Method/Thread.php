@@ -9,6 +9,7 @@ use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\GDT_ForumPost;
 use GDO\Table\GDT_Table;
 use GDO\User\GDO_User;
+use GDO\Core\Website;
 
 /**
  * Display a forum thread.
@@ -83,6 +84,7 @@ final class Thread extends MethodQueryCards
     public function setupTitle(GDT_Table $table)
     {
         $thread = $this->getThread();
+        Website::setTitle($thread->getTitle());
         $table->title(t('list_title_thread_posts', 
             [$thread->displayTitle(), $table->countItems()]));
     }

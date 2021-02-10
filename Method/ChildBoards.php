@@ -39,8 +39,8 @@ final class ChildBoards extends MethodQueryList
             GDO_ForumBoard::table()->select()->
             where("board_left BETWEEN {$board->getLeft()} AND {$board->getRight()}")->
             where("board_depth={$board->getDepth()}+1 OR ( board_sticky AND board_depth>{$board->getDepth()} )")->
+            order("board_sort");
             order("board_depth");
-            order("board_left");
     }
     
     public function setupTitle(GDT_Table $table)

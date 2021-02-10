@@ -39,6 +39,7 @@ final class Unsubscribe extends Method
             $href = href('Forum', 'Boards', '&boardid='.$thread->getBoard()->getID());
         }
         
+        $href = Website::hrefBack($href);
         return Website::redirectMessage('msg_unsubscribed', null, $href);
     }
 

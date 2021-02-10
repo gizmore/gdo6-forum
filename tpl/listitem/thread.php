@@ -1,5 +1,4 @@
 <?php /** @var $thread \GDO\Forum\GDO_ForumThread **/
-use GDO\Forum\GDO_ForumThread;
 use GDO\User\GDO_User;
 use GDO\UI\GDT_Link;
 use GDO\UI\GDT_ListItem;
@@ -7,7 +6,7 @@ use GDO\UI\GDT_Paragraph;
 use GDO\UI\GDT_Button;
 use GDO\Forum\Module_Forum;
 use GDO\Forum\GDT_ForumSubscribe;
-$thread instanceof GDO_ForumThread;
+use GDO\UI\GDT_Title;
 // $creator = $thread->getCreator();
 $lastPoster = $thread->getLastPoster();
 $postcount = $thread->getPostCount();
@@ -25,7 +24,7 @@ $li = GDT_ListItem::make("thread_$tid")->gdo($thread);
 
 $li->addClass($readClass);
 
-$li->creatorHeader($thread->gdoColumn('thread_title'));
+$li->creatorHeader(GDT_Title::make()->titleRaw($thread->getTitle()));
 
 if ($replycount)
 {

@@ -14,6 +14,7 @@ use GDO\DB\GDT_UInt;
 use GDO\UI\GDT_Page;
 use GDO\Core\GDT_Template;
 use GDO\User\GDO_Permission;
+use GDO\Table\Module_Table;
 
 /**
  * GWF Forum Module.
@@ -81,7 +82,7 @@ final class Module_Forum extends GDO_Module
      */
     public function getConfig()
     {
-        return array(
+        return [
         	GDT_ForumBoard::make('forum_root')->editable(false),
             GDT_Checkbox::make('forum_guest_posts')->initial('1'),
             GDT_Checkbox::make('forum_attachments')->initial('1'),
@@ -92,7 +93,8 @@ final class Module_Forum extends GDO_Module
             GDT_Checkbox::make('forum_mail_enable')->initial('1'),
         	GDT_UInt::make('forum_num_latest')->initial('6'),
             GDT_Checkbox::make('forum_hook_left_bar')->initial('1'),
-        );
+            GDT_UInt::make('forum_threads_per_page')->initial('20'),
+        ];
     }
     public function cfgGuestPosts() { return $this->getConfigValue('forum_guest_posts'); }
     public function cfgAttachments() { return $this->getConfigValue('forum_attachments'); }
@@ -105,6 +107,8 @@ final class Module_Forum extends GDO_Module
     public function cfgNumLatestThreads() { return $this->getConfigVar('forum_num_latest'); }
     public function cfgHookLeftBar() { return $this->getConfigValue('forum_hook_left_bar'); }
     public function cfgMailEnabled() { return $this->getConfigValue('forum_mail_enable'); }
+    public function cfgThreadsPerPage() { return $this->getConfigValue('forum_threads_per_page'); }
+    
     
     ###################
     ### Permissions ###

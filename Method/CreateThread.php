@@ -54,7 +54,7 @@ final class CreateThread extends MethodForm
         $gdo = GDO_ForumThread::table();
         $posts = GDO_ForumPost::table();
         $form->addFields(array(
-            $gdo->gdoColumn('thread_board')->initial($this->board->getID())->editable(false),
+            $gdo->gdoColumn('thread_board')->noChoices($this->board)->initial($this->board->getID())->editable(false),
             $gdo->gdoColumn('thread_title'),
         	$posts->gdoColumn('post_level')->initial('0'),
         	$posts->gdoColumn('post_message'),

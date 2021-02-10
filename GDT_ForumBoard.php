@@ -19,6 +19,20 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 		$this->emptyLabel('no_parent');
 	}
 	
+	public function initChoices()
+	{
+	    if ($this->noChoices)
+	    {
+	        $nc = $this->noChoices;
+	        return $this->choices([$nc->getID() => $nc]);
+	    }
+	    if ($this->choices === null)
+	    {
+	        return $this->choices($this->getChoices());
+	    }
+	    return $this;
+	}
+	
 	####################
 	### Default root ###
 	####################
@@ -32,12 +46,12 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 	##################
 	### No choices ###
 	##################
-// 	public $noChoices = false;
-// 	public function noChoices($noChoices=true)
-// 	{
-// 	    $this->noChoices = $noChoices;
-// 	    return $this;
-// 	}
+	public $noChoices = false;
+	public function noChoices(GDO_ForumBoard $noChoices)
+	{
+	    $this->noChoices = $noChoices;
+	    return $this;
+	}
 
 	/**
 	 * @return GDO_ForumBoard

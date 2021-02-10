@@ -50,7 +50,7 @@ final class Subscribe extends Method
             ))->replace();
             $user->tempUnset('gdo_forum_thread_subsciptions');
             $user->recache();
-            $href = href('Forum', 'Boards', '&board='.$thread->getBoard()->getID());
+            $href = Website::hrefBack(href('Forum', 'Boards', '&board='.$thread->getBoard()->getID()));
             return Website::redirectMessage('msg_subscribed', null, $href);
         }
     }

@@ -20,7 +20,7 @@ echo ChildBoards::make()->execute()->render();
 # 2. Create thread button
 if ($board->allowsThreads())
 {
-    echo GDT_Button::make('btn_create_thread')->icon('create')->href(href('Forum', 'CreateThread', '&board='.$board->getID()))->render();
+    echo GDT_Button::make('btn_create_thread')->icon('create')->href(hrefSEO(t('btn_create_thread'), 'Forum', 'CreateThread', '&board='.$board->getID()))->render();
 }
 
 # 3. Threads as list

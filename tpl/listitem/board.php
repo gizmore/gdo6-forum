@@ -6,26 +6,19 @@ use GDO\UI\GDT_Button;
 use GDO\UI\GDT_Image;
 use GDO\UI\GDT_Container;
 use GDO\UI\GDT_Headline;
-use GDO\Table\GDT_PageMenu;
-use GDO\Forum\Method\Threads;
-use GDO\Core\GDT_Fields;
 use GDO\Forum\Module_Forum;
 use GDO\Forum\GDT_ForumSubscribe;
 $user = GDO_User::current();
-
-// if ( (!$board->allowsThreads()) && (!$board->authorizedChildren($user)) )
-// {
-//     return;
-// }
-
 $bid = $board->getID(); ?>
 <?php
 $subscribed = $board->hasSubscribed($user);
 $subscribeClass = $subscribed ? 'gdo-forum gdo-forum-subscribed' : 'gdo-forum';
 $subscribeLabel = $subscribed ? 'btn_unsubscribe' : 'btn_subscribe';
 $readClass = $board->hasUnreadPosts($user) ? 'gdo-forum-unread' : 'gdo-forum-read';
-$href = href('Forum', 'Boards', '&board='.$bid);
-$href2 = $subscribed ? href('Forum', 'Unsubscribe', '&board='.$bid) : href('Forum', 'Subscribe', '&board='.$bid);
+$href = hrefSEO($board->getTitle(), 'Forum', 'Boards', '&board='.$bid.'&o2[page]='.$board->getPageCount());
+$href2 = $subscribed ?
+hrefSEO(t('url_unsubscribe', [$board->getTitle()]), 'Forum', 'Unsubscribe', '&board='.$bid) :
+hrefSEO(t('url_subscribe', [$board->getTitle()]), 'Forum', 'Subscribe', '&board='.$bid);
 
 $li = GDT_ListItem::make();
 $li->addClass($readClass);
