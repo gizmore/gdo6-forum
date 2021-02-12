@@ -51,9 +51,9 @@ final class Repair extends MethodForm
             GDT_Checkbox::make('repair_forum_lastpost')->initial('1'),
             GDT_Checkbox::make('repair_user_postcount')->initial('1'),
             GDT_Checkbox::make('repair_readmark')->initial('1'),
-            GDT_Submit::make(),
             GDT_AntiCSRF::make(),
         ]);
+        $form->actions()->addField(GDT_Submit::make());
     }
 
     public function formValidated(GDT_Form $form)

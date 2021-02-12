@@ -115,7 +115,11 @@ final class GDO_ForumBoard extends GDO_Tree
     ### Permission ###
     ##################
     public function needsPermission() { return $this->getPermissionID() !== null; }
-    public function canView(GDO_User $user) { return $this->needsPermission() ? $user->hasPermissionID($this->getPermissionID()) : true; }
+    public function canView(GDO_User $user)
+    {
+        return $this->needsPermission() ?
+            $user->hasPermissionID($this->getPermissionID()) : true;
+    }
     
     ##############
     ### Render ###
@@ -183,4 +187,5 @@ final class GDO_ForumBoard extends GDO_Tree
         }
         return $cache;
     }
+    
 }

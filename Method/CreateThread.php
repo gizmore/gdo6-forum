@@ -55,13 +55,13 @@ final class CreateThread extends MethodForm
         $posts = GDO_ForumPost::table();
         $form->addFields(array(
             $gdo->gdoColumn('thread_board')->noChoices($this->board)->initial($this->board->getID())->editable(false),
+            $gdo->gdoColumn('thread_level'),
             $gdo->gdoColumn('thread_title'),
-        	$posts->gdoColumn('post_level')->initial('0'),
-        	$posts->gdoColumn('post_message'),
+            $posts->gdoColumn('post_message'),
             $posts->gdoColumn('post_attachment'),
-            GDT_Submit::make(),
             GDT_AntiCSRF::make(),
         ));
+        $form->actions()->addField(GDT_Submit::make());
         
         $module = Module_Forum::instance();
         $user = GDO_User::current();

@@ -12,6 +12,7 @@ use GDO\UI\GDT_Title;
 use GDO\User\GDT_User;
 use GDO\Date\GDT_DateTime;
 use GDO\DB\GDT_UInt;
+use GDO\User\GDT_Level;
 
 /**
  * Forum thread database object.
@@ -30,7 +31,7 @@ final class GDO_ForumThread extends GDO
             GDT_ForumBoard::make('thread_board')->notNull()->label('board'),
             GDT_Title::make('thread_title')->max(128),
             GDT_UInt::make('thread_postcount')->initial('1'),
-//             GDT_Virtual::make('thread_postcount')->subquery("SELECT COUNT(*) FROM gdo_forumpost WHERE post_thread=thread_id"),
+            GDT_Level::make('thread_level'),
             GDT_UInt::make('thread_viewcount')->initial('0'),
         	GDT_Checkbox::make('thread_locked')->initial('0'),
             GDT_CreatedAt::make('thread_created'),
@@ -43,8 +44,22 @@ final class GDO_ForumThread extends GDO
     ##################
     ### Permission ###
     ##################
-    public function canView(GDO_User $user) { return $this->getBoard()->canView($user); }
-    public function canEdit(GDO_User $user) { return $user->isStaff() || ($this->getCreatorID() === $user->getID()); }
+    public function canView(GDO_User $user)
+    {
+//         if ($this->hasPosted($user))
+//         {
+//             # allow always when user had posted.
+//             return true;
+//         }
+        return $user->getLevel() >= $this->getLevel() &&
+            $this->getBoard()->canView($user);
+    }
+    
+    public function canEdit(GDO_User $user)
+    {
+        return $user->isStaff() || ($this->getCreatorID() === $user->getID());
+    }
+    
     public function hasPosted(GDO_User $user)
     {
         return GDO_ForumPost::table()->select('1')->
@@ -75,6 +90,7 @@ final class GDO_ForumThread extends GDO
     public function getViewCount() { return $this->getVar('thread_viewcount'); }
     
     public function isLocked() { return $this->getValue('thread_locked'); }
+    public function getLevel() { return $this->getValue('thread_level'); }
     
     public function getCreated() { return $this->getVar('thread_created'); }
     public function getLastPosted() { return $this->getVar('thread_lastposted'); }

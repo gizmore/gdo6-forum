@@ -15,9 +15,12 @@ use GDO\UI\GDT_Message;
 use GDO\User\GDO_User;
 use GDO\Vote\WithLikes;
 use GDO\Vote\GDT_LikeCount;
-use GDO\User\GDT_Level;
 use GDO\DB\GDT_Checkbox;
 
+/**
+ * A forum post.
+ * @author gizmore
+ */
 final class GDO_ForumPost extends GDO
 {
 	#############
@@ -43,7 +46,6 @@ final class GDO_ForumPost extends GDO
             GDT_Object::make('post_thread')->table(GDO_ForumThread::table())->notNull(),
         	GDT_LikeCount::make('post_likes'),
             GDT_Message::make('post_message')->utf8()->caseI()->notNull(),
-        	GDT_Level::make('post_level')->initial('0'),
             GDT_File::make('post_attachment'),
             GDT_Checkbox::make('post_first')->initial('0'),
             GDT_CreatedAt::make('post_created'),
@@ -55,8 +57,20 @@ final class GDO_ForumPost extends GDO
     ##################
     ### Permission ###
     ##################
-    public function canEdit(GDO_User $user) { return $user->isStaff() || ($user->getID() === $this->getCreatorID()); }
-    public function canView(GDO_User $user) { return $this->getThread()->canView($user); }
+    public function canEdit(GDO_User $user)
+    {
+        if (!$this->canView($user))
+        {
+            return false;
+        }
+        return $user->isStaff() || ($user->getID() === $this->getCreatorID());
+    }
+
+    public function canView(GDO_User $user)
+    {
+        return $this->getThread()->canView($user);
+    }
+    
     ##############
     ### Getter ###
     ##############
@@ -142,18 +156,4 @@ final class GDO_ForumPost extends GDO
         return GDO_ForumUnread::markRead($user, $this);
     }
     
-    #############
-    ### Hooks ###
-    #############
-//     public function gdoAfterCreate()
-//     {
-//         $thread = $this->getThread();
-//         $thread->increase('thread_postcount');
-//         $board = $thread->getBoard();
-//         while ($board)
-//         {
-//             $board->increase('board_postcount');
-//             $board = $board->getParent();
-//         }
-//     }
 }

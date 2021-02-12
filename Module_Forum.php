@@ -14,11 +14,9 @@ use GDO\DB\GDT_UInt;
 use GDO\UI\GDT_Page;
 use GDO\Core\GDT_Template;
 use GDO\User\GDO_Permission;
-use GDO\Table\Module_Table;
 
 /**
  * GWF Forum Module.
- * Quite unfinished.
  * @author gizmore
  * @version 6.10
  * @since 2.0

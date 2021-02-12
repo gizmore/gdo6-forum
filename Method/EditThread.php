@@ -56,10 +56,12 @@ final class EditThread extends MethodForm
         }
         $form->addFields(array(
             $gdo->gdoColumn('thread_title'),
-            GDT_Submit::make(),
-            GDT_Submit::make('delete'),
             GDT_AntiCSRF::make(),
         ));
+        $form->actions()->addFields([
+            GDT_Submit::make(),
+            GDT_Submit::make('delete'),
+        ]);
         $form->withGDOValuesFrom($gdo);
     }
     

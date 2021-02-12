@@ -4,7 +4,6 @@ namespace GDO\Forum\Method;
 use GDO\Core\GDT_Hook;
 use GDO\Core\GDO;
 use GDO\Form\GDT_Form;
-use GDO\Form\GDT_Hidden;
 use GDO\Form\MethodCrud;
 use GDO\Forum\GDO_ForumPost;
 use GDO\Forum\Module_Forum;
@@ -14,12 +13,17 @@ use GDO\UI\GDT_Message;
 use GDO\File\GDT_File;
 use GDO\Date\Time;
 use GDO\Core\Website;
-use GDO\User\GDT_Level;
 use GDO\Form\GDT_Submit;
 use GDO\Core\GDT_Response;
 use GDO\UI\GDT_CardView;
 use GDO\Forum\GDO_ForumUnread;
 
+/**
+ * CRUD method for GDO_ForumPost.
+ * @author gizmore
+ * @version 6.10
+ * @since 6.03
+ */
 final class CRUDPost extends MethodCrud
 {
 	private $post;
@@ -50,6 +54,10 @@ final class CRUDPost extends MethodCrud
         {
             $post = $this->post = GDO_ForumPost::table()->find($pid);
             $this->thread = $post->getThread();
+            if (!$post->canView($user))
+            {
+                return $this->error('err_permission_read');
+            }
         }
         else
         {
@@ -91,6 +99,7 @@ final class CRUDPost extends MethodCrud
     	$by = t('quote_by', [$by]);
     	$at = tt($this->post->getCreated());
     	$at = t('quote_at', [$at]);
+    	# @TODO: Each message editor provider should provide a template for inserting a quoted message.
     	$msg = sprintf("<div><blockquote><span class=\"quote-by\">%s</span> <span class=\"quote-from\">%s</span>\n%s</blockquote>&nbsp;</div>", $by, $at, $msg);
     	return $msg;
     }
@@ -104,8 +113,7 @@ final class CRUDPost extends MethodCrud
     {
     	$initialPostHTML = isset($_REQUEST['quote']) ? $this->initialMessage() : '';
         $form->addFields(array(
-            GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
-        	GDT_Level::make('post_level')->initial($this->initialPostLevel()),
+//             GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
         	GDT_Message::make('post_message')->initial($initialPostHTML),
         ));
         if (Module_Forum::instance()->canUpload(GDO_User::current()))
@@ -120,7 +128,7 @@ final class CRUDPost extends MethodCrud
             }
         }
         $this->createFormButtons($form);
-        $form->addField(GDT_Submit::make('preview')->label('preview')->icon('view'));
+        $form->actions()->addField(GDT_Submit::make('btn_preview')->label('preview')->icon('view'));
     }
     
     public function afterCreate(GDT_Form $form, GDO $gdo)
@@ -148,7 +156,7 @@ final class CRUDPost extends MethodCrud
         return Website::redirect(href('Forum', 'Thread', '&post='.$id.'#card-'.$id));
     }
     
-    public function onSubmit_preview(GDT_Form $form)
+    public function onSubmit_btn_preview(GDT_Form $form)
     {
         $response = parent::renderPage($form);
         $preview = GDO_ForumPost::blank($form->getFormData());
