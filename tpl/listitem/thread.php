@@ -46,7 +46,7 @@ $li->actions()->addFields([
 if (GDT_ForumSubscribe::ALL !== Module_Forum::instance()->userSettingVar($user, 'forum_subscription'))
 {
     $li->actions()->addField(
-        GDT_Button::make()->href($href)->icon('email')->label($subscribeLabel)->addClass($subscribeClass),
+        GDT_Button::make()->href($href)->icon('email')->label($subscribeLabel)->addClass($subscribeClass)
     );
 }
 echo $li->render();

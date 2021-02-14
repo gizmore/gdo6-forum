@@ -72,7 +72,7 @@ $module = Module_Forum::instance();
 if ($module->userSettingVar($user, 'forum_subscription') !== GDT_ForumSubscribe::ALL)
 {
     $li->actions()->addField(
-    	GDT_Button::make()->addClass($subscribeClass)->href($href2)->icon('email')->label($subscribeLabel),
+    	GDT_Button::make()->addClass($subscribeClass)->href($href2)->icon('email')->label($subscribeLabel)
     );
 }
 
