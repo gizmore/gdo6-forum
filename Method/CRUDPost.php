@@ -17,6 +17,7 @@ use GDO\Form\GDT_Submit;
 use GDO\Core\GDT_Response;
 use GDO\UI\GDT_CardView;
 use GDO\Forum\GDO_ForumUnread;
+use GDO\Form\GDT_Hidden;
 
 /**
  * CRUD method for GDO_ForumPost.
@@ -80,28 +81,20 @@ final class CRUDPost extends MethodCrud
         # 3. Execute
         $response = parent::execute();
         
-//         # 4. prepend reply
-//         if (isset($post) && (count($_POST)===0))
-//         {
-//         	$tabs->addHTML($post->renderCard());
-//         }
-        
-//         return $tabs->add($response);
-        
         $card = GDT_CardView::make()->gdo($post);
         return GDT_Response::makeWith($card)->add($response);
     }
     
+    /**
+     * Get the initial message for quoting a message.
+     * @return mixed
+     */
     public function initialMessage()
     {
+    	$by = $this->post->getCreator();
+    	$at = $this->post->getCreated();
     	$msg = $this->post->displayMessage();
-    	$by = $this->post->getCreator()->displayNameLabel();
-    	$by = t('quote_by', [$by]);
-    	$at = tt($this->post->getCreated());
-    	$at = t('quote_at', [$at]);
-    	# @TODO: Each message editor provider should provide a template for inserting a quoted message.
-    	$msg = sprintf("<div><blockquote><span class=\"quote-by\">%s</span> <span class=\"quote-from\">%s</span>\n%s</blockquote>&nbsp;</div>", $by, $at, $msg);
-    	return $msg;
+    	return GDT_Message::quoteMessage($by, $at, $msg);
     }
     
     public function initialPostLevel()
@@ -111,16 +104,19 @@ final class CRUDPost extends MethodCrud
     
     public function createForm(GDT_Form $form)
     {
-    	$initialPostHTML = isset($_REQUEST['quote']) ? $this->initialMessage() : '';
+        $initialPostHTML = '';
+        if ( (!count($_POST)) && (isset($_REQUEST['quote'])) )
+        {
+            # Prefill post on GET and quote
+        	$initialPostHTML = $this->initialMessage();
+        }
         $form->addFields(array(
-//             GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
+            GDT_Hidden::make('post_thread')->initial($this->thread->getID()),
         	GDT_Message::make('post_message')->initial($initialPostHTML),
         ));
         if (Module_Forum::instance()->canUpload(GDO_User::current()))
         {
-            $form->addFields(array(
-                GDT_File::make('post_attachment'),
-            ));
+            $form->addField(GDT_File::make('post_attachment'));
             
             if ($this->gdo)
             {
@@ -128,7 +124,7 @@ final class CRUDPost extends MethodCrud
             }
         }
         $this->createFormButtons($form);
-        $form->actions()->addField(GDT_Submit::make('btn_preview')->label('preview')->icon('view'));
+        $form->actions()->addField(GDT_Submit::make('btn_preview')->label('btn_preview')->icon('view'));
     }
     
     public function afterCreate(GDT_Form $form, GDO $gdo)

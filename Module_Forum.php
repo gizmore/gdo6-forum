@@ -141,7 +141,6 @@ final class Module_Forum extends GDO_Module
     public function hookForumPostCreated(GDO_ForumPost $post)
     {
         $post->getThread()->getBoard()->recache();
-        GDO_ForumBoard::recacheAll();
         Cache::flush();
     }
 
