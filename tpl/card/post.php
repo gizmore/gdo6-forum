@@ -12,6 +12,7 @@ use GDO\Core\GDT_Hook;
 use GDO\DB\GDT_UInt;
 use GDO\Forum\Module_Forum;
 use GDO\Vote\GDT_LikeButton;
+use GDO\Profile\GDT_ProfileLink;
 
 $id = $post->getID();
 
@@ -30,10 +31,18 @@ if ($post->isPersisted())
     $actions->addField(GDT_LikeButton::make()->gdo($post));
 }
 
-$card->creatorHeader();
 if ($post->isFirstInThread())
 {
-    $card->title($post->getThread()->gdoColumn('thread_title'));
+    $card->title(
+        GDT_Container::make()->addFields([
+            $post->getThread()->gdoColumn('thread_title'),
+            $post->gdoColumn('post_created'),
+        ])
+    );
+}
+else
+{
+    $card->title($post->gdoColumn('post_created'));
 }
 
 $attachment = $post->hasAttachment() ? $post->getAttachment() : '';
@@ -65,7 +74,9 @@ $cont = GDT_Container::make();
 $user = $post->getCreator();
 $numPosts = Module_Forum::instance()->userSettingVar($user, 'forum_posts');
 $cont->addFields([
-    GDT_Container::makeWith(GDT_UInt::make()->var($numPosts)->label('num_posts')),
+    GDT_ProfileLink::make()->withAvatar()->withNickname()->forUser($user),
+    $user->gdoColumn('user_level'),
+    GDT_UInt::make()->initial($numPosts)->label('num_posts'),
 ]);
 GDT_Hook::callHook('DecoratePostUser', $card, $cont, $user);
 $card->image($cont);
