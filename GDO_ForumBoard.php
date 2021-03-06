@@ -58,7 +58,7 @@ final class GDO_ForumBoard extends GDO_Tree
             GDT_ForumBoardThreadcount::make('board_user_count_'), # thread- and postcount via an ugly hack @see GDT_ForumBoardThreadcount
             GDT_ForumPost::make('board_lastpost'),
         	GDT_ImageFile::make('board_image')->scaledVersion('thumb', 48, 48),
-            GDT_Sort::make('board_sort')->notNull()->initial('0'),
+            GDT_Sort::make('board_sort'),
             GDT_CreatedAt::make('board_created'),
             GDT_CreatedBy::make('board_creator'),
         ], parent::gdoColumns());
