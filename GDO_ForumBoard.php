@@ -111,6 +111,11 @@ final class GDO_ForumBoard extends GDO_Tree
     public function hasImage() { return !!$this->getVar('board_image'); }
     public function getImageId() { return $this->getVar('board_image'); }
     
+    ############
+    ### HREF ###
+    ############
+    public function hrefView() { return href('Forum', 'Boards', '&board='.$this->getID()); }
+    
     ##################
     ### Permission ###
     ##################
