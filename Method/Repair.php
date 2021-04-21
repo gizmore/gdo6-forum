@@ -10,6 +10,7 @@ use GDO\Forum\GDO_ForumPost;
 use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
+use GDO\Core\Application;
 use GDO\Core\MethodAdmin;
 use GDO\UI\GDT_Page;
 use GDO\DB\GDT_Checkbox;
@@ -30,9 +31,12 @@ final class Repair extends MethodForm
     
     public function beforeExecute()
     {
-        $this->renderNavBar();
-        GDT_Page::$INSTANCE->topTabs->addField(
-            Admin::make()->adminTabs());
+        if (Application::instance()->isHTML())
+        {
+            $this->renderNavBar();
+            GDT_Page::$INSTANCE->topTabs->addField(
+                Admin::make()->adminTabs());
+        }
     }
     
     ##################

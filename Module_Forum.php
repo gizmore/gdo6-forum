@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Forum;
 
+use GDO\Core\Application;
 use GDO\Core\GDO_Module;
 use GDO\DB\Cache;
 use GDO\Date\GDT_DateTime;
@@ -160,8 +161,11 @@ final class Module_Forum extends GDO_Module
     ##############
     public function renderTabs()
     {
-        GDT_Page::$INSTANCE->topTabs->addField(
-            GDT_Template::make()->template($this->getName(), 'tabs.php'));
+        if (Application::instance()->isHTML())
+        {
+            GDT_Page::$INSTANCE->topTabs->addField(
+                GDT_Template::make()->template($this->getName(), 'tabs.php'));
+        }
     }
     
     public function onInitSidebar()

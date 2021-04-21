@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Forum\Method;
 
+use GDO\Core\Application;
 use GDO\Core\Method;
 use GDO\Core\MethodAdmin;
 use GDO\UI\GDT_Bar;
@@ -20,8 +21,11 @@ final class Admin extends Method
     
     public function beforeExecute()
     {
-        $this->renderNavBar();
-        GDT_Page::$INSTANCE->topTabs->addField($this->adminTabs());
+        if (Application::instance()->isHTML())
+        {
+            $this->renderNavBar();
+            GDT_Page::$INSTANCE->topTabs->addField($this->adminTabs());
+        }
     }
     
     public function execute()
