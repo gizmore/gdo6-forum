@@ -25,6 +25,7 @@ return array(
 'last_post' => 'Last post from %s by %s',
 'list_threads' => '%s Threads in %s',
 'board_allow_threads' => 'Allow threads?',
+'forum_board_last_subtext' => 'Neuester Thread: %s',
 #######################################################################
 'cfg_forum_root' => 'Forum board root',
 'tt_cfg_forum_root' => 'This board is automatically created during install.',

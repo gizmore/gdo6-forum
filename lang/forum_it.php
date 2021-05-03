@@ -25,6 +25,7 @@ return array(
 'last_post' => 'Ultimo post di %s su %s',
 'list_threads' => '%s Threads in %s',													
 'board_allow_threads' => 'Permetti Threads',
+'forum_board_last_subtext' => 'Discussione più recente: %s',
 #######################################################################
 'cfg_forum_root' => 'Forum board root',
 'tt_cfg_forum_root' => 'Questo Board é stato creato durante la installazione.',
