@@ -13,7 +13,7 @@ $bar = GDT_Menu::make()->label('actions');
 $user = GDO_User::current();
 $module = Module_Forum::instance();
 
-$board = GDO_ForumBoard::getById(Common::getRequestString('board', $module->cfgRootID()));
+$board = GDO_ForumBoard::findById(Common::getRequestString('board', $module->cfgRootID()));
 
 $bar->addField(GDT_IconButton::make()->icon('settings')->label('link_settings')->href(href('Account', 'Settings', '&module=Forum')));
 
