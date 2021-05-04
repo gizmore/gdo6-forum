@@ -132,9 +132,11 @@ final class CRUDPost extends MethodCrud
         $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$gdo->getID()}&file="));
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
+        $this->thread->tempUnset('last_post');
         $this->thread->saveVar('thread_lastposted', Time::getDate());
         $module->increaseSetting('forum_posts');
         $this->thread->increase('thread_postcount');
+        GDO_ForumUnread::markUnread($gdo);
         GDO_ForumUnread::markRead(GDO_User::current(), $gdo);
         GDT_Hook::callWithIPC('ForumPostCreated', $gdo);
         $this->thread->updateBoardLastPost($gdo);
@@ -149,6 +151,8 @@ final class CRUDPost extends MethodCrud
         $this->thread->saveVar('thread_lastposted', Time::getDate());
         $id = $gdo->getID();
         $this->thread->updateBoardLastPost($gdo);
+        GDO_ForumUnread::markUnread($gdo);
+        GDO_ForumUnread::markRead(GDO_User::current(), $gdo);
         return Website::redirect(href('Forum', 'Thread', '&post='.$id.'#card-'.$id));
     }
     

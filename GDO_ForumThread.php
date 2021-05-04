@@ -23,7 +23,7 @@ final class GDO_ForumThread extends GDO
     ###########
     ### GDO ###
     ###########
-    public function gdoCached() { return false; }
+//     public function gdoCached() { return false; }
     public function gdoColumns()
     {
         return array(
@@ -105,7 +105,16 @@ final class GDO_ForumThread extends GDO
      */
     public function getLastPost($first=false)
     {
-    	return GDO_ForumPost::table()->select()->where("post_thread={$this->getID()}")->order('IFNULL(post_edited, post_created)', $first)->first()->exec()->fetchObject();
+        if (null === ($lastPost = $this->tempGet('last_post')))
+        {
+            $lastPost = GDO_ForumPost::table()->select()->where("post_thread={$this->getID()}")->order('IFNULL(post_edited, post_created)', $first)->first()->exec()->fetchObject();
+            if ($lastPost)
+            {
+                $this->tempSet('last_post', $lastPost);
+                $this->recache();
+            }
+        }
+    	return $lastPost;
     }
     
     /**
@@ -146,16 +155,6 @@ final class GDO_ForumThread extends GDO
     #############
     ### Hooks ###
     #############
-//     public function gdoAfterCreate()
-//     {
-//         $board = $this->getBoard();
-//         while ($board)
-//         {
-//             $board->increase('board_threadcount');
-//             $board = $board->getParent();
-//         }
-//     }
-    
     public function updateBoardLastPost(GDO_ForumPost $post)
     {
         $postID = $post->getID();
@@ -188,13 +187,12 @@ final class GDO_ForumThread extends GDO
                 return true;
             }
         }
-        
         return strpos($this->getForumSubscriptions($user), ",{$this->getID()},") !== false;
     }
     
     public function getForumSubscriptions(GDO_User $user)
     {
-        if (!($cache = $user->tempGet('gdo_forum_thread_subsciptions')))
+        if (null === ($cache = $user->tempGet('gdo_forum_thread_subsciptions')))
         {
             $cache = GDO_ForumThreadSubscribe::table()->select('GROUP_CONCAT(subscribe_thread)')->where("subscribe_user={$user->getID()}")->exec()->fetchValue();
             $cache = empty($cache) ? '' : ",$cache,";

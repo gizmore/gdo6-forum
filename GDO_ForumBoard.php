@@ -44,7 +44,7 @@ final class GDO_ForumBoard extends GDO_Tree
     ### GDO ###
     ###########
     public function gdoCached() { return true; }  # GDO Cache is a good idea for Thread->getBoard()
-    public function memCached() { return true; } # uses cacheall in memcached (see further down), so no single row storage for memcached
+//     public function memCached() { return true; } # uses cacheall in memcached (see further down), so no single row storage for memcached
     public function gdoColumns()
     {
         return array_merge([
@@ -183,7 +183,7 @@ final class GDO_ForumBoard extends GDO_Tree
     
     public function getForumSubscriptions(GDO_User $user)
     {
-        if (!($cache = $user->tempGet('gdo_forum_board_subsciptions')))
+        if (null === ($cache = $user->tempGet('gdo_forum_board_subsciptions')))
         {
             $cache = GDO_ForumBoardSubscribe::table()->select('GROUP_CONCAT(subscribe_board)')->where("subscribe_user={$user->getID()}")->exec()->fetchValue();
             $cache = empty($cache) ? '' : ",$cache,";

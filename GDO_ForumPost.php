@@ -38,7 +38,7 @@ final class GDO_ForumPost extends GDO
     ###########
     ### GDO ###
     ###########
-    public function gdoCached() { return false; }
+//     public function gdoCached() { return false; }
     public function gdoColumns()
     {
         return array(

@@ -10,6 +10,7 @@ use GDO\DB\GDT_Join;
 use GDO\User\GDO_Permission;
 use GDO\DB\Database;
 use GDO\User\GDO_UserPermission;
+use GDO\Core\GDT_Hook;
 
 /**
  * When a post is created, entries will be made for all users.
@@ -46,7 +47,6 @@ final class GDO_ForumUnread extends GDO
     {
         $thread = $post->getThread();
         $perm = $thread->getBoard()->getPermissionID();
-//         $level = $post->getLevel();
         
         if ($perm)
         {
@@ -69,6 +69,13 @@ final class GDO_ForumUnread extends GDO
         while ($userID = $users->fetchValue())
         {
             $bulk[] = [$userID, $postID];
+            
+            foreach (GDO_User::table()->cache->cache as $user)
+            {
+                $user->tempUnset('forum_unread');
+                $user->recacheMemcached();
+            }
+            
             if (count($bulk) >= 100)
             {
                 self::table()->bulkInsert($fields, $bulk, $bulkSize);
@@ -79,11 +86,19 @@ final class GDO_ForumUnread extends GDO
         {
             self::table()->bulkInsert($fields, $bulk, $bulkSize);
         }
+        
+        GDT_Hook::callWithIPC('ForumActivity', $thread, $post);
     }
     
     public static function countUnread(GDO_User $user)
     {
-        return self::table()->countWhere("unread_user={$user->getID()}");
+        if (null === ($unread = $user->tempGet('forum_unread')))
+        {
+            $unread = self::table()->countWhere("unread_user={$user->getID()}");
+            $user->tempSet('forum_unread', $unread);
+            $user->recache();
+        }
+        return $unread;
     }
     
     public static function isThreadUnread(GDO_User $user, GDO_ForumThread $thread)
