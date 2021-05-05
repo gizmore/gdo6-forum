@@ -69,6 +69,7 @@ final class GDO_ForumBoard extends GDO_Tree
     ##############
     public function allowsThreads() { return $this->getValue('board_allow_threads'); }
     public function getTitle() { return $this->getVar('board_title'); }
+    public function displayTitle() { return $this->display('board_title'); }
     public function getDescription() { return $this->getVar('board_description'); }
     public function getUserThreadCount() { return $this->gdoColumn('board_user_count_')->getThreadCount(); }
     public function getUserPostCount() { return $this->gdoColumn('board_user_count_')->getPostCount(); }

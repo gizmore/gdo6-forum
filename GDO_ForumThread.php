@@ -23,10 +23,9 @@ final class GDO_ForumThread extends GDO
     ###########
     ### GDO ###
     ###########
-//     public function gdoCached() { return false; }
     public function gdoColumns()
     {
-        return array(
+        return [
             GDT_AutoInc::make('thread_id'),
             GDT_ForumBoard::make('thread_board')->notNull()->label('board'),
             GDT_Title::make('thread_title')->max(128),
@@ -38,7 +37,7 @@ final class GDO_ForumThread extends GDO
             GDT_CreatedBy::make('thread_creator'),
         	GDT_User::make('thread_lastposter'), # can be removed without thread loss
         	GDT_DateTime::make('thread_lastposted')->notNull(),
-        );
+        ];
     }
     
     ##################
@@ -46,13 +45,8 @@ final class GDO_ForumThread extends GDO
     ##################
     public function canView(GDO_User $user)
     {
-//         if ($this->hasPosted($user))
-//         {
-//             # allow always when user had posted.
-//             return true;
-//         }
-        return $user->getLevel() >= $this->getLevel() &&
-            $this->getBoard()->canView($user);
+        return ($user->getLevel() >= $this->getLevel()) &&
+               ($this->getBoard()->canView($user));
     }
     
     public function canEdit(GDO_User $user)
@@ -63,9 +57,9 @@ final class GDO_ForumThread extends GDO
     public function hasPosted(GDO_User $user)
     {
         return GDO_ForumPost::table()->select('1')->
-        where("post_thread={$this->getID()}")->
-        where("post_creator={$user->getID()}")->
-        exec()->fetchValue() === '1';
+          where("post_thread={$this->getID()}")->
+          where("post_creator={$user->getID()}")->
+          exec()->fetchValue() === '1';
     }
     
     ############

@@ -12,6 +12,8 @@ use GDO\Util\Common;
 
 final class Unsubscribe extends Method
 {
+    public function getTitleLangKey() { return 'btn_unsubscribe'; }
+    
     public function execute()
     {
         $user = GDO_User::current();

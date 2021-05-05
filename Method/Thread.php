@@ -9,7 +9,6 @@ use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\GDT_ForumPost;
 use GDO\Table\GDT_Table;
 use GDO\User\GDO_User;
-use GDO\Core\Website;
 
 /**
  * Display a forum thread.

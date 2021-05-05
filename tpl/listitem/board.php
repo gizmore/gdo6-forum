@@ -15,7 +15,7 @@ $subscribed = $board->hasSubscribed($user);
 $subscribeClass = $subscribed ? 'gdo-forum gdo-forum-subscribed' : 'gdo-forum';
 $subscribeLabel = $subscribed ? 'btn_unsubscribe' : 'btn_subscribe';
 $readClass = $board->hasUnreadPosts($user) ? 'gdo-forum-unread' : 'gdo-forum-read';
-$href = hrefSEO($board->getTitle(), 'Forum', 'Boards', '&board='.$bid.'&o2[page]='.$board->getPageCount());
+$href = hrefSEO($board->displayTitle(), 'Forum', 'Boards', '&board='.$bid.'&o2[page]='.$board->getPageCount());
 $href2 = $subscribed ?
 hrefSEO(t('url_unsubscribe', [$board->getTitle()]), 'Forum', 'Unsubscribe', '&board='.$bid) :
 hrefSEO(t('url_subscribe', [$board->getTitle()]), 'Forum', 'Subscribe', '&board='.$bid);
@@ -40,12 +40,6 @@ $li->right(GDT_Container::make()->horizontal()->addFields([
     GDT_Paragraph::make()->text('board_stats', [$board->getUserThreadCount(), $board->getUserPostCount()])
 ]));
 
-// $li->content(
-//     GDT_PageMenu::make()->
-//     headers(GDT_Fields::make('t')->addFields(Threads::make()->gdoParameters()))->
-//     href(href('Forum', 'Threads', "&board={$board->getID()}"))->
-//     ipp(20)->items(40)->shown(1000000));
-
 $lastThread = $board->getLastThread();
 
 if ($lastThread)
@@ -53,19 +47,9 @@ if ($lastThread)
     $li->subtext(GDT_Paragraph::make()->text('forum_board_last_subtext', [$lastThread->displayTitle()]));
 }
 
-
-# Name and description in content
-// $c = GDT_Container::make();
-// $c->addField(GDT_Link::make()->href($href)->labelRaw($board->displayName()));
-// $c->addField(GDT_Paragraph::make()->textRaw($board->displayDescription()));
-// $li->content($c);
-
-// # Stats in subtext
-// $li->subtext(GDT_Paragraph::make()->text('board_stats', [$board->getThreadCount(), $board->getPostCount()]));
-
 # Menu
 $li->actions()->addFields([
-	GDT_Button::make()->href($href)->icon('view')->label('btn_view'),
+	GDT_Button::make('view')->href($href)->icon('view'),
 ]);
 
 $module = Module_Forum::instance();

@@ -39,8 +39,8 @@ else
 # Actions
 $href = $subscribed ? href('Forum', 'Unsubscribe', '&thread='.$tid) : href('Forum', 'Subscribe', '&thread='.$tid);
 $li->actions()->addFields([
-	GDT_Button::make()->href($thread->hrefFirstPost())->icon('view')->label('btn_view_first_post'),
-	GDT_Button::make()->href($thread->hrefLastPost())->icon('view')->label('btn_view_last_post'),
+	GDT_Button::make('first_post')->href($thread->hrefFirstPost())->icon('view')->label('btn_view_first_post'),
+	GDT_Button::make('last_post')->href($thread->hrefLastPost())->icon('view')->label('btn_view_last_post'),
 ]);
 
 if (GDT_ForumSubscribe::ALL !== Module_Forum::instance()->userSettingVar($user, 'forum_subscription'))
