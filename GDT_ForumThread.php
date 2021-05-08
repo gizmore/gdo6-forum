@@ -4,7 +4,7 @@ namespace GDO\Forum;
 use GDO\DB\GDT_ObjectSelect;
 
 /**
- * A selection for a forum board.
+ * A forum thread
  * @author gizmore
  */
 final class GDT_ForumThread extends GDT_ObjectSelect
@@ -13,6 +13,7 @@ final class GDT_ForumThread extends GDT_ObjectSelect
 	
 	protected function __construct()
 	{
+	    parent::__construct();
 	    $this->table(GDO_ForumThread::table());
 	}
 	
@@ -23,19 +24,5 @@ final class GDT_ForumThread extends GDT_ObjectSelect
 	{
 		return $this->getValue();
 	}
-	
-// 	public function withCompletion()
-// 	{
-// 	 	$this->completionHref(href('Forum', 'BoardCompletion'));
-// 	}
-	
-// 	public function renderCell()
-// 	{
-// 		return GDT_Template::php('Forum', 'cell/board.php', ['field'=>$this]);
-// 	}
-	
-// 	public function renderChoice($choice)
-// 	{
-// 		return GDT_Template::php('Forum', 'choice/board.php', ['field'=>$this,'board' =>$choice]);
-// 	}
+
 }

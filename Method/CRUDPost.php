@@ -82,7 +82,7 @@ final class CRUDPost extends MethodCrud
         $response = parent::execute();
         
         $card = GDT_CardView::make()->gdo($post);
-        return GDT_Response::makeWith($card)->add($response);
+        return GDT_Response::makeWith($card)->addField($response);
     }
     
     /**

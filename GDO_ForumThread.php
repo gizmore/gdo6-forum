@@ -99,12 +99,13 @@ final class GDO_ForumThread extends GDO
      */
     public function getLastPost($first=false)
     {
-        if (null === ($lastPost = $this->tempGet('last_post')))
+        $key = $first ? 'first_post' : 'last_post';
+        if (null === ($lastPost = $this->tempGet($key)))
         {
             $lastPost = GDO_ForumPost::table()->select()->where("post_thread={$this->getID()}")->order('IFNULL(post_edited, post_created)', $first)->first()->exec()->fetchObject();
             if ($lastPost)
             {
-                $this->tempSet('last_post', $lastPost);
+                $this->tempSet($key, $lastPost);
                 $this->recache();
             }
         }

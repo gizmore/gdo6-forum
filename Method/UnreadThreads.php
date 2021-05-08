@@ -37,7 +37,7 @@ final class UnreadThreads extends MethodQueryList
         $cont = GDT_Container::make();
         $cont->addField(GDT_IconButton::make()->label('mark_all_read')->icon('check')->href(href('Forum', 'MarkAllRead')));
         $response = GDT_Response::makeWith($cont);
-        return $response->add(parent::execute());
+        return $response->addField(parent::execute());
     }
     
     public function getQuery()
