@@ -7,7 +7,6 @@ use GDO\DB\Cache;
 use GDO\Date\GDT_DateTime;
 use GDO\UI\GDT_Link;
 use GDO\DB\GDT_Checkbox;
-use GDO\DB\GDT_Int;
 use GDO\UI\GDT_Message;
 use GDO\User\GDT_Level;
 use GDO\User\GDO_User;
@@ -19,8 +18,8 @@ use GDO\User\GDO_Permission;
 /**
  * GWF Forum Module.
  * @author gizmore
- * @version 6.10
- * @since 2.0
+ * @version 6.10.3
+ * @since 2.0.0
  */
 final class Module_Forum extends GDO_Module
 {
@@ -88,7 +87,7 @@ final class Module_Forum extends GDO_Module
             GDT_Level::make('forum_attachment_level')->initial('0'),
             GDT_Level::make('forum_post_level')->initial('0'),
             GDT_DateTime::make('forum_latest_post_date')->editable(false),
-            GDT_Int::make('forum_mail_sent_for_post')->initial('0')->editable(false),
+            GDT_UInt::make('forum_mail_sent_for_post')->initial('0')->editable(false),
             GDT_Checkbox::make('forum_mail_enable')->initial('1'),
         	GDT_UInt::make('forum_num_latest')->initial('6'),
             GDT_Checkbox::make('forum_hook_left_bar')->initial('1'),
