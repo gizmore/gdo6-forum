@@ -29,8 +29,8 @@ final class GDO_ForumUnread extends GDO
             GDT_User::make('unread_user')->primary(),
             GDT_ForumPost::make('unread_post')->primary()->cascade(),
             GDT_Index::make('unread_user_index')->indexColumns('unread_user'),
-            GDT_Join::make('unread_post_thread')->join("gdo_forumthread AS ft ON ft.thread_id=post_thread"),
-            GDT_Join::make('unread_post_board')->join("gdo_forumboard AS fb ON ft.thread_board=fb.board_id"),
+            GDT_Join::make('unread_post_thread')->joinRaw("gdo_forumthread AS ft ON ft.thread_id=post_thread"),
+            GDT_Join::make('unread_post_board')->joinRaw("gdo_forumboard AS fb ON ft.thread_board=fb.board_id"),
         ];
     }
     
