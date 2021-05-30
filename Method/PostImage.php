@@ -28,7 +28,11 @@ final class PostImage extends Method
     
     public function hasPermission(GDO_User $user)
     {
-        return $this->getPost()->canView($user);
+        if ($post = $this->getPost())
+        {
+            return $post->canView($user);
+        }
+        return false;
     }
     
     public function execute()

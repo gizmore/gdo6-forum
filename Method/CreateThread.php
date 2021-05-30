@@ -12,9 +12,9 @@ use GDO\Forum\GDO_ForumPost;
 use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\User\GDO_User;
-use GDO\Util\Common;
 use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\GDO_ForumUnread;
+use GDO\Forum\GDT_ForumBoard;
 
 /**
  * Start a new thread.
@@ -38,11 +38,30 @@ final class CreateThread extends MethodForm
         Module_Forum::instance()->renderTabs();
     }
     
+    public function gdoParameters()
+    {
+        return [
+            GDT_ForumBoard::make('board')->notNull(),
+        ];
+    }
+    
+    /**
+     * @return GDO_ForumBoard
+     */
+    public function getBoard()
+    {
+        if (!$this->board)
+        {
+            $this->board = $this->gdoParameterValue('board');
+        }
+        return $this->board;
+    }
+    
     public function execute()
     {
-        $this->board = GDO_ForumBoard::findById(Common::getRequestString('board'));
-        if ( (!$this->board->canView(GDO_User::current())) ||
-             (!$this->board->allowsThreads()) )
+        $board = $this->getBoard();
+        if ( (!$board->canView(GDO_User::current())) ||
+             (!$board->allowsThreads()) )
         {
             return $this->error('err_permission_create');
         }
@@ -51,10 +70,11 @@ final class CreateThread extends MethodForm
     
     public function createForm(GDT_Form $form)
     {
+        $board = $this->getBoard();
         $gdo = GDO_ForumThread::table();
         $posts = GDO_ForumPost::table();
         $form->addFields(array(
-            $gdo->gdoColumn('thread_board')->noChoices($this->board)->initial($this->board->getID())->editable(false),
+            $gdo->gdoColumn('thread_board')->noChoices($board)->initial($board ? $board->getID() : null)->editable(false),
             $gdo->gdoColumn('thread_level'),
             $gdo->gdoColumn('thread_title'),
             $posts->gdoColumn('post_message'),

@@ -26,7 +26,7 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 	        $nc = $this->noChoices;
 	        return $this->choices([$nc->getID() => $nc]);
 	    }
-	    if ($this->choices === null)
+	    if (!$this->choices)
 	    {
 	        return $this->choices($this->getChoices());
 	    }
@@ -46,8 +46,8 @@ final class GDT_ForumBoard extends GDT_ObjectSelect
 	##################
 	### No choices ###
 	##################
-	public $noChoices = false;
-	public function noChoices(GDO_ForumBoard $noChoices)
+	public $noChoices = null;
+	public function noChoices(GDO_ForumBoard $noChoices=null)
 	{
 	    $this->noChoices = $noChoices;
 	    return $this;

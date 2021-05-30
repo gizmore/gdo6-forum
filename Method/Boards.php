@@ -48,7 +48,14 @@ final class Boards extends Method
     
     public function getTitle()
     {
-        return $this->board->getTitle();
+        if ($this->board)
+        {
+            return $this->board->getTitle();
+        }
+        else
+        {
+            return t('gdo_forumboard');
+        }
     }
 
 }
