@@ -22,7 +22,6 @@ final class Threads extends MethodQueryList
     public function isSearched() { return false; }
     
     public function getDefaultOrder() { return 'thread_created'; }
-    public function getDefaultOrderDir() { return true; }
     
     public function gdoParameters()
     {

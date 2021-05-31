@@ -21,7 +21,6 @@ final class Thread extends MethodQueryCards
     public function isSearched() { return false; }
     
     public function getDefaultOrder() { return 'IFNULL(post_edited, post_created)'; }
-    public function getDefaultOrderDir() { return true; }
     
     public function getDefaultIPP() { return 10; }
     
