@@ -11,11 +11,11 @@ use GDO\Forum\Method\ChildBoards;
 $numLatest = Module_Forum::instance()->cfgNumLatestThreads();
 if ($numLatest && $board->isRoot())
 {
-    echo LatestPosts::make()->execute()->render();
+    echo LatestPosts::make()->executeWithInit()->render();
 }
 
 # 1. Children boards as list.
-echo ChildBoards::make()->execute()->render();
+echo ChildBoards::make()->executeWithInit()->render();
 
 # 2. Create thread button
 if ($board->allowsThreads())
@@ -27,5 +27,5 @@ if ($board->allowsThreads())
 if ($board->allowsThreads())
 {
     $_REQUEST['board'] = $board->getID();
-    echo Threads::make()->execute()->render();
+    echo Threads::make()->executeWithInit()->render();
 }
