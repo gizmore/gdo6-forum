@@ -15,6 +15,7 @@ use GDO\User\GDO_User;
 use GDO\Forum\GDO_ForumBoard;
 use GDO\Forum\GDO_ForumUnread;
 use GDO\Forum\GDT_ForumBoard;
+use GDO\Util\Common;
 
 /**
  * Start a new thread.
@@ -52,7 +53,7 @@ final class CreateThread extends MethodForm
     {
         if (!$this->board)
         {
-            $this->board = $this->gdoParameterValue('board');
+            $this->board = GDO_ForumBoard::findById(Common::getRequestString('board'));
         }
         return $this->board;
     }

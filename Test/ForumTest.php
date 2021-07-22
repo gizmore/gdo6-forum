@@ -23,6 +23,7 @@ final class ForumTest extends TestCase
             'board_description' => 'Beschreibung Test Board 2',
             'board_parent' => '1',
             'board_allow_threads' => '1',
+            'create' => 'create',
         ];
         MethodTest::make()->method(CRUDBoard::make())->parameters($p)->execute();
         $this->assert200("Check if Forum::CRUDBoard has easy to spot errors.");
@@ -32,6 +33,7 @@ final class ForumTest extends TestCase
             'board_description' => 'Beschreibung Test Board 3',
             'board_parent' => '2',
             'board_allow_threads' => '1',
+            'create' => 'create',
         ];
         MethodTest::make()->method(CRUDBoard::make())->parameters($p)->execute();
         $this->assert200("Check if Forum::CRUDBoard has easy to spot errors.");
@@ -50,6 +52,7 @@ final class ForumTest extends TestCase
         $p = [
             'thread_title' => 'Test Thread 1',
             'post_message' => 'Test Thread Message 1',
+            'submit' => 'submit',
         ];
         MethodTest::make()->method(CreateThread::make())->getParameters($gp)->parameters($p)->execute();
         $this->assert200("Check if CreateThread results in code 200.");
