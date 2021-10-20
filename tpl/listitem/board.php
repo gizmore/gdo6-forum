@@ -15,10 +15,11 @@ $subscribed = $board->hasSubscribed($user);
 $subscribeClass = $subscribed ? 'gdo-forum gdo-forum-subscribed' : 'gdo-forum';
 $subscribeLabel = $subscribed ? 'btn_unsubscribe' : 'btn_subscribe';
 $readClass = $board->hasUnreadPosts($user) ? 'gdo-forum-unread' : 'gdo-forum-read';
-$href = hrefSEO($board->displayTitle(), 'Forum', 'Boards', '&board='.$bid.'&o2[page]='.$board->getPageCount());
+$title = urlencodeSEO($board->getTitle());
+$href = href('Forum', 'Boards', "&board={$bid}&named={$title}&o2[page]={$board->getPageCount()}");
 $href2 = $subscribed ?
-hrefSEO(t('url_unsubscribe', [$board->getTitle()]), 'Forum', 'Unsubscribe', '&board='.$bid) :
-hrefSEO(t('url_subscribe', [$board->getTitle()]), 'Forum', 'Subscribe', '&board='.$bid);
+href('Forum', 'Unsubscribe', "&board={$bid}&named={$title}") :
+href('Forum', 'Subscribe', "&board={$bid}&named={$title}");
 
 $li = GDT_ListItem::make();
 $li->addClass($readClass);
