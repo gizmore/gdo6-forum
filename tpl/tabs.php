@@ -44,6 +44,10 @@ while ($p)
     $p = $p->getParent();
 }
 $links = Arrays::reverse($links);
+foreach ($board->getChildren() as $p)
+{
+    $links[$p->getID()] = str_repeat('+', $p->getDepth()) . $p->displayName();
+}
 $boardselect->choices($links);
 $boardselect->initial($lastboard);
 

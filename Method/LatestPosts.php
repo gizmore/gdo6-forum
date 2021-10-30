@@ -5,6 +5,7 @@ use GDO\Table\MethodQueryList;
 use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\Table\GDT_Table;
+use GDO\User\GDO_User;
 
 /**
  * Display a list of latest threads.
@@ -32,10 +33,14 @@ final class LatestPosts extends MethodQueryList
 	
 	public function getQuery()
 	{
+	    $user = GDO_User::current();
 	    return
 	       $this->gdoTable()->select()->
-    	   order('thread_lastposted', false)->
-    	   limit($this->numLatestThreads());
+	           where("thread_level <= {$user->getLevel()}")->
+	           joinObject('thread_board')->
+	           join("JOIN gdo_userpermission ON perm_user_id={$user->getID()} AND perm_perm_id=board_permission")->
+    	       order('thread_lastposted DESC')->
+    	       limit($this->numLatestThreads());
 	}
 	
 }

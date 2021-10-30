@@ -52,7 +52,7 @@ final class GDO_ForumUnread extends GDO
         {
             $query = GDO_UserPermission::table()->select('user_id')->
             joinObject('perm_user_id')->
-            where('perm_perm_id=$perm');
+            where("perm_perm_id={$perm}");
         }
         else
         {

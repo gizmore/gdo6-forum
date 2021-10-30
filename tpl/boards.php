@@ -27,5 +27,5 @@ if ($board->allowsThreads())
 if ($board->allowsThreads())
 {
     $_REQUEST['board'] = $board->getID();
-    echo Threads::make()->executeWithInit()->render();
+    echo Threads::make()->execute()->render();
 }

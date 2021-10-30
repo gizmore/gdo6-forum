@@ -1,6 +1,7 @@
 <?php
 namespace GDO\Forum\Method;
 
+use GDO\Core\Website;
 use GDO\Forum\GDO_ForumThread;
 use GDO\Forum\Module_Forum;
 use GDO\Forum\GDO_ForumPost;
@@ -79,13 +80,13 @@ final class Thread extends MethodQueryCards
             where("post_thread={$thread->getID()}");
     }
     
-//     public function setupTitle(GDT_Table $table)
-//     {
-//         $thread = $this->getThread();
-//         Website::setTitle($thread->getTitle());
-//         $table->title(t('list_title_thread_posts', 
-//             [$thread->displayTitle(), $table->countItems()]));
-//     }
+    public function setupTitle(GDT_Table $table)
+    {
+        $thread = $this->getThread();
+        Website::setTitle($thread->getTitle());
+        $table->title(t('list_title_thread_posts', 
+            [$thread->displayTitle(), $table->countItems()]));
+    }
 
     /**
      * Set board correctly on init.
