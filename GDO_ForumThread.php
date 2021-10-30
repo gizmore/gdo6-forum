@@ -70,7 +70,7 @@ final class GDO_ForumThread extends GDO
     
     public function hrefPost(GDO_ForumPost $post)
     {
-        $title = urlencodeSEO($post->getThread()->getTitle());
+        $title = seo($post->getThread()->getTitle());
         return href('Forum', 'Thread', "&title={$title}&post={$post->getID()}#card-{$post->getID()}");
     }
     

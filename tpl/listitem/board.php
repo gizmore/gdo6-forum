@@ -15,7 +15,7 @@ $subscribed = $board->hasSubscribed($user);
 $subscribeClass = $subscribed ? 'gdo-forum gdo-forum-subscribed' : 'gdo-forum';
 $subscribeLabel = $subscribed ? 'btn_unsubscribe' : 'btn_subscribe';
 $readClass = $board->hasUnreadPosts($user) ? 'gdo-forum-unread' : 'gdo-forum-read';
-$title = urlencodeSEO($board->getTitle());
+$title = seo($board->getTitle());
 $href = href('Forum', 'Boards', "&board={$bid}&named={$title}&o2[page]={$board->getPageCount()}");
 $href2 = $subscribed ?
 href('Forum', 'Unsubscribe', "&board={$bid}&named={$title}") :
