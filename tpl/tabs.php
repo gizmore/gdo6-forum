@@ -60,7 +60,7 @@ if ($user->isStaff())
 {
     if (isset($_REQUEST['thread']))
     {
-        $bar->addField(GDT_IconButton::make()->label('thread')->icon('edit')->href(href('Forum', 'EditThread', '&id='.Common::getGetString('thread'))));
+        $bar->addField(GDT_IconButton::make()->label('thread')->icon('edit')->href(href('Forum', 'EditThread', '&id='.Common::getRequestString('thread'))));
         
     }
     else
