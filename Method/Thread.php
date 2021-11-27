@@ -94,6 +94,7 @@ final class Thread extends MethodQueryCards
      */
     public function init()
     {
+    	parent::init();
         $_REQUEST['board'] = $this->getThread()->getBoardID();
     }
     
