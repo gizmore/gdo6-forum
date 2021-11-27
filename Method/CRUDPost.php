@@ -49,9 +49,9 @@ final class CRUDPost extends MethodCrud
     {
         # 1. Get thread
         $user = GDO_User::current();
-        if ( ($pid = Common::getGetString('quote')) ||
-        	 ($pid = Common::getGetString('reply')) ||
-             ($pid = Common::getGetString('id')) )
+        if ( ($pid = Common::getRequestString('quote')) ||
+        	 ($pid = Common::getRequestString('reply')) ||
+             ($pid = Common::getRequestString('id')) )
         {
             $post = $this->post = GDO_ForumPost::table()->find($pid);
             $this->thread = $post->getThread();
@@ -120,7 +120,7 @@ final class CRUDPost extends MethodCrud
             
             if ($this->gdo)
             {
-                $form->getField('post_attachment')->previewHREF(href('Forum', 'PostImage', "&id="));
+                $form->getField('post_attachment')->previewHREF(href('Forum', 'PostImage', "&id={id}"));
             }
         }
         $this->createFormButtons($form);
@@ -129,7 +129,7 @@ final class CRUDPost extends MethodCrud
     
     public function afterCreate(GDT_Form $form, GDO $gdo)
     {
-        $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$gdo->getID()}&file="));
+        $form->getField('post_attachment')->previewHREF(href('Forum', 'DownloadAttachment', "&post={$gdo->getID()}&file={id}"));
         $module = Module_Forum::instance();
         $module->saveConfigVar('forum_latest_post_date', $gdo->getCreated());
         $this->thread->tempUnset('last_post');

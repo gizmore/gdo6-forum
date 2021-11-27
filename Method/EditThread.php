@@ -38,7 +38,7 @@ final class EditThread extends MethodForm
     
     public function execute()
     {
-        $this->thread = GDO_ForumThread::table()->find(Common::getGetString('id'));
+        $this->thread = GDO_ForumThread::table()->find(Common::getRequestString('id'));
         if (!$this->thread->canEdit(GDO_User::current()))
         {
             return $this->error('err_permission_update');

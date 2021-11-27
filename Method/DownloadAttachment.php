@@ -21,7 +21,7 @@ final class DownloadAttachment extends Method
     {
         $user = GDO_User::current();
         $table = GDO_ForumPost::table();
-        $post = $table->find(Common::getGetString('post'));
+        $post = $table->find(Common::getRequestString('post'));
         if (!$post->canView($user))
         {
             return $this->error('err_permission_read');

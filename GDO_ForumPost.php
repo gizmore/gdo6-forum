@@ -121,7 +121,7 @@ final class GDO_ForumPost extends GDO
     public function hrefReply() { return href('Forum', 'CRUDPost', '&reply='.$this->getID()); }
     public function hrefQuote() { return href('Forum', 'CRUDPost', '&quote='.$this->getID()); }
     public function hrefAttachment() { return href('Forum', 'DownloadAttachment', '&post='.$this->getID()); }
-    public function hrefPreview() { return $this->hrefAttachment() . '&att='; }
+    public function hrefPreview() { return $this->hrefAttachment() . '&att={id}'; }
     public function href_preview() { return $_SERVER['REQUEST_URI']; }
     
     ##############
