@@ -93,9 +93,9 @@ final class Thread extends MethodQueryCards
      * Set board correctly on init.
      * Go to default page for a post.
      */
-    public function init()
+    public function onInit()
     {
-    	parent::init();
+    	parent::onInit();
         $_REQUEST['board'] = $this->getThread()->getBoardID();
     }
     
