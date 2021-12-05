@@ -16,7 +16,8 @@ use GDO\Core\GDT_Template;
 use GDO\User\GDO_Permission;
 
 /**
- * GWF Forum Module.
+ * GDO Forum Module.
+ * 
  * @author gizmore
  * @version 6.10.3
  * @since 2.0.0
