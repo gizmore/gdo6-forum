@@ -45,14 +45,12 @@ final class ForumTest extends TestCase
     {
         # Look at boards again to make sure we are not in a deadloop.
         $this->callMethod(Boards::make());
-
         $gp = [
             'board' => '3',
         ];
         $p = [
             'thread_title' => 'Test Thread 1',
-            'post_message' => 'Test Thread Message 1',
-            'submit' => 'submit',
+            'post_message' => '<p>Test Thread Message 1</p>',
         ];
         MethodTest::make()->method(CreateThread::make())->getParameters($gp)->parameters($p)->execute();
         $this->assert200("Check if CreateThread results in code 200.");
